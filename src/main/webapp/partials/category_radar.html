@@ -1,0 +1,115 @@
+<div class="container" ng-controller="CategoryViewController">
+    <!-- Example row of columns -->
+
+    <div class="row" ng-if="internetExplorer < 9">
+        <p class="text-center">For the full effect please use Chrome, Firefox or IE > 9</p>
+        <br/>
+        <hr/>
+        <div class="form-group">
+            <br/>
+
+            <p class="text-center"><label for="simple_query">Search:</label>&nbsp;&nbsp;<input
+                    id="simple_query" ng-model="simple_query"></p>
+        </div>
+        <div class="form-group" ng-repeat="tab in rawStatuses">
+            <p class="text-center">
+                <font color="green" style="font-weight: bold; font-family: Helvetica; font-size: 12pt" ng-if="tab == 'Adopt'">{{tab}}</font>
+                <font color="blue" style="font-weight: bold; font-family: Helvetica; font-size: 12pt" ng-if="tab == 'Trial' || tab == 'Assess'">{{tab}}</font>
+                <font color="red" style="font-weight: bold; font-family: Helvetica; font-size: 12pt" ng-if="tab == 'Hold'">{{tab}}</font>
+            </p>
+            <ol class="list-unstyled" ng-repeat="item in bucket[tab] | filter:simple_query">
+                <li>
+                    <p class="text-center">
+                        <button class="btn btn-link" ng-click="isCollapsed = !isCollapsed">
+                            <b><font style="font-weight: bold; font-size: 8pt">{{item.name}}</font></b>
+                        </button>
+                    </p>
+                    <div collapse="isCollapsed">
+                        <div class="well well-lg">
+                            <b>Overview:</font></b><br/>
+
+                            <p>{{item.description}}</p>
+                            <br/>
+                            <b>Status:</b><br>
+                            <b><p><font color="red">{{item.status}}</font></p></b>
+                            <br>
+                            <button type="button" ng-click="overview(item.id);" class="btn btn-info">
+                                Details...
+                            </button>
+                            </font>
+                        </div>
+
+
+                    </div>
+                </li>
+            </ol>
+            <hr/>
+            <br/>
+            <br/>
+        </div>
+    </div>
+    <div class="row" ng-if="internetExplorer >= 9">
+        <tabset>
+            <tab ng-repeat="tab in tabs" heading="{{tab}}">
+                <div class="row" ng-if="tab == 'Radar'">
+                    <div class="container">
+                        <svg width="800" height="600">
+                            <rect x="50" ng-attr-y = "{{offsets.Adopt}}" width="700" height="125" style="fill:rgb(191,192,191);stroke-width:3;stroke:rgb(191,192,191)" />
+                            <text x="50" ng-attr-y="{{offsets.Adopt + 10}}" style="font-weight: bold; font-family: Helvetica; font-size: 8pt">Adopt</text>
+                            <text ng-attr-x="{{point.x}}" ng-attr-y="{{point.y}}" style="fill:green; font-weight: bold; font-family: Helvetica; font-size: 8pt" ng-repeat="point in points['Adopt']"><a ng-click="overview(point.val['id']);"> {{point.improvement}} {{point.val['name']}}</a></text>
+                            <rect x="50" ng-attr-y = "{{offsets.Trial}}" width="700" height="125" style="fill:rgb(203,204,203);stroke-width:3;stroke:rgb(203,204,203)" />
+                            <text x="50" ng-attr-y="{{offsets.Trial + 10}}" style="font-weight: bold; font-family: Helvetica; font-size: 8pt">Trial</text>
+                            <text ng-attr-x="{{point.x}}" ng-attr-y="{{point.y}}" style="fill:blue; font-weight: bold; font-family: Helvetica; font-size: 8pt" ng-repeat="point in points['Trial']"><a ng-click="overview(point.val['id']);"> {{point.improvement}} {{point.val['name']}}</a></text>
+                            <rect x="50" ng-attr-y = "{{offsets.Assess}}" width="700" height="125" style="fill:rgb(215,216,214);stroke-width:3;stroke:rgb(215,216,214)" />
+                            <text x="50" ng-attr-y="{{offsets.Assess + 10}}" style="font-weight: bold; font-family: Helvetica; font-size: 8pt">Assess</text>
+                            <text ng-attr-x="{{point.x}}" ng-attr-y="{{point.y}}" style="fill:blue; font-weight: bold; font-family: Helvetica; font-size: 8pt" ng-repeat="point in points['Assess']"><a ng-click="overview(point.val['id']);"> {{point.improvement }} {{point.val['name']}}</a></text>
+                            <rect x="50" ng-attr-y = "{{offsets.Hold}}" width="700" height="125" style="fill:rgb(228,229,228);stroke-width:3;stroke:rgb(228,229,228)" />
+                            <text x="50" ng-attr-y="{{offsets.Hold + 10}}" style="font-weight: bold; font-family: Helvetica; font-size: 8pt">Hold</text>
+                            <text ng-attr-x="{{point.x}}" ng-attr-y="{{point.y}}" style="fill:red; font-weight: bold; font-family: Helvetica; font-size: 8pt" ng-repeat="point in points['Hold']"><a ng-click="overview(point.val['id']);"> {{point.improvement}} {{point.val['name']}}</a></text>
+                        </svg>
+                    </div>
+                </div>
+                <div class="row" ng-if="tab != 'Radar'">
+                    <div class="form-group">
+                        <br/>
+
+                        <p class="text-center"><label for="{{tab}}_query">Search:</label>&nbsp;&nbsp;<input
+                                id="{{tab}}_query" ng-model="query"></p>
+                    </div>
+                    <hr/>
+                    <div class="form-group">
+                        <ol class="list-unstyled" ng-repeat="item in bucket[tab] | filter:query">
+                            <li>
+                                <p class="text-center">
+                                    <button class="btn btn-link" ng-click="isCollapsed = !isCollapsed">
+                                        <b><font style="font-weight: bold; font-size: 8pt">{{item.name}}</font></b>
+                                    </button>
+                                </p>
+                                <div collapse="isCollapsed">
+                                    <div class="well well-lg">
+                                        <b>Overview:</font></b><br/>
+
+                                        <p>{{item.description}}</p>
+                                        <br/>
+                                        <b>Status:</b><br>
+                                        <b><p><font color="red">{{item.status}}</font></p></b>
+                                        <br>
+                                        <button type="button" ng-click="overview(item.id);" class="btn btn-info">
+                                            Details...
+                                        </button>
+                                        </font>
+                                    </div>
+
+
+                                </div>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </tab>
+        </tabset>
+    </div>
+    <!-- /.blog-sidebar -->
+
+
+</div><!-- /.container -->

@@ -1,0 +1,22 @@
+[
+{
+"name":"Java 6.0",
+"id":"java_6_0",
+"description":"Version 6 of the Java programming language",
+"features":["Desktop Integration"," ParallellGC"],
+"status":"Adopt",
+"history":[{"year":2013,"status":"Adopt"}],
+"bank_standard":"Yes",
+"reasons":["Bank Standard"]
+}, 
+{
+"name":"Java 7.0",
+"id":"java_7_0",
+"description":"Version 7 of the Java programming language",
+"features":[],
+"status":"Trial",
+"history":[{"year":2013,"status":"Hold"}],
+"bank_standard":"No",
+"reasons":["There is currently no Weblogic support for Java 7"]
+}
+]

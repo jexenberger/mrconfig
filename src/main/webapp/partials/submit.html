@@ -1,0 +1,48 @@
+<div class="container" ng-controller="MailController" xmlns="http://www.w3.org/1999/html">
+
+    <div class="form-group"><h4>Submit new Technology, Method or Tool</h4></div>
+
+
+    <!-- Example row of columns -->
+
+    <form novalidate role="form" name="submitForm">
+
+        <div class="form-group has-feedback" ng-class="{'has-error': submitForm.yourName.$invalid, 'has-success': !submitForm.yourName.$invalid}">
+            <label for="yourName">Your Name</label>
+            <input id="yourName" name="yourName" class="form-control" type="text" ng-model="master.yourName" required/>
+            <span class="glyphicon glyphicon-remove form-control-feedback" ng-show="submitForm.yourName.$invalid"></span>
+        </div>
+        <div class="form-group has-feedback"  ng-class="{'has-error': submitForm.technology.$invalid, 'has-success': !submitForm.technology.$invalid}">
+            <label  for="technology">Technology, Methodology or Technique:</label>
+            <input id="technology" name="technology" type="text" class="form-control" ng-model="master.technology" required/>
+            <span class="glyphicon glyphicon-remove form-control-feedback" ng-show="submitForm.technology.$invalid"></span>
+        </div>
+        <div class="form-group has-feedback"  ng-class="{'has-error': submitForm.category.$invalid, 'has-success': !submitForm.category.$invalid}">
+            <label  for="status">What should this be on the Radar:</label>
+            <select id="status" name="status" class="form-control" ng-model="master.status" ng-options="status for status in statuses" required></select>
+        </div>
+        <div class="form-group has-feedback"  ng-class="{'has-error': submitForm.category.$invalid, 'has-success': !submitForm.category.$invalid}">
+            <label  for="tool">Category:</label>
+            <select id="tool" name="tool" class="form-control" ng-model="master.tool" ng-options="category.name group by category.category for category in categories" required ng-model-options="{ updateOn: 'blur' }"></select>
+        </div>
+        <div class="form-group has-feedback" ng-class="{'has-error': submitForm.url.$invalid, 'has-success': !submitForm.url.$invalid}">
+            <label   for="url">Reference URL:</label>
+            <input class="form-control" id="url" name="url" type="url" ng-model="master.url" required/>
+            <span class="glyphicon glyphicon-remove form-control-feedback" ng-show="submitForm.url.$invalid"></span>
+        </div>
+        <div class="form-group has-feedback" ng-class="{'has-error': submitForm.description.$invalid, 'has-success': !submitForm.description.$invalid}">
+            <label for="description">Description:</label><textarea class="form-control" id="description"
+                                                                   name="description" rows="2"
+                                                                   ng-model="master.description"
+                                                                   required></textarea>
+        </div>
+        <div class="form-group has-feedback" ng-class="{'has-error': submitForm.motivation.$invalid, 'has-success': !submitForm.motivation.$invalid}">
+            <label for="motivation">Motivation:</label>
+            <textarea class="form-control" id="motivation" rows="2" ng-model="master.motivation"
+                      required></textarea>
+        </div>
+        <div class="form-group">
+            <button class="btn brn-info" ng-click="mailIt(master.tool.id)" ng-disabled="submitForm.$invalid">Submit</button>
+        </div>
+    </form>
+</div>

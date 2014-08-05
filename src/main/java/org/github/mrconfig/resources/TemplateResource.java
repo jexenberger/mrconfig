@@ -1,0 +1,53 @@
+package org.github.mrconfig.resources;
+
+import org.github.mrconfig.domain.Template;
+import org.github.mrconfig.framework.resources.DeletableResource;
+import org.github.mrconfig.framework.resources.ReadableResource;
+import org.github.mrconfig.framework.resources.WritableResource;
+import org.github.mrconfig.framework.service.Creatable;
+import org.github.mrconfig.framework.service.Listable;
+import org.github.mrconfig.framework.service.UniqueLookup;
+import org.github.mrconfig.framework.service.Updateable;
+
+import javax.ws.rs.Consumes;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+
+/**
+ * Created by julian3 on 2014/07/19.
+ */
+@Path("/templates")
+@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+public class TemplateResource implements ReadableResource<Template,Long>, WritableResource<Template,Long>, DeletableResource<Template> {
+    @Override
+    public Class<Long> getResourceTypeId() {
+        return null;
+    }
+
+    @Override
+    public Listable<Template> getListableResource() {
+        return null;
+    }
+
+    @Override
+    public Creatable<Template, Long> getCreatable() {
+        return null;
+    }
+
+    @Override
+    public Updateable<Template> getUpdateable() {
+        return null;
+    }
+
+    @Override
+    public UniqueLookup<Template, Long> getLookup() {
+        return null;
+    }
+
+    @Override
+    public Class<Template> getType() {
+        return Template.class;
+    }
+}

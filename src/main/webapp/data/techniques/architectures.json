@@ -1,0 +1,11 @@
+[
+    {"name": "REST",
+     "id": "rest",
+     "description": "REpresentation State Transfer Architectural pattern",
+     "features": ["Clean URLS", "Wide client support ","Web Browser support","API centric design"],
+     "status" : "Adopt",
+     "bank_standard": "No",
+     "url": "http://en.wikipedia.org/wiki/Representational_state_transfer",
+     "reasons": ["Rest is becoming the defacto standard for Web APIs"]
+    }
+]

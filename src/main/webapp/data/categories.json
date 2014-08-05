@@ -1,0 +1,32 @@
+[
+    {"name": "Java Platforms",
+     "id" : "java",
+     "category": "tools",
+     "description": "All the java tools and techniques.",
+     "owner" : "jexenberger@wesbank.co.za"
+    },
+    {"name": "Web Platforms",
+     "id" : "web",
+     "category": "tools",
+     "description": "Tools and Techniques for doing Web development.",
+     "owner" : "jexenberger@wesbank.co.za"
+    },
+    {"name": "PL/SQL Platforms",
+     "id" : "plsql",
+     "category": "tools",
+     "description": "All the PL/SQL tools and techniques",
+     "owner" : "test@wesbank.co.za"
+    },
+    {"name": "Agile",
+     "id" : "agile",
+     "category": "methodologies",
+     "description": "Agile Tools and methodologies",
+     "owner" : "jexenberger@wesbank.co.za"
+    },
+    {"name": "Application Architectures",
+     "id" : "architectures",
+     "category": "techniques",
+     "description": "Architectures for building Applications",
+     "owner" : "jexenberger@wesbank.co.za"
+    }
+]

@@ -1,0 +1,34 @@
+[
+    {"name": "Angular JS V1.2",
+     "id": "angular_js_1_2",
+     "description": "Angular JS web development framework",
+     "features": ["MVC", "Built in integration with Unit testing framework", "Bootstrap integration", "Service Framework"],
+     "status" : "Assess",
+     "bank_standard": "No",
+     "reasons": ["Angular is the most mature and widely adopted pure Browser based UX toolkit and framework", "Angular needs to be used carefully with IE < 9"]
+    },
+    {"name": "Angular JS V1.3",
+     "id": "angular_js_1_3",
+     "description": "Angular JS web development framework",
+     "features": ["MVC", "Built in integration with Unit testing framework", "Bootstrap integration", "Service Framework"],
+     "status" : "Hold",
+     "bank_standard": "No",
+     "reasons": ["From version 1.3 Angular no longer supports IE < 9"]
+    },
+    {"name": "JQuery 1.x",
+     "id": "jquery_1_x",
+     "description": "JQuery JavaScript framework V1",
+     "features": ["Browser support"],
+     "status" : "Adopt",
+     "bank_standard": "No",
+     "reasons": ["Works well with IE 8"]
+    },
+    {"name": "JQuery 2.x",
+     "id": "jquery_2_x",
+     "description": "JQuery JavaScript framework",
+     "features": ["Browser support"],
+     "status" : "Hold",
+     "bank_standard": "No",
+     "reasons": ["Still in Beta"]
+    }
+]

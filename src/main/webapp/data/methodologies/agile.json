@@ -1,0 +1,11 @@
+[
+    {"name": "SCRUM",
+     "id": "scrum",
+     "description": "SCRUM Software development Framework",
+     "features": ["Wide industry support", "Emperical approach"],
+     "status" : "Adopt",
+     "bank_standard": "Yes",
+     "url": "https://www.scrum.org/",
+     "reasons": ["Bank standard"]
+    }
+]

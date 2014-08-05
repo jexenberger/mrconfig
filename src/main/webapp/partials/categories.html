@@ -1,0 +1,19 @@
+
+<div class="container" ng-controller="CategoriesListCntrl">
+    <!-- Example row of columns -->
+    <div class="row">
+
+        <p><a class="btn btn-info" href="#/submit" role="button">Submit new Technology, Methodology or Technique &raquo;</a></p>
+    </div>
+    <hr/>
+    <div class="row">
+        <div class="col-md-4" ng-repeat="category in categories">
+            <h3><font color="#0097AC">{{category.name}}</font></h3>
+            <p><font color="#0097AC">{{category.description}}</font></p>
+            <p><a class="btn btn-default" href="#/categories/{{category.category}}/{{category.id}}" role="button">View details &raquo;</a></p>
+        </div>
+    </div>
+    <hr/>
+
+
+</div> <!-- /container -->

@@ -1,0 +1,46 @@
+[
+
+    {"id" : 1,
+     "name":"Local Main",
+     "location":"South Africa",
+     "host": "local",
+     "type": "datacentre"},
+
+    {"id": 2,
+     "name" : "Development",
+     "type" : "environment",
+     "parent" : 1},
+
+    {"id": 3,
+     "name" : "dhdvitint01",
+     "type" : "vm",
+     "parent" : 2},
+
+    {"id": 4,
+     "name" : "Test",
+     "type" : "environment",
+     "parent" : 1},
+
+    {"id": 5,
+     "name" : "dhtvitint01",
+     "type" : "vm",
+     "parent" : 4},
+
+
+    {"id": 6,
+     "name" : "Production",
+     "type" : "environment",
+     "parent" : 1},
+
+   {"id": 7,
+     "name" : "dhpvitint01",
+     "type" : "vm",
+     "parent" : 6},
+
+   {"id": 8,
+     "name" : "dhpvitint02",
+     "type" : "vm",
+     "parent" : 6}
+
+
+]

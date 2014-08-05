@@ -1,0 +1,119 @@
+<script type="javascript">
+
+</script>
+<div class="container-fluid" ng-controller="OverviewController">
+    <!-- Example row of columns -->
+    <h4 class="sub-header">&nbsp;&nbsp;&nbsp;Environments</h4>
+    &nbsp;&nbsp;&nbsp;
+    <script type="text/ng-template" id="addEnvironment.html">
+        <div class="modal-header">
+            <h3 class="modal-title">Add new Environment</h3>
+        </div>
+        <div class="modal-body">
+            <form role="form">
+                <div class="form-group">
+                    <label for="name" >Name</label>
+
+                    <div>
+                        <input type="text" id="name" name="name" ng-model="environment.name"
+                               class="form-control"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="location" >Location</label>
+
+                    <div >
+                        <input type="text" id="location" name="location"
+                               ng-model="environment.location" class="form-control"/>
+                    </div>
+                </div>
+               <div class="form-group">
+                    <label for="location" >Type</label>
+
+                    <div>
+                        <div class="btn-group">
+                            <label class="btn btn-primary" ng-model="environment.type" btn-radio="'environment'">Environment</label>
+                            <label class="btn btn-primary" ng-model="environment.type" btn-radio="'physical'">Physical Server</label>
+                            <label class="btn btn-primary" ng-model="environment.type" btn-radio="'vm'">Virtual Machine</label>
+                        </div>
+                    </div>
+                </div>
+
+               <div class="form-group" ng-hide="isNotServer()">
+                   <div class="form-group">
+                       <label for="ipAddress">IP Address</label>
+
+                       <div>
+                           <input type="text" id="ipAddress" name="ipAddress"
+                                  ng-model="environment.ipAddress" class="form-control"/>
+                       </div>
+                   </div>
+                   <div class="form-group">
+                       <label for="dnsName" >Fully Qualified Domain Name</label>
+
+                       <div >
+                           <input type="text" id="dnsName" name="dnsName"
+                                  ng-model="environment.dnsName" class="form-control"/>
+                       </div>
+                   </div>
+                   <div class="form-group">
+                       <label for="user" >User Name</label>
+
+                       <div >
+                           <input type="text" id="user" name="user"
+                                  ng-model="environment.user" class="form-control"/>
+                       </div>
+                   </div>
+                   <div class="form-group">
+                       <label for="password" >Password</label>
+                       <div >
+                           <input type="password" id="password" name="password"
+                                  ng-model="environment.password" class="form-control"/>
+                       </div>
+                   </div>
+                   <div class="form-group">
+                       <label for="verifyPassword" >Verify Password</label>
+                       <div >
+                           <input type="password" id="verifyPassword" name="verifyPassword"
+                                  ng-model="verifyPassword" class="form-control"/>
+                       </div>
+                   </div>
+                   <div class="form-group">
+                       <label for="port" >Port</label>
+                       <div >
+                           <input type="number" id="port" name="port"
+                                  ng-model="environment.port" class="form-control" min="1" max="656656"/>
+                       </div>
+                   </div>
+                   <div class="form-group">
+                       <label for="shellPrompt" >Shell Prompt</label>
+
+                       <div >
+                           <input type="text" id="shellPrompt" name="shellPrompt"
+                                  ng-model="environment.shellPrompt" class="form-control"/>
+                       </div>
+                   </div>
+
+                </div>
+
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" ng-click="ok()">Save</button>
+            <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+        </div>
+    </script>
+    <div class="btn-group">
+        <label class="btn btn-info">Edit Properties</label>
+        <label class="btn btn-info" ng-click="add()">Add Child</label>
+        <label class="btn btn-info">Delete</label>
+    </div>
+    <br/>
+    <br/>
+
+    <div class="col-xs-6 col-sm-3 placeholder">
+        <div data-ng-chart="" data-ng-model='options'
+             style="width: 1024px; height: 768px; border-style: dotted; border-width: 1px;"></div>
+    </div>
+
+</div> <!-- /container -->
