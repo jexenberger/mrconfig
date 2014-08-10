@@ -1,5 +1,6 @@
 package org.github.mrconfig.domain;
 
+import org.github.mrconfig.service.BaseDomainJPATest;
 import org.github.mrconfig.service.BaseJPA;
 import org.junit.Test;
 
@@ -13,7 +14,7 @@ import static org.github.mrconfig.domain.Property.importProperties;
 /**
  * Created by julian3 on 2014/07/19.
  */
-public class TemplateTest extends BaseJPA{
+public class TemplateTest extends BaseDomainJPATest{
 
 
     @Test

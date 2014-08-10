@@ -44,9 +44,9 @@ public class Property extends KeyEntity<Property> {
     public Property() {
     }
 
-    public static Pair<Property, PropertyValue> fromKeyValue(String key, String value, Environment owner) {
+    public static Pair<Property, PropertyValue> fromKeyValue(Property p, String key, String value, Environment owner) {
         String[] split = key.split("\\.");
-        Property p = new Property();
+        p = (p == null) ? new Property() : p;
         p.setKey(key);
         if (split.length >= 1) {
             p.setName(split[split.length - 1]);
@@ -131,9 +131,11 @@ public class Property extends KeyEntity<Property> {
                 }
                 props.forEach((key, value) -> {
                     Optional<Property> byKey = findByKey(Property.class, key.toString().trim());
-                    Pair<Property, PropertyValue> propAndVal = fromKeyValue((String) key, (String) value, result.get());
+                    Pair<Property, PropertyValue> propAndVal = fromKeyValue(byKey.orElseGet(()->null), (String) key, (String) value, result.get());
                     if (!byKey.isPresent()) {
-                        propAndVal.getCar().save();
+                        System.out.println("saving!! ***** -> "+propAndVal.getCar());
+                        Property car = propAndVal.getCar();
+                        car.save();
                     }
                     Collection<PropertyValue> values = ActiveRecord.findWhere(PropertyValue.class, p("property", propAndVal.getCar().getKey()), p("environment", result.get().getKey()));
                     if (values.size() == 0) {

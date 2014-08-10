@@ -1,6 +1,7 @@
 package org.github.mrconfig.framework.templating;
 
 import org.github.mrconfig.domain.Template;
+import org.github.mrconfig.service.BaseDomainJPATest;
 import org.github.mrconfig.service.BaseJPA;
 import org.junit.Test;
 
@@ -10,7 +11,7 @@ import java.util.HashMap;
 /**
  * Created by julian3 on 2014/07/19.
  */
-public class FreemarkerEngineTest extends BaseJPA{
+public class FreemarkerEngineTest extends BaseDomainJPATest{
 
     public static final String TEST_TEMPLATE = "test_template";
 

@@ -23,6 +23,7 @@ public class JPAProvider implements Provider {
     }
 
     public static void setPersistenceUnit(String unit) {
+        reset();
         persistenceUnit = unit;
     }
 
@@ -96,20 +97,24 @@ public class JPAProvider implements Provider {
     }
 
     @Override
-    public <K> void save(ActiveRecord<?,K> activeRecord, K existingId) {
-        transact(() -> {
+    public <K> ActiveRecord<?,K> save(ActiveRecord<?,K> activeRecord, K existingId) {
+        return transact(() -> {
+            ActiveRecord<?,K> result = null;
             if (existingId != null) {
                 if (getEntityManager().contains(activeRecord)) {
-                    getEntityManager().merge(activeRecord);
-                } else if (existingId != null && getEntityManager().find(activeRecord.getClass(), existingId) != null) {
-                    getEntityManager().merge(activeRecord);
+                    result = activeRecord;
+                    //do nothing, state will save auto-magically
+                } else if (existingId != null && !getEntityManager().contains(activeRecord) && getEntityManager().find(activeRecord.getClass(),existingId) != null) {
+                    result = getEntityManager().merge(activeRecord);
                 } else {
                     getEntityManager().persist(activeRecord);
+                    result = activeRecord;
                 }
             } else {
                 getEntityManager().persist(activeRecord);
+                result = activeRecord;
             }
-            return null;
+            return result;
         });
 
     }
@@ -120,11 +125,13 @@ public class JPAProvider implements Provider {
             Query namedQuery = createNamedQuery(buildName(type, name), parameters);
             try {
                 Object singleResult = namedQuery.getSingleResult();
-                Object singleResult1 = singleResult;
-                return Optional.ofNullable((T) singleResult1);
+                T singleResult1 = (T) singleResult;
+                return Optional.ofNullable(singleResult1);
 
-            } catch (NoResultException | NonUniqueResultException e) {
+            } catch (NoResultException e) {
                 return Optional.empty();
+            } catch (NonUniqueResultException e) {
+                return Optional.ofNullable((T) namedQuery.getResultList().get(0));
             }
         });
 
@@ -341,6 +348,10 @@ public class JPAProvider implements Provider {
             return entityManager;
         }
         return entityManagerFactory.createEntityManager();
+    }
+
+    public static void reset() {
+        entityManagerFactory = null;
     }
 
 

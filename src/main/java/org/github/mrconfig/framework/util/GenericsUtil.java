@@ -75,7 +75,7 @@ public class GenericsUtil {
         if (type instanceof Class) {
             Class clazz = (Class) type;
             Type[] genericInterfaces = clazz.getGenericInterfaces();
-            if (genericInterfaces != null) {
+            if (genericInterfaces != null && genericInterfaces.length > 0) {
                 Type genericInterface = genericInterfaces[0];
                 if (genericInterface instanceof ParameterizedType) {
                     return (Class) ((ParameterizedType) genericInterface).getActualTypeArguments()[whichOne];

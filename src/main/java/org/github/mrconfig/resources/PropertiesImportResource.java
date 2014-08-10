@@ -43,7 +43,7 @@ public class PropertiesImportResource {
                 }
                 props.forEach((key, value) -> {
                     Optional<Property> byKey = findByKey(Property.class, key.toString().trim());
-                    Pair<Property, PropertyValue> propAndVal = fromKeyValue((String) key, (String) value, result.get());
+                    Pair<Property, PropertyValue> propAndVal = fromKeyValue(byKey.get(), (String) key, (String) value, result.get());
                     if (!byKey.isPresent()) {
                         propAndVal.getCar().save();
                     }

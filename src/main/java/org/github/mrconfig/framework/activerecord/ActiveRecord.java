@@ -87,7 +87,7 @@ public interface ActiveRecord<T extends ActiveRecord, K> {
     public K getId();
 
     public default T save() {
-        getProvider().save(this, getId());
+        ActiveRecord<?, K> save = getProvider().save(this, getId());
         return (T) this;
     }
 

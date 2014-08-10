@@ -22,7 +22,7 @@ public interface Provider {
 
     <T> T doWork(Supplier<T> work);
 
-    <K> void save(ActiveRecord<?,K> activeRecord, K existingId);
+    <K> ActiveRecord<?,K> save(ActiveRecord<?,K> activeRecord, K existingId);
 
     <T> Optional<T> single(Class<T> type, String name, Parameter... parameters);
 

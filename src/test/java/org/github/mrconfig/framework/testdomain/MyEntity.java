@@ -2,19 +2,26 @@ package org.github.mrconfig.framework.testdomain;
 
 import org.github.mrconfig.framework.activerecord.ActiveRecord;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * Created by w1428134 on 2014/08/04.
  */
 @Entity
+@NamedQueries({
+        @NamedQuery(name = "MyEntity.findNameLike", query = "SELECT e FROM MyEntity e where e.name like :name"),
+})
 public class MyEntity implements ActiveRecord<MyEntity, Long>{
 
     @Id
+    @SequenceGenerator(name="myEntitySeq",sequenceName="TEST_SEQ", allocationSize = 1, initialValue = 1 )
+    @GeneratedValue( strategy = GenerationType.SEQUENCE, generator = "myEntitySeq" )
     Long id;
 
     String name;
+
+    @ManyToOne
+    MyEntity parent;
 
 
     public MyEntity() {
@@ -42,4 +49,6 @@ public class MyEntity implements ActiveRecord<MyEntity, Long>{
     public void setName(String name) {
         this.name = name;
     }
+
+
 }

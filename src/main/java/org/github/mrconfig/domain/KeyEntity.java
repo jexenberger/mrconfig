@@ -21,7 +21,7 @@ public class KeyEntity<T extends ActiveRecord> extends BaseEntity<T> implements 
     public static <K extends KeyEntity> Optional<K> findByKey(Class<K> type, String key) {
         Collection<K> result = (Collection<K>) ActiveRecord.findWhere(type, p("key", key));
         if (result.size() > 0) {
-            return Optional.of((K) result.iterator().next());
+            return Optional.ofNullable((K) result.iterator().next());
         }
         return Optional.empty();
     }

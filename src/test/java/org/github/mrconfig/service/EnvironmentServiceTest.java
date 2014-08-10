@@ -14,7 +14,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * Created by w1428134 on 2014/07/10.
  */
-public class EnvironmentServiceTest extends BaseJPA{
+public class EnvironmentServiceTest extends BaseDomainJPATest{
 
     String key;
 

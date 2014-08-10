@@ -1,5 +1,6 @@
 package org.github.mrconfig.domain;
 
+import org.github.mrconfig.service.BaseDomainJPATest;
 import org.github.mrconfig.service.BaseJPA;
 import org.junit.Test;
 
@@ -15,7 +16,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * Created by julian3 on 2014/07/19.
  */
-public class EnvironmentTest extends BaseJPA {
+public class EnvironmentTest extends BaseDomainJPATest {
 
 
     @Test

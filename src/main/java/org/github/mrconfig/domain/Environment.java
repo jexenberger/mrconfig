@@ -6,10 +6,7 @@ import org.github.mrconfig.framework.activerecord.Named;
 import javax.persistence.*;
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 import static java.util.stream.Collectors.toList;
 import static org.github.mrconfig.framework.activerecord.Parameter.p;
@@ -35,7 +32,7 @@ public class Environment<T extends Environment> extends KeyEntity<T> implements 
         DRDataCentre
     }
 
-    @Column(name = "name", unique = true)
+    @Column(name = "name")
     String name;
 
     @ManyToOne(targetEntity = AdminGroup.class, fetch = FetchType.LAZY)
@@ -53,7 +50,7 @@ public class Environment<T extends Environment> extends KeyEntity<T> implements 
     public Environment(String name, Environment parent) {
         this.name = name;
         this.parent = parent;
-        setKey(name);
+        setKey(UUID.randomUUID().toString());
         getOwner();
     }
 

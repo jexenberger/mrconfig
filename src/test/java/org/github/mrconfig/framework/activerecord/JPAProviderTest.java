@@ -1,9 +1,9 @@
 package org.github.mrconfig.framework.activerecord;
 
-import org.github.mrconfig.domain.Environment;
-import org.github.mrconfig.domain.EnvironmentGroup;
+import org.github.mrconfig.framework.testdomain.MyEntity;
 import org.github.mrconfig.service.BaseJPA;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -20,19 +20,18 @@ import static org.junit.Assert.*;
 /**
  * Created by w1428134 on 2014/07/11.
  */
-public class JPAProviderTest {
+public class JPAProviderTest extends BaseJPA{
 
     private static JPAProvider provider;
 
-    @BeforeClass
-    public static void before() {
-        JPAProvider.setPersistenceUnit(BaseJPA.UNIT_NAME);
+    @Before
+    public  void before() throws Exception{
+        super.before();
         provider = new JPAProvider();
 
         for (int i = 0; i < 100; i++) {
-            Environment environment = new Environment();
+            MyEntity environment = new MyEntity();
             environment.setName("Name ->" + i);
-            environment.setKey(Integer.toString(i));
             provider.save(environment, null);
         }
 
@@ -47,13 +46,12 @@ public class JPAProviderTest {
     @Test
     public void testTransaction() throws Exception {
         provider.transact(() -> {
-            Environment environment = new Environment();
+            MyEntity environment = new MyEntity();
             environment.setName("Test");
-            environment.setKey("test");
             provider.getEntityManager().persist(environment);
             provider.getEntityManager().flush();
             provider.getEntityManager().clear();
-            Optional<Environment> byId = provider.findById(Environment.class, environment.getId());
+            Optional<MyEntity> byId = provider.findById(MyEntity.class, environment.getId());
             assertTrue(byId.isPresent());
             return null;
         });
@@ -66,14 +64,13 @@ public class JPAProviderTest {
 
         int i = 10000000;
         //for (int i=0;i<100;i++) {
-        Environment environment = new Environment();
+        MyEntity environment = new MyEntity();
         environment.setName("Name ->" + i);
-        environment.setKey(Integer.toString(i));
         provider.save(environment, null);
         //}
         provider.getEntityManager().clear();
 
-        Optional<Environment> byId = provider.findById(Environment.class, environment.getId());
+        Optional<MyEntity> byId = provider.findById(MyEntity.class, environment.getId());
         assertNotNull(byId);
         assertTrue(byId.isPresent());
         assertEquals(environment.getId(), byId.get().getId());
@@ -84,8 +81,8 @@ public class JPAProviderTest {
 
     @Test
     public void testStream() throws Exception {
-        Stream<Environment> stream = provider.stream(Environment.class, "findNameLike", p("name", "Name%"));
-        List<Environment> collect = stream.collect(Collectors.toList());
+        Stream<MyEntity> stream = provider.stream(MyEntity.class, "findNameLike", p("name", "Name%"));
+        List<MyEntity> collect = stream.collect(Collectors.toList());
         assertNotNull(collect);
         assertTrue(collect.size() > 1);
 
@@ -93,7 +90,7 @@ public class JPAProviderTest {
     }
     @Test
     public void testIterate() throws Exception {
-        Iterator<Environment> stream = provider.iterate(Environment.class, "findNameLike", p("name", "Name%"));
+        Iterator<MyEntity> stream = provider.iterate(MyEntity.class, "findNameLike", p("name", "Name%"));
         assertNotNull(stream);
         assertTrue(stream.hasNext());
         assertTrue(stream.hasNext());
@@ -103,7 +100,7 @@ public class JPAProviderTest {
 
     @Test
     public void testPage() throws Exception {
-        Collection<Environment> stream = provider.page(Environment.class, "findNameLike", 5, 5, p("name", "Name%"));
+        Collection<MyEntity> stream = provider.page(MyEntity.class, "findNameLike", 5, 5, p("name", "Name%"));
         assertNotNull(stream);
         assertEquals(5, stream.size());
 
@@ -111,24 +108,25 @@ public class JPAProviderTest {
     }
     @Test
     public void testSingle() throws Exception {
-        Optional<Environment> stream = provider.single(Environment.class, "findByKey", p("key", "0"));
+
+        Optional<MyEntity> stream = provider.single(MyEntity.class, "findNameLike", p("name", "Name%"));
         assertNotNull(stream);
         assertTrue(stream.isPresent());
-        assertEquals("0", stream.get().getKey());
+        assertEquals(new Long(1), stream.get().getId());
 
 
     }
 
     @Test
     public void testCountWhere() throws Exception {
-        long stream = provider.countWhere(Environment.class);
+        long stream = provider.countWhere(MyEntity.class);
         assertTrue(stream > 0);
 
     }
 
     @Test
     public void testFindWhere() throws Exception {
-        Collection<Environment> result = provider.findWhere(Environment.class, p("key", "0"));
+        Collection<MyEntity> result = provider.findWhere(MyEntity.class, p("id", "1"));
         assertNotNull(result);
         assertTrue(result.size() > 0);
 
@@ -136,7 +134,7 @@ public class JPAProviderTest {
 
     @Test
     public void testFindWhereWildcard() throws Exception {
-        Collection<Environment> result = provider.findWhere(Environment.class, p("name","Name*"));
+        Collection<MyEntity> result = provider.findWhere(MyEntity.class, p("name","Name*"));
         assertNotNull(result);
         assertTrue(result.size() > 0);
 
@@ -144,7 +142,7 @@ public class JPAProviderTest {
 
     @Test
     public void testPageWhere() throws Exception {
-        Collection<Environment> result = provider.pageWhere(Environment.class,0,5, p("key","0"));
+        Collection<MyEntity> result = provider.pageWhere(MyEntity.class,0,5, p("name","Name*"));
         assertNotNull(result);
         assertTrue(result.size() > 0);
 
@@ -152,16 +150,16 @@ public class JPAProviderTest {
 
     @Test
     public void testGenerateQuery() throws Exception {
-        String s = provider.generateQuery(EnvironmentGroup.class, "select x from "+Environment.class.getSimpleName()+" x",false, true, p("name", "val"), p("parent", "1"));
-        assertEquals("select x from "+Environment.class.getSimpleName()+" x JOIN FETCH x.parent where x.name = :name AND x.parent.id = :parent", s.trim());
+        String s = provider.generateQuery(MyEntity.class, "select x from "+MyEntity.class.getSimpleName()+" x",false, true, p("name", "val"), p("parent", "1"));
+        assertEquals("select x from "+MyEntity.class.getSimpleName()+" x JOIN FETCH x.parent where x.name = :name AND x.parent.id = :parent", s.trim());
         provider.getEntityManager().createQuery(s);
 
     }
 
     @Test
     public void testGenerateWildcardQuery() throws Exception {
-        String s = provider.generateQuery(Environment.class,"select x from Test x",true, true, p("name", "val*"), p("key", "val"));
-        assertEquals("select x from "+Environment.class.getSimpleName()+" x where x.name like :name AND x.key = :key", s.trim());
+        String s = provider.generateQuery(MyEntity.class,"select x from "+MyEntity.class.getSimpleName()+" x",true, true, p("name", "val*"));
+        assertEquals("select x from "+MyEntity.class.getSimpleName()+" x where x.name like :name", s.trim());
         provider.getEntityManager().createQuery(s);
     }
 }
