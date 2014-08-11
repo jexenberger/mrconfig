@@ -1,4 +1,4 @@
-package org.github.mrconfig.framework.scaffold;
+package org.github.mrconfig.framework.macro;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

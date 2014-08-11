@@ -1,7 +1,7 @@
 package org.github.mrconfig.framework.resources;
 
-import org.github.mrconfig.framework.scaffold.Form;
-import org.github.mrconfig.framework.scaffold.FormRegistry;
+import org.github.mrconfig.framework.ux.Form;
+import org.github.mrconfig.framework.macro.FormRegistry;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

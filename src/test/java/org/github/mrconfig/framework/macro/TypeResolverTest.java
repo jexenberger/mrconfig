@@ -1,6 +1,5 @@
-package org.github.mrconfig.framework.scaffold;
+package org.github.mrconfig.framework.macro;
 
-import org.github.mrconfig.domain.KeyEntity;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

@@ -1,18 +1,15 @@
-package org.github.mrconfig.framework.scaffold;
+package org.github.mrconfig.framework.macro;
 
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
-import org.github.mrconfig.domain.AdminGroup;
-import org.github.mrconfig.framework.scaffold.angular.TemplateEngine;
+import org.github.mrconfig.framework.macro.angular.TemplateEngine;
+import org.github.mrconfig.framework.ux.Form;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.StreamingOutput;
-import java.io.IOException;
 import java.io.OutputStreamWriter;
-
-import static org.github.mrconfig.framework.scaffold.BeanFormBuilder.form;
 
 /**
  * Created by julian3 on 2014/07/20.

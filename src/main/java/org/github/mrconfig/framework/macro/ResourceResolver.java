@@ -1,4 +1,4 @@
-package org.github.mrconfig.framework.scaffold;
+package org.github.mrconfig.framework.macro;
 
 import org.github.mrconfig.framework.activerecord.Keyed;
 import org.github.mrconfig.framework.activerecord.Named;

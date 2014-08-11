@@ -1,11 +1,13 @@
-package org.github.mrconfig.framework.scaffold;
+package org.github.mrconfig.framework.macro;
+
+import org.github.mrconfig.framework.ux.Form;
 
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import static org.github.mrconfig.framework.scaffold.BeanFormBuilder.form;
-import static org.github.mrconfig.framework.scaffold.ResourceResolver.getRelativeHref;
+import static org.github.mrconfig.framework.macro.BeanFormBuilder.form;
+import static org.github.mrconfig.framework.macro.ResourceResolver.getRelativeHref;
 
 /**
  * Created by julian3 on 2014/07/20.

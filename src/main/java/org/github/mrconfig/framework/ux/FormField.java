@@ -1,4 +1,4 @@
-package org.github.mrconfig.framework.scaffold;
+package org.github.mrconfig.framework.ux;
 
 import org.github.mrconfig.framework.util.Pair;
 
@@ -15,9 +15,13 @@ public class FormField {
     String type;
     String lookup;
     String lookupFilter;
+    int length;
+    double min;
+    double max;
     boolean required;
+    boolean readonly;
 
-    public FormField(String id, String label, String type, String lookup, String lookupFilter, boolean required, Pair<String, String> ... options) {
+    public FormField(String id, String label, String type, String lookup, String lookupFilter, boolean required, boolean readonly, Pair<String, String> ... options) {
         this.id = id;
         this.label = label;
         this.type = type;
@@ -25,6 +29,7 @@ public class FormField {
         this.options = options;
         this.lookupFilter = lookupFilter;
         this.required = required;
+        this.readonly = readonly;
     }
 
     public String getId() {
@@ -68,6 +73,21 @@ public class FormField {
         return required;
     }
 
+    public boolean isReadonly() {
+        return readonly;
+    }
+
+    public int getLength() {
+        return length;
+    }
+
+    public double getMin() {
+        return min;
+    }
+
+    public double getMax() {
+        return max;
+    }
 
     @Override
     public String toString() {
@@ -79,6 +99,7 @@ public class FormField {
         sb.append(", lookup='").append(lookup).append('\'');
         sb.append(", lookupFilter='").append(lookupFilter).append('\'');
         sb.append(", required=").append(required);
+        sb.append(", readonly=").append(readonly);
         sb.append('}');
         return sb.toString();
     }

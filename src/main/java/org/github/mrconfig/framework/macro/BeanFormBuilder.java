@@ -1,10 +1,12 @@
-package org.github.mrconfig.framework.scaffold;
+package org.github.mrconfig.framework.macro;
 
 import org.github.mrconfig.framework.activerecord.Keyed;
 import org.github.mrconfig.framework.activerecord.Named;
 import org.github.mrconfig.framework.util.Pair;
 import org.github.mrconfig.framework.util.ReflectionUtil;
 import org.github.mrconfig.framework.util.Inflector;
+import org.github.mrconfig.framework.ux.Form;
+import org.github.mrconfig.framework.ux.FormField;
 
 import javax.persistence.Column;
 import javax.persistence.Index;
@@ -19,8 +21,8 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static org.github.mrconfig.framework.util.Pair.cons;
-import static org.github.mrconfig.framework.scaffold.ResourceResolver.getAbsoluteHref;
-import static org.github.mrconfig.framework.scaffold.ResourceResolver.getLookupField;
+import static org.github.mrconfig.framework.macro.ResourceResolver.getAbsoluteHref;
+import static org.github.mrconfig.framework.macro.ResourceResolver.getLookupField;
 
 /**
  * Created by julian3 on 2014/07/20.
@@ -79,7 +81,7 @@ public class BeanFormBuilder {
 
             boolean required = (fieldId.equals("id") || fieldId.equals("key") || declaredField.isAnnotationPresent(NotNull.class));
 
-            FormField formField = new FormField(fieldId,label, fieldType, lookup, lookupFilter,required, options);
+            FormField formField = new FormField(fieldId,label, fieldType, lookup, lookupFilter,required, false, options);
             form.getFields().add(formField);
 
         }

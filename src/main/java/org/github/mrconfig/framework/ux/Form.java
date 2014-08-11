@@ -1,4 +1,6 @@
-package org.github.mrconfig.framework.scaffold;
+package org.github.mrconfig.framework.ux;
+
+import org.github.mrconfig.framework.macro.ListForm;
 
 import java.util.*;
 
@@ -13,6 +15,7 @@ public class Form {
     List<FormField> fields;
     ListForm list;
     Set<FormField> searchFields;
+    Set<FormField> listFields;
     String group = "Main";
 
 
@@ -73,6 +76,13 @@ public class Form {
             return orderFields(field1, field2);
         });
         return searchFields;
+    }
+
+    public Set<FormField> getListFields() {
+        if (listFields == null) {
+            listFields = new LinkedHashSet<>();
+        }
+        return listFields;
     }
 
     public int orderFields(FormField field1, FormField field2) {

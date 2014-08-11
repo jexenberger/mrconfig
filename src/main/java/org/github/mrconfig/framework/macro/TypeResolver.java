@@ -1,6 +1,5 @@
-package org.github.mrconfig.framework.scaffold;
+package org.github.mrconfig.framework.macro;
 
-import org.github.mrconfig.domain.BaseEntity;
 import org.github.mrconfig.framework.activerecord.ActiveRecord;
 
 import javax.persistence.Id;

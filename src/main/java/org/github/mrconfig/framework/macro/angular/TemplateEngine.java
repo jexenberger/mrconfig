@@ -1,4 +1,4 @@
-package org.github.mrconfig.framework.scaffold.angular;
+package org.github.mrconfig.framework.macro.angular;
 
 import freemarker.template.Configuration;
 
@@ -23,7 +23,7 @@ public class TemplateEngine {
             //CONFIG.setClassForTemplateLoading(TemplateEngine.class, "templates");
             System.out.println(pwd());
             try {
-                CONFIG.setDirectoryForTemplateLoading(new File(pwd()+"/src/main/resources/org/github/mrconfig/framework/scaffold/angular/templates"));
+                CONFIG.setDirectoryForTemplateLoading(new File(pwd()+"/src/main/resources/org/github/mrconfig/framework/macro/angular/templates"));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
