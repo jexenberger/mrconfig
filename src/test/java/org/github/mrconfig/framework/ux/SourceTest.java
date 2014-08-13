@@ -11,14 +11,24 @@ import static org.junit.Assert.assertEquals;
 /**
  * Created by julian3 on 2014/08/11.
  */
-public class ViewTest {
+public class SourceTest {
 
 
     @Test
     public void testRender() throws Exception {
 
         String helloWorld = "hello world";
-        View toTest = () -> new ByteArrayInputStream(helloWorld.getBytes());
+        Source toTest = new Source() {
+            @Override
+            public InputStream getSource() {
+                return new ByteArrayInputStream(helloWorld.getBytes());
+            }
+
+            @Override
+            public String getPath() {
+                return "";
+            }
+        };
 
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         toTest.render(output);

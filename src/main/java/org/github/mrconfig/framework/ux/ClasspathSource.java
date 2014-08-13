@@ -1,19 +1,18 @@
 package org.github.mrconfig.framework.ux;
 
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.Objects;
 
 /**
  * Created by julian3 on 2014/08/11.
  */
-public class ClasspathView implements View{
+public class ClasspathSource implements Source{
 
 
     ClassLoader classLoader;
     String path;
 
-    public ClasspathView(ClassLoader classLoader, String path) {
+    public ClasspathSource(ClassLoader classLoader, String path) {
         this.classLoader = classLoader;
         this.path = path;
     }
@@ -22,7 +21,7 @@ public class ClasspathView implements View{
         return path;
     }
 
-    public ClasspathView(String path) {
+    public ClasspathSource(String path) {
         this(Thread.currentThread().getContextClassLoader(),path);
     }
 
@@ -33,11 +32,11 @@ public class ClasspathView implements View{
         return resourceAsStream;
     }
 
-    public static View classpath(String path) {
-        return new ClasspathView(path);
+    public static Source classpath(String path) {
+        return new ClasspathSource(path);
     }
 
-    public static View classpath(ClassLoader classLoader, String path) {
-        return new ClasspathView(classLoader, path);
+    public static Source classpath(ClassLoader classLoader, String path) {
+        return new ClasspathSource(classLoader, path);
     }
 }

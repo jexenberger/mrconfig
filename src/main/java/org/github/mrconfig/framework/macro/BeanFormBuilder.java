@@ -81,7 +81,7 @@ public class BeanFormBuilder {
 
             boolean required = (fieldId.equals("id") || fieldId.equals("key") || declaredField.isAnnotationPresent(NotNull.class));
 
-            FormField formField = new FormField(fieldId,label, fieldType, lookup, lookupFilter,required, false, options);
+            FormField formField = new FormField(fieldId,label, null, lookup, lookupFilter,required, false, options);
             form.getFields().add(formField);
 
         }

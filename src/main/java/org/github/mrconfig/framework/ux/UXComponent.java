@@ -1,6 +1,7 @@
 package org.github.mrconfig.framework.ux;
 
 import java.io.OutputStream;
+import java.util.Map;
 
 /**
  * Created by w1428134 on 2014/08/04.
@@ -38,7 +39,7 @@ public class UXComponent {
     }
 
 
-    public void render(String method, OutputStream output) {
+    public void render(String method, Map<String, Object> model, OutputStream output) {
         //the hard way
         View targetView = null;
         if (method.equalsIgnoreCase("get")) {
@@ -56,6 +57,6 @@ public class UXComponent {
         if (targetView == null) {
             throw new IllegalStateException("no view could be resolved for "+method);
         }
-        targetView.render(output);
+        targetView.render(model, output);
     }
 }

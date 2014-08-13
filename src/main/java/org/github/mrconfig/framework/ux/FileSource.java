@@ -7,12 +7,12 @@ import static java.util.Objects.requireNonNull;
 /**
  * Created by julian3 on 2014/08/10.
  */
-public class FileView implements View {
+public class FileSource implements Source {
 
 
     File input;
 
-    public FileView(File input) {
+    public FileSource(File input) {
         requireNonNull(input,"input file cannot be null");
         assert input.exists();
         this.input = input;
@@ -27,12 +27,17 @@ public class FileView implements View {
         }
     }
 
+    @Override
+    public String getPath() {
+        return input.getName();
+    }
+
 
     public File getInput() {
         return input;
     }
 
-    public static View fileView(File file) {
-        return new FileView(file);
+    public static Source file(File file) {
+        return new FileSource(file);
     }
 }

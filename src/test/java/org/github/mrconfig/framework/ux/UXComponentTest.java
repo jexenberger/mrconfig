@@ -4,6 +4,8 @@ import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.easymock.EasyMock.*;
 
@@ -17,16 +19,18 @@ public class UXComponentTest {
 
         View view = createMock(View.class);
         ByteArrayOutputStream output = new ByteArrayOutputStream();
-        view.render(output);
+        Map<String, Object> model = new HashMap<>();
+
+        view.render(model, output);
         expectLastCall().times(4);
 
         replay(view);
 
         UXComponent uxComponent = new UXComponent(view,view,view,view);
-        uxComponent.render("get", output);
-        uxComponent.render("put", output);
-        uxComponent.render("post", output);
-        uxComponent.render("list", output);
+        uxComponent.render("get", model, output);
+        uxComponent.render("put", model,output);
+        uxComponent.render("post",model, output);
+        uxComponent.render("list",model, output);
 
         verify(view);
 

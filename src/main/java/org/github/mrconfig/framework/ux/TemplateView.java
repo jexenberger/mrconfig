@@ -1,10 +1,16 @@
 package org.github.mrconfig.framework.ux;
 
+import freemarker.cache.MultiTemplateLoader;
+import freemarker.cache.TemplateLoader;
 import freemarker.template.Template;
+import freemarker.template.TemplateException;
 import org.github.mrconfig.framework.macro.angular.TemplateEngine;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -12,26 +18,19 @@ import java.util.Objects;
  */
 public class TemplateView implements View{
 
-    View delegate;
 
-    public TemplateView(View delegate) {
-        Objects.requireNonNull(delegate);
-        this.delegate = delegate;
+    private String source;
+
+    public TemplateView(String source) {
+        this.source = source;
     }
 
     @Override
-    public InputStream getSource() {
-        return delegate.getSource();
+    public void render(Map<String, Object> model, OutputStream target) {
+        Templating.getTemplating().write(source, model, target);
     }
 
-    @Override
-    public String getPath() {
-        return this.delegate.getPath();
-    }
-
-    @Override
-    public void render(OutputStream outputStream) {
-        Template template = TemplateEngine.getConfiguration().getTemplate(getPath());
-        template.process();
+    public static View templateView(String name) {
+        return new TemplateView(name);
     }
 }

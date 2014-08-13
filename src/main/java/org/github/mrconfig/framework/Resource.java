@@ -31,6 +31,19 @@ public class Resource {
         this.uniqueLookup = uniqueLookup;
     }
 
+    public Resource(String path, String group, Class<?> resourceClass, Class<?> resourceController,CRUDService<? , ?> service, UXComponent uxComponent) {
+        this.path = path;
+        this.group = group;
+        this.resourceClass = resourceClass;
+        this.resourceController = resourceController;
+        this.creatable = service;
+        this.listable = service;
+        this.updateable = service;
+        this.deletable = service;
+        this.uniqueLookup = service;
+        this.uxComponent = uxComponent;
+    }
+
     public String getPath() {
         return path;
     }
