@@ -3,6 +3,8 @@ package org.github.mrconfig.framework.ux;
 import org.github.mrconfig.framework.activerecord.ActiveRecord;
 
 import javax.ws.rs.core.Link;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.*;
 
 /**
@@ -141,19 +143,25 @@ public class Component {
     }
 
     public static Component select() {
-        return new Component("select", "Read Only", "ReadOnly Field component", "select.ftl", Enum.class);
+        return new Component("select", "Read Only", "ReadOnly Field component", "select.ftl",Enum.class);
+    }
+
+    public static Component number() {
+        return new Component("number", "Number", "Number Field component", "number.ftl",
+                Integer.class, int.class,
+                Double.class, double.class,
+                Float.class, float.class,
+                Short.class, short.class,
+                Byte.class, byte.class,
+                long.class, Long.class,
+                BigDecimal.class,
+                BigInteger.class);
     }
 
     public static Component text() {
         return new Component("text", "Read Only", "ReadOnly Field component", "text.ftl",
                 String.class,
-                Integer.class, int.class,
-                Double.class, double.class,
-                Character.class, char.class,
-                Float.class, float.class,
-                Short.class, short.class,
-                Byte.class, byte.class,
-                long.class, Long.class);
+                Character.class, char.class);
     }
 
     public static Optional<Component> getComponentByType(Class<?> dataType, boolean allowSubtypes) {

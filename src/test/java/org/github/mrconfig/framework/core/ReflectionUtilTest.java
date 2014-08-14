@@ -8,6 +8,7 @@ import java.lang.reflect.Field;
 import java.util.Collection;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -15,6 +16,10 @@ import static org.junit.Assert.assertTrue;
  */
 public class ReflectionUtilTest {
 
+    public boolean test1;
+    public Boolean test2;
+    public String test3;
+    public Number test4;
 
     @Test
     public void testGetAllFields() throws Exception {
@@ -48,5 +53,54 @@ public class ReflectionUtilTest {
 
 
 
+    }
+
+    @Test
+    public void testGetMethod() throws Exception {
+
+
+        Field primitiveBoolean = getClass().getField("test1");
+        String method = ReflectionUtil.getMethod(primitiveBoolean);
+        assertEquals("isTest1",method);
+
+        Field wrapperBoolean = getClass().getField("test2");
+        method = ReflectionUtil.getMethod(wrapperBoolean);
+        assertEquals("isTest2",method);
+
+        Field stringField = getClass().getField("test3");
+        method = ReflectionUtil.getMethod(stringField);
+        assertEquals("getTest3",method);
+
+    }
+
+    @Test
+    public void testSetMethod() throws Exception {
+
+        Field primitiveBoolean = getClass().getField("test1");
+        String method = ReflectionUtil.setMethod(primitiveBoolean);
+        assertEquals("setTest1",method);
+    }
+
+    @Test
+    public void testHasSetter() throws Exception {
+
+        Field setterField = getClass().getField("test1");
+        assertTrue(ReflectionUtil.hasSetterMethod(setterField, getClass()));
+
+        Field noSetterField = getClass().getField("test2");
+        assertFalse(ReflectionUtil.hasSetterMethod(noSetterField, getClass()));
+
+        Field widenedField = getClass().getField("test3");
+        assertFalse(ReflectionUtil.hasSetterMethod(widenedField, getClass()));
+
+
+    }
+
+    public void setTest1(boolean test1) {
+        this.test1 = test1;
+    }
+
+    public void setTest4(Long test4) {
+        this.test4 = test4;
     }
 }

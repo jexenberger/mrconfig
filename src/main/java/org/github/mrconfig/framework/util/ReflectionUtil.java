@@ -1,8 +1,8 @@
 package org.github.mrconfig.framework.util;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Collection;
+import java.lang.reflect.Method;
+import java.util.*;
 import java.util.function.Predicate;
 
 /**
@@ -33,5 +33,33 @@ public class ReflectionUtil {
         }
         return fields;
 
+    }
+
+
+    public static String getMethod(Field property) {
+        Objects.requireNonNull(property);
+        Inflector inflector = Inflector.getInstance();
+        if (Boolean.class.isAssignableFrom(property.getType()) || boolean.class.isAssignableFrom(property.getType())) {
+            return "is"+ inflector.capitalise(property.getName());
+        } else {
+            return "get" + inflector.capitalise(property.getName());
+        }
+
+    }
+
+    public static String setMethod(Field property) {
+        Objects.requireNonNull(property);
+        Inflector inflector = Inflector.getInstance();
+        return "set" + inflector.capitalise(property.getName());
+    }
+
+    public static boolean hasSetterMethod(Field property, Class<?> parent) {
+        Objects.requireNonNull(property);
+        String method = setMethod(property);
+        Method[] methods = parent.getMethods();
+        Optional<Method> setMethod = Arrays.stream(methods)
+                .filter((aMethod) -> aMethod.getName().equals(method) && aMethod.getParameterCount() == 1 && aMethod.getParameterTypes()[0].isAssignableFrom(property.getType()))
+                .findFirst();
+        return setMethod.isPresent();
     }
 }
