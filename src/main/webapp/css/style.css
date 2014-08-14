@@ -1,0 +1,143 @@
+@import url(../fonts/lato.woff);
+
+* {
+    -webkit-border-radius: 0 !important;
+    -moz-border-radius: 0 !important;
+    border-radius: 0 !important;
+}
+
+*
+{
+    border-color: #CCCCCC;
+    outline: none;
+    box-shadow:none !important;
+}
+
+h1, h2, h3, h4 {
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
+}
+label .form-group .form-control .form-control-feedback .help-block .control-label {
+    font-family: 'Lato', sans-serif;
+}
+html {
+    background-color: #ffffff;
+}
+.top {
+    background-color: #3498DB;
+}
+.top .navbar-brand {
+    font-family: 'Lato', sans-serif;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    padding: 0 10px;
+    background-color: #3498DB;
+    color: #ffffff;
+    text-decoration: none;
+}
+.top .container {
+    padding: 0;
+}
+.banner {
+    background-color: #373737;
+}
+.banner .container {
+    background-color: #3498DB;
+    min-height: 200px;
+    padding: 40px 30px 30px 40px;
+}
+.banner .container p {
+    font-size: 22px;
+    padding-left: 5px;
+    font-weight: 300;
+}
+.middle {
+    background-color: #CCC;
+}
+.middle .container {
+    background-color: #FFF;
+    min-height: 300px;
+    padding-bottom: 20px;
+}
+.navbar-nav li a {
+    color: #FFFFFF;
+    font-family: 'Lato', sans-serif;
+}
+.navbar-nav li a:hover ul  {
+    background-color: #373737;
+}
+.bottom {
+    background-color: #474747;
+}
+.bottom .container {
+    background-color: #373737;
+    min-height: 150px;
+}
+.bottom .container h3 {
+    color: #999;
+}
+.bottom .container p {
+    color: #666;
+}
+.navbar-toggle {
+    color: #3498DB;
+    font-size: 32px;
+    margin: 3px;
+    padding: 2px 5px;
+    line-height: 32px;
+}
+.navbar-toggle:hover {
+    background-color: #373737;
+}
+.navbar-nav {
+    margin: 0;
+}
+
+.content p {
+    line-height: 30px;
+    font-size: 16px;
+    font-family: 'Lato', sans-serif;
+}
+
+.dropdown-submenu {
+    position:relative;
+}
+.dropdown-submenu>.dropdown-menu {
+    top:0;
+    left:100%;
+    margin-top:-6px;
+    margin-left:-1px;
+    -webkit-border-radius:0 6px 6px 6px;
+    -moz-border-radius:0 6px 6px 6px;
+    border-radius:0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+    display:block;
+}
+.dropdown-submenu>a:after {
+    display:block;
+    content:" ";
+    float:right;
+    width:0;
+    height:0;
+    border-color:transparent;
+    border-style:solid;
+    border-width:5px 0 5px 5px;
+    border-left-color:#cccccc;
+    margin-top:5px;
+    margin-right:-10px;
+}
+.dropdown-submenu:hover>a:after {
+    border-left-color:#ffffff;
+}
+.dropdown-submenu.pull-left {
+    float:none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+    left:-100%;
+    margin-left:10px;
+    -webkit-border-radius:6px 0 6px 6px;
+    -moz-border-radius:6px 0 6px 6px;
+    border-radius:6px 0 6px 6px;
+}

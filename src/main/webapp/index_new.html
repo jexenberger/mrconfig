@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <!-- Set the viewport so this responsive site displays correctly on mobile devices -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap 3 Responsive Design Tutorial | RevillWeb.com</title>
+    <!-- Include bootstrap CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+<!-- Site header and navigation -->
+<header class="top" role="header">
+    <div class="container-fluid">
+        <a href="#" class="navbar-brand pull-left">
+            My Application
+        </a>
+        <button class="navbar-toggle" data-toggle="collapse" data-target="#topNav">
+            <span class="glyphicon glyphicon-align-justify"></span>
+        </button>
+        <nav id="topNav" class="navbar-collapse collapse" role="navigation">
+            <ul class="navbar-nav nav">
+                <li><a href="#">Home</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+            <ul class="navbar-nav nav pull-right">
+                <li><a href="#">username</a></li>
+            </ul>
+
+        </nav>
+    </div>
+
+</header>
+
+<br/>
+<br/>
+<!-- Middle content section -->
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-2">
+
+            <div class="panel-group" id="accordion">
+                <div class="panel panel-default ">
+                    <div class="panel-heading">
+                        <h4 class="panel-title nav">
+                            <a data-toggle="collapse" class="nav" data-parent="#accordion" href="#collapseOne">
+                                <i class="glyphicon glyphicon-th"></i>&nbsp;Main Menu
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapseOne" class="panel-collapse collapse in">
+                        <div class="panel-body">
+                            <ul class="nav"><!-- Main menu -->
+                                <li><a href="index.html"><i class="glyphicon glyphicon-home"></i>Dashboard</a></li>
+                                <li><a href="calendar.html"><i class="glyphicon glyphicon-calendar"></i>Calendar</a></li>
+                                <li><a href="stats.html"><i class="glyphicon glyphicon-stats"></i>Statistics (Charts)</a></li>
+                                <li><a href="tables.html"><i class="glyphicon glyphicon-list"></i>Tables</a></li>
+                                <li><a href="buttons.html"><i class="glyphicon glyphicon-record"></i>Buttons</a></li>
+                                <li><a href="editors.html"><i class="glyphicon glyphicon-pencil"></i>Editors</a></li>
+                                <li class="current"><a href="forms.html"><i class="glyphicon glyphicon-tasks"></i>Forms</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
+                                <i class="glyphicon glyphicon-th"></i>&nbsp;Main Menu 2
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapseTwo" class="panel-collapse collapse in">
+                        <div class="panel-body">
+                            <ul class="nav"><!-- Main menu -->
+                                <li><a href="index.html"><i class="glyphicon glyphicon-home"></i>Dashboard</a></li>
+                                <li><a href="calendar.html"><i class="glyphicon glyphicon-calendar"></i>Calendar</a></li>
+                                <li><a href="stats.html"><i class="glyphicon glyphicon-stats"></i>Statistics (Charts)</a></li>
+                                <li><a href="tables.html"><i class="glyphicon glyphicon-list"></i>Tables</a></li>
+                                <li><a href="buttons.html"><i class="glyphicon glyphicon-record"></i>Buttons</a></li>
+                                <li><a href="editors.html"><i class="glyphicon glyphicon-pencil"></i>Editors</a></li>
+                                <li class="current"><a href="forms.html"><i class="glyphicon glyphicon-tasks"></i>Forms</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-10">
+            <div class="panel panel-default nav-stacked">
+                <div class="panel-heading clearfix">
+
+                    <h2 class="panel-title pull-left" style="padding-top: 7.5px;">Horizontal Form</h2>
+                    <div class="btn-group pull-right">
+                        <button type="button"
+                                class="glyphicon glyphicon-cog btn btn-danger dropdown-toggle pull-right"
+                                data-toggle="dropdown">
+                            Actions <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href="#">Action</a></li>
+                            <li><a href="#">Another action</a></li>
+                            <li><a href="#">Something else here</a></li>
+                            <li class="divider"></li>
+                            <li><a href="#">Separated link</a></li>
+                        </ul>
+                    </div>
+
+                </div>
+
+                <div class="panel-body">
+                    <form class="form-horizontal" role="form">
+                        <div class="form-group has-success has-feedback">
+                            <label for="inputEmail3" class="col-sm-2 control-label">Email</label>
+
+                            <div class="col-sm-7">
+                                <input type="email" class="form-control" id="inputEmail3" placeholder="Email">
+                                <span class="glyphicon glyphicon-ok form-control-feedback"></span>
+
+                            </div>
+                            <span class="help-block has-success">Input was correct</span>
+                        </div>
+                        <div class="form-group  has-feedback">
+                            <label for="inputEmail4" class="col-sm-2 control-label">Test2</label>
+
+                            <div class="col-sm-7">
+                                <input type="email" class="form-control" id="inputEmail4" placeholder="Email">
+
+
+                            </div>
+                        </div>
+                        <div class="form-group has-warning has-feedback">
+                            <label for="inputPassword3" class="col-sm-2 control-label">Password</label>
+
+                            <div class="col-sm-7">
+                                <input type="password" class="form-control" id="inputPassword3" placeholder="Password">
+                                <span class="glyphicon glyphicon-warning-sign form-control-feedback"></span>
+                            </div>
+                            <span class="help-block has-success">She's broken</span>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-7">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox"> Remember me
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="panel-footer">
+                    <button type="submit" class="btn btn-success glyphicon glyphicon-save">&nbsp;Save</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Include jQuery and bootstrap JS plugins -->
+<script src="js/jquery-2.1.1.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+</body>
+</html>
