@@ -1,6 +1,6 @@
 package org.github.mrconfig.framework.macro;
 
-import org.github.mrconfig.framework.ux.Form;
+import org.github.mrconfig.framework.ux.form.Form;
 
 import java.util.Collection;
 import java.util.LinkedHashMap;

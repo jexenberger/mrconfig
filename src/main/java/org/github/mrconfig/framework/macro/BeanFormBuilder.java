@@ -5,8 +5,8 @@ import org.github.mrconfig.framework.activerecord.Named;
 import org.github.mrconfig.framework.util.Pair;
 import org.github.mrconfig.framework.util.ReflectionUtil;
 import org.github.mrconfig.framework.util.Inflector;
-import org.github.mrconfig.framework.ux.Form;
-import org.github.mrconfig.framework.ux.FormField;
+import org.github.mrconfig.framework.ux.form.Form;
+import org.github.mrconfig.framework.ux.form.FormField;
 
 import javax.persistence.Column;
 import javax.persistence.Index;

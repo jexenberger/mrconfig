@@ -2,9 +2,11 @@ package org.github.mrconfig.framework.ux;
 
 import org.github.mrconfig.framework.Resource;
 import org.github.mrconfig.framework.testdomain.MyEntity;
+import org.github.mrconfig.framework.ux.form.FormBuilder;
+import org.github.mrconfig.framework.ux.form.FormField;
 import org.junit.Test;
 
-import static org.github.mrconfig.framework.ux.FormBuilder.newInstance;
+import static org.github.mrconfig.framework.ux.form.FormBuilder.newInstance;
 
 /**
  * Created by w1428134 on 2014/08/12.

@@ -1,4 +1,4 @@
-package org.github.mrconfig.framework.ux;
+package org.github.mrconfig.framework.ux.form;
 
 import org.github.mrconfig.framework.Resource;
 import org.github.mrconfig.framework.util.Inflector;

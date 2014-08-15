@@ -3,7 +3,7 @@ package org.github.mrconfig.framework.macro;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import org.github.mrconfig.framework.macro.angular.TemplateEngine;
-import org.github.mrconfig.framework.ux.Form;
+import org.github.mrconfig.framework.ux.form.Form;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;

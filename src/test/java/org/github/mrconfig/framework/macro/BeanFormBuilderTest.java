@@ -2,7 +2,7 @@ package org.github.mrconfig.framework.macro;
 
 import org.github.mrconfig.domain.Server;
 import org.github.mrconfig.framework.macro.angular.TemplateEngine;
-import org.github.mrconfig.framework.ux.Form;
+import org.github.mrconfig.framework.ux.form.Form;
 import org.junit.Test;
 
 import java.io.StringWriter;

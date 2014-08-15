@@ -1,6 +1,6 @@
 package org.github.mrconfig.framework.resources;
 
-import org.github.mrconfig.framework.ux.Form;
+import org.github.mrconfig.framework.ux.form.Form;
 import org.github.mrconfig.framework.macro.FormRegistry;
 
 import javax.ws.rs.GET;

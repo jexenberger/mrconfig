@@ -1,7 +1,8 @@
-package org.github.mrconfig.framework.ux;
+package org.github.mrconfig.framework.ux.form;
 
 import org.github.mrconfig.framework.macro.ResourceResolver;
 import org.github.mrconfig.framework.util.Inflector;
+import org.github.mrconfig.framework.ux.Component;
 
 import javax.validation.constraints.*;
 import java.lang.reflect.Field;
