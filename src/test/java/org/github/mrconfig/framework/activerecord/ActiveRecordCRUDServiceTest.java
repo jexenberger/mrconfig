@@ -1,5 +1,6 @@
 package org.github.mrconfig.framework.activerecord;
 
+import org.github.mrconfig.framework.activerecord.jpa.JPAProvider;
 import org.github.mrconfig.framework.testdomain.MyEntity;
 import org.github.mrconfig.framework.util.Box;
 import org.github.mrconfig.service.BaseJPA;
@@ -27,7 +28,7 @@ public class ActiveRecordCRUDServiceTest extends BaseJPA {
     @Before
     public void before() throws Exception {
         super.before();
-        JPAProvider.setPersistenceUnit(BaseJPA.UNIT_NAME);
+        JPAProvider.setPERSISTENCE_UNIT(BaseJPA.UNIT_NAME);
 
         service = new ActiveRecordCRUDService<MyEntity, Long>(MyEntity.class);
         environment = getMyEntity();

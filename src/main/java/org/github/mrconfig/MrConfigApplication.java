@@ -4,7 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
 import org.github.mrconfig.domain.*;
-import org.github.mrconfig.framework.activerecord.JPAProvider;
+import org.github.mrconfig.framework.Module;
+import org.github.mrconfig.framework.Resource;
+import org.github.mrconfig.framework.ResourceRegistry;
+import org.github.mrconfig.framework.activerecord.jpa.JPAModule;
+import org.github.mrconfig.framework.activerecord.jpa.JPAProvider;
 import org.github.mrconfig.framework.activerecord.ProviderFactory;
 import org.github.mrconfig.framework.resources.GenerateExceptionMapper;
 import org.github.mrconfig.framework.resources.JaxbProvider;
@@ -12,6 +16,8 @@ import org.github.mrconfig.framework.resources.MenuResource;
 import org.github.mrconfig.framework.macro.FormRegistry;
 import org.github.mrconfig.framework.macro.FormResource;
 import org.github.mrconfig.framework.macro.StaticResource;
+import org.github.mrconfig.framework.ux.form.BeanFormBuilder;
+import org.github.mrconfig.framework.ux.form.DefaultUXModule;
 import org.github.mrconfig.resources.TemplateResource;
 import org.github.mrconfig.resources.*;
 import org.glassfish.grizzly.http.server.HttpServer;
@@ -49,44 +55,40 @@ public class MrConfigApplication extends ResourceConfig {
             @Override
             public void run() {
 
-                FormRegistry.get().register(Server.class);
-                FormRegistry.get().register(AdminGroup.class);
-                FormRegistry.get().register(EnvironmentGroup.class);
-                FormRegistry.get().register(PropertyValue.class);
-                FormRegistry.get().register(Property.class);
-                FormRegistry.get().register(Template.class);
-                FormRegistry.get().register(User.class);
-                FormRegistry.get().register(ManeeshDemo.class);
+
+                Module myModule = new Module() {
+
+                    @Override
+                    public void init() {
 
 
-                JPAProvider.setPersistenceUnit("org.github.mrconfig.domain");
+                        this.addModule(new JPAModule("org.github.mrconfig.domain"));
+                        this.addModule(new DefaultUXModule());
 
-                ObjectMapper mapper = new ObjectMapper();
-                mapper.enable(SerializationFeature.INDENT_OUTPUT);
+                        Resource.scaffold(EnvironmentResource.class, BeanFormBuilder::form);
+                        Resource.scaffold(EnvironmentGroupResource.class,BeanFormBuilder::form);
+                        Resource.scaffold(ServerResource.class,BeanFormBuilder::form);
+                        Resource.scaffold(PropertyResource.class,BeanFormBuilder::form);
+                        Resource.scaffold(AdminGroupResource.class,BeanFormBuilder::form);
+                        Resource.scaffold(UserResource.class,BeanFormBuilder::form);
+                        Resource.scaffold(ManeeshResource.class,BeanFormBuilder::form);
+                        Resource.scaffold(PropertyValueResource.class,BeanFormBuilder::form);
+                        Resource.scaffold(TemplateResource.class,BeanFormBuilder::form);
 
-                // create JsonProvider to provide custom ObjectMapper
-                JacksonJaxbJsonProvider provider = new JacksonJaxbJsonProvider();
-                provider.setMapper(mapper);
+                        addResourceClass(PropertiesImportResource.class);
+                        addResourceClass(FileResource.class);
 
-                ResourceConfig rc = new MrConfigApplication(
-                        EnvironmentResource.class,
-                        EnvironmentGroupResource.class,
-                        ServerResource.class,
-                        PropertyResource.class,
-                        AdminGroupResource.class,
-                        UserResource.class,
-                        ManeeshResource.class,
-                        PropertyValueResource.class,
-                        TemplateResource.class,
-                        PropertiesImportResource.class,
-                        FileResource.class,
-                        JacksonFeature.class,
-                        MultiPartFeature.class,
-                        GenerateExceptionMapper.class,
-                        JaxbProvider.class,
-                        FormResource.class,
-                        StaticResource.class,
-                        MenuResource.class);
+                        addResourceClass(JaxbProvider.class);
+                        addResourceClass(JaxbProvider.class);
+                        addResourceClass(GenerateExceptionMapper.class);
+                        addResourceClass(MultiPartFeature.class);
+                    }
+                };
+
+
+                ResourceConfig rc = new MrConfigApplication(myModule.allResources());
+
+
                 Map<String, Object> properties = new HashMap<>();
                 properties.put(ServerProperties.TRACING, "ALL");
                 properties.put(ServerProperties.TRACING_THRESHOLD, "VERBOSE");
@@ -153,7 +155,7 @@ public class MrConfigApplication extends ResourceConfig {
         importProperties(disc, MrConfigApplication.class.getResourceAsStream("/parent.properties"));
         importProperties(prod, MrConfigApplication.class.getResourceAsStream("/test.properties"));
 
-        BufferedReader reader = new BufferedReader(new InputStreamReader(MrConfigApplication.class.getResourceAsStream("/test.ftl")));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(MrConfigApplication.class.getResourceAsStream("/org/github/mrconfig/test.ftl")));
 
         Template t = new Template("testTemplate",reader.lines().collect(joining("\n")).getBytes()).save();
 

@@ -1,6 +1,5 @@
 package org.github.mrconfig.framework.service;
 
-import org.github.mrconfig.framework.activerecord.Link;
 import org.github.mrconfig.framework.util.Pair;
 
 import java.util.Collection;

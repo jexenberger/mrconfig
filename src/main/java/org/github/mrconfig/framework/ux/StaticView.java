@@ -15,7 +15,7 @@ public class StaticView  implements View{
     }
 
     @Override
-    public void render(Map<String, Object> model, OutputStream target) {
+    public void render(Object model, OutputStream target) {
         //can't render the model, just process the target
         source.render(target);
     }

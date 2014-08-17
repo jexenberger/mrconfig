@@ -1,9 +1,7 @@
 package org.github.mrconfig.framework.resources;
 
-import org.github.mrconfig.framework.activerecord.JPAProvider;
 import org.github.mrconfig.framework.service.CRUDService;
 import org.github.mrconfig.framework.service.Creatable;
-import org.github.mrconfig.framework.service.UniqueLookup;
 import org.github.mrconfig.framework.service.Updateable;
 import org.github.mrconfig.framework.testdomain.MyEntity;
 import org.junit.Before;

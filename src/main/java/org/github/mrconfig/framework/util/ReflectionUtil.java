@@ -1,6 +1,7 @@
 package org.github.mrconfig.framework.util;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.function.Predicate;
@@ -28,7 +29,7 @@ public class ReflectionUtil {
                 fields.add(baseField);
             }
         }
-        if (!type.getSuperclass().getName().equals(Object.class.getName())) {
+        if (type.getSuperclass() != null) {
             fields.addAll(getAllFields(type.getSuperclass(), fieldFilter));
         }
         return fields;
@@ -53,6 +54,22 @@ public class ReflectionUtil {
         return "set" + inflector.capitalise(property.getName());
     }
 
+    public static Method resolveMethod(Class<?> source, String name, Class<?> ... parameterTypes) {
+        try {
+            return source.getMethod(name, parameterTypes);
+        } catch (NoSuchMethodException e) {
+            return null;
+        }
+    }
+
+    public static Object invoke(Method method, Object target, Object ... parameters) {
+        try {
+            return method.invoke(target, parameters);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public static boolean hasSetterMethod(Field property, Class<?> parent) {
         Objects.requireNonNull(property);
         String method = setMethod(property);
@@ -62,4 +79,39 @@ public class ReflectionUtil {
                 .findFirst();
         return setMethod.isPresent();
     }
+
+    public static Field resolveField(Class<?> aClass, String name) {
+        try {
+            return aClass.getDeclaredField(name);
+        } catch (NoSuchFieldException e) {
+            if (aClass.getSuperclass() != null) {
+                return resolveField(aClass. getSuperclass(), name);
+            }
+            return null;
+        }
+    }
+
+    public static boolean setField(Class<?> type, String name, Object instance, Object value) {
+        Field field = resolveField(type,name);
+        if (field != null) {
+            field.setAccessible(true);
+            try {
+                field.set(instance, value);
+                return true;
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return false;
+    }
+
+    public static <T> T createInstance(Class<T> instance, Object ... params) {
+        Objects.requireNonNull(instance, "instance must be passed");
+        try {
+            return instance.newInstance();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }

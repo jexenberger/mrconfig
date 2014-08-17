@@ -1,14 +1,16 @@
 package org.github.mrconfig.framework.resources;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.*;
 
 /**
  * Created by julian3 on 2014/07/19.
  */
 @XmlType(namespace = "http://www.github.org/mrconfig")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Error {
+
+    private static final String NOT_FOUND = "not.found";
+
 
     @XmlAttribute(namespace = "http://www.github.org/mrconfig",required=true)
     String code;
@@ -41,6 +43,10 @@ public class Error {
 
     public static Error error(String code, String description) {
         return new Error(code, description);
+    }
+
+    public static Error notFound() {
+        return error(NOT_FOUND,"Requsted resource was not found");
     }
 
     @Override

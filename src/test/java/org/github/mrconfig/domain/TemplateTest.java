@@ -1,7 +1,6 @@
 package org.github.mrconfig.domain;
 
 import org.github.mrconfig.service.BaseDomainJPATest;
-import org.github.mrconfig.service.BaseJPA;
 import org.junit.Test;
 
 import java.io.BufferedReader;
@@ -23,7 +22,7 @@ public class TemplateTest extends BaseDomainJPATest{
         EnvironmentGroup group = new EnvironmentGroup("parent",null).save();
         Server server = new Server("test",group,"test","qweqwe","linux","test","test").save();
 
-        BufferedReader reader = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/test.ftl")));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/org/github/mrconfig/test.ftl")));
 
         Template t = new Template("testTemplate",reader.lines().collect(joining("\n")).getBytes()).save();
 

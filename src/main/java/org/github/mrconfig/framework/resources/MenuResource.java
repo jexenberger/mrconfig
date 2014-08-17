@@ -1,5 +1,7 @@
 package org.github.mrconfig.framework.resources;
 
+import org.github.mrconfig.framework.ResourceRegistry;
+import org.github.mrconfig.framework.UXModule;
 import org.github.mrconfig.framework.ux.form.Form;
 import org.github.mrconfig.framework.macro.FormRegistry;
 
@@ -11,6 +13,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import static java.util.stream.Collectors.toList;
+
 /**
  * Created by w1428134 on 2014/08/01.
  */
@@ -20,12 +24,16 @@ public class MenuResource {
 
     @GET
     public Menu getMenu() {
-        Collection<Form> forms = FormRegistry.get().getForms();
+        Collection<UXModule> forms = ResourceRegistry.list()
+                .stream()
+                .filter((resource)-> resource.getUxModule() != null)
+                .map((resource)-> resource.getUxModule())
+                .collect(toList());
         Menu response = new Menu();
-        for (Form form : forms) {
+        for (UXModule form : forms) {
 
             initGroup(response,form.getGroup());
-            response.getMenuGroups().get(form.getGroup()).add(new MenuItem(form.getName(), form.getId(), form.getResourceName()));
+            response.getMenuGroups().get(form.getGroup()).add(new MenuItem(form.getName(), form.getKey(), form.getLink()));
         }
 
         return response;

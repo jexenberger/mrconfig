@@ -1,7 +1,7 @@
 package org.github.mrconfig.domain;
 
 import org.github.mrconfig.framework.activerecord.ActiveRecord;
-import org.github.mrconfig.framework.activerecord.Named;
+import org.github.mrconfig.framework.service.Named;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.*;
@@ -23,7 +23,7 @@ import static org.github.mrconfig.framework.activerecord.Parameter.p;
 })
 @XmlRootElement(namespace = "http://www.github.org/mrconfig")
 @XmlAccessorType(XmlAccessType.PROPERTY)
-public class Environment<T extends Environment> extends KeyEntity<T> implements Named {
+public class Environment<T extends Environment> extends KeyEntity<T> implements  Named, ActiveRecord<T, Long> {
 
     enum Type {
         cloud,

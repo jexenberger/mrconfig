@@ -22,7 +22,7 @@ import javax.ws.rs.core.MediaType;
 @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 public class TemplateResource implements ReadableResource<Template,Long>, WritableResource<Template,Long>, DeletableResource<Template> {
     @Override
-    public Class<Long> getResourceTypeId() {
+    public Class<Long> getResourceIdType() {
         return null;
     }
 

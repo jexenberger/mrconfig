@@ -1,11 +1,10 @@
 package org.github.mrconfig.framework.activerecord;
 
-import org.github.mrconfig.domain.Environment;
+import org.github.mrconfig.framework.activerecord.jpa.JPAProvider;
 import org.github.mrconfig.framework.testdomain.MyEntity;
 import org.github.mrconfig.service.BaseJPA;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
@@ -18,7 +17,7 @@ public class HibernateProviderTest extends BaseJPA{
     @Before
     public void before() throws Exception{
         super.before();
-        JPAProvider.setPersistenceUnit(BaseJPA.UNIT_NAME);
+        JPAProvider.setPERSISTENCE_UNIT(BaseJPA.UNIT_NAME);
         provider = new JPAProvider();
 
         for (int i = 0; i < 100; i++) {

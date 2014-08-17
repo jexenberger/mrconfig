@@ -1,6 +1,7 @@
 package org.github.mrconfig.framework.ux;
 
 import org.github.IntegrationTest;
+import org.github.mrconfig.Main;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -20,7 +21,8 @@ public class TemplatingTest {
     @BeforeClass
     public static void beforeClass() {
         Templating.registerClass(IntegrationTest.class);
-        Templating.registerPath("C:\\Users\\w1428134\\Personal\\mrconfig\\src\\test\\resources\\test");
+
+        Templating.registerClass(Main.class);
     }
 
 
@@ -29,7 +31,7 @@ public class TemplatingTest {
 
         ByteArrayOutputStream target = new ByteArrayOutputStream();
         Map<String, Object> model = new HashMap<>();
-        model.put("nested_template","/nested/nested.ftl");
+        model.put("nested_template","nested.ftl");
 
         Templating.getTemplating().write("test.ftl",model, target);
         assertEquals("test",target.toString());

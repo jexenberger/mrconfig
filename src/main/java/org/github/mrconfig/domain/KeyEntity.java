@@ -1,8 +1,7 @@
 package org.github.mrconfig.domain;
 
 import org.github.mrconfig.framework.activerecord.ActiveRecord;
-import org.github.mrconfig.framework.activerecord.Keyed;
-import org.github.mrconfig.framework.activerecord.Link;
+import org.github.mrconfig.framework.service.Keyed;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlElement;

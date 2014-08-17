@@ -12,7 +12,7 @@ public interface CRUDResource<T,K extends Serializable> extends ReadableResource
 
     
     @Override
-    default Class<K> getResourceTypeId() {
+    default Class<K> getResourceIdType() {
         return (Class<K>) GenericsUtil.getClass(getClass(),1);
     }
 

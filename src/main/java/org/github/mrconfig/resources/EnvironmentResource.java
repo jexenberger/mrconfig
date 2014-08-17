@@ -23,7 +23,7 @@ public class EnvironmentResource implements ReadableResource<Environment,Long> {
     }
 
     @Override
-    public Class getResourceTypeId() {
+    public Class getResourceIdType() {
         return null;
     }
 

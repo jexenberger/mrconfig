@@ -1,8 +1,11 @@
 package org.github.mrconfig.framework.ux.form;
 
-import org.github.mrconfig.framework.macro.ListForm;
 
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * Created by julian3 on 2014/07/19.
@@ -13,10 +16,11 @@ public class Form {
     String name;
     String resourceName;
     List<FormField> fields;
-    ListForm list;
     Set<FormField> searchFields;
     Set<FormField> listFields;
     String group = "Main";
+    boolean sorted = false;
+    boolean sortedSearch = false;
 
 
     public void setId(String id) {
@@ -38,9 +42,6 @@ public class Form {
         });
     }
 
-    public void setList(ListForm list) {
-        this.list = list;
-    }
 
     public String getId() {
         return id;
@@ -58,9 +59,12 @@ public class Form {
         if (fields == null) {
             fields = new ArrayList<>();
         }
-        Collections.sort(fields, (field1, field2) -> {
-            return orderFields(field1, field2);
-        });
+        if (!sorted) {
+            Collections.sort(fields, (field1, field2) -> {
+                sorted = true;
+                return orderFields(field1, field2);
+            });
+        }
         return fields;
     }
 
@@ -72,9 +76,12 @@ public class Form {
         if (searchFields == null) {
             searchFields = new LinkedHashSet<>();
         }
-        Collections.sort(fields, (field1, field2) -> {
-            return orderFields(field1, field2);
-        });
+        if (!sortedSearch) {
+            Collections.sort(fields, (field1, field2) -> {
+                sortedSearch = true;
+                return orderFields(field1, field2);
+            });
+        }
         return searchFields;
     }
 
@@ -86,6 +93,9 @@ public class Form {
     }
 
     public int orderFields(FormField field1, FormField field2) {
+        if (!field1.getGroup().equals(field2.getGroup())) {
+            return field1.getGroup().compareTo(field2.getGroup());
+        }
         if (field1.getId().equals("id")) {
             return -1;
         }
@@ -99,12 +109,16 @@ public class Form {
         this.searchFields = searchFields;
     }
 
-    public ListForm getList() {
-        return list;
-    }
-
     public Optional<FormField> getField(String id) {
         return fields.stream().filter((field) -> field.getId().equals(id)).findFirst();
+    }
+
+    public Form addField(FormField field) {
+        if (this.fields == null) {
+            this.fields = new ArrayList<>();
+        }
+        this.fields.add(field);
+        return this;
     }
 
     public String getGroup() {
@@ -113,5 +127,18 @@ public class Form {
 
     public void setGroup(String group) {
         this.group = group;
+    }
+
+    public Map<String, Collection<FormField>> getByGroups() {
+
+        Map<String, Collection<FormField>> result = new HashMap<>();
+        for (FormField formField : getFields()) {
+            if (!result.containsKey(formField.getGroup())) {
+                result.put(formField.getGroup(), new ArrayList<>());
+            }
+            result.get(formField.getGroup()).add(formField);
+        }
+        return result;
+
     }
 }

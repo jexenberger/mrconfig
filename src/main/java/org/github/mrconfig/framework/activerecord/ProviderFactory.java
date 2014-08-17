@@ -1,5 +1,7 @@
 package org.github.mrconfig.framework.activerecord;
 
+import org.github.mrconfig.framework.activerecord.jpa.JPAProvider;
+
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -11,7 +13,7 @@ public class ProviderFactory {
 
     public static Provider getProvider() {
         if (PROVIDER == null) {
-            PROVIDER = new JPAProvider();
+            throw new IllegalStateException("provider must be registered calling setProvider");
         }
         return PROVIDER;
     }

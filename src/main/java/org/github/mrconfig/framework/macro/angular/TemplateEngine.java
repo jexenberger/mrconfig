@@ -23,7 +23,7 @@ public class TemplateEngine {
             //CONFIG.setClassForTemplateLoading(TemplateEngine.class, "templates");
             System.out.println(pwd());
             try {
-                CONFIG.setDirectoryForTemplateLoading(new File(pwd()+"/src/main/resources/org/github/mrconfig/framework/macro/angular/templates"));
+                CONFIG.setDirectoryForTemplateLoading(new File(pwd()+"/src/main/resources/org/github/mrconfig/framework/ux/form"));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

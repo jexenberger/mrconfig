@@ -1,9 +1,9 @@
 package org.github.mrconfig.service;
 
 import org.github.mrconfig.domain.KeyEntity;
-import org.github.mrconfig.framework.activerecord.JPAProvider;
+import org.github.mrconfig.framework.activerecord.ProviderFactory;
+import org.github.mrconfig.framework.activerecord.jpa.JPAProvider;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 
@@ -28,7 +28,8 @@ public class BaseJPA {
             entityManager = entityManagerFactory.createEntityManager();
             System.getProperties().put("domain_"+ENTITY_MANAGER, entityManager);
         }
-        JPAProvider.setPersistenceUnit(UNIT_NAME);
+        JPAProvider.setPERSISTENCE_UNIT(UNIT_NAME);
+        ProviderFactory.setProvider(new JPAProvider());
     }
 
     @Before

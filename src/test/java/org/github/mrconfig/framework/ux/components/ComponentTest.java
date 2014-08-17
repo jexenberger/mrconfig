@@ -16,7 +16,7 @@ public class ComponentTest {
     @Test
     public void testRegister() throws Exception {
 
-        Component.register(new Component("test", "test.ftl"));
+        Component.register(new Component("test", "org/github/mrconfig/test.ftl"));
         Component component = Component.get("test");
 
         assertNotNull(component);

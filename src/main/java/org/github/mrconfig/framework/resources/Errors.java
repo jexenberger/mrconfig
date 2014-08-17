@@ -1,5 +1,7 @@
 package org.github.mrconfig.framework.resources;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.ArrayList;
@@ -9,6 +11,7 @@ import java.util.Collection;
  * Created by julian3 on 2014/07/19.
  */
 @XmlRootElement(namespace = "http://www.github.org/mrconfig")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Errors {
 
     @XmlElement(namespace = "http://www.github.org/mrconfig")
@@ -38,7 +41,7 @@ public class Errors {
         this.errors = errors;
     }
 
-    public Errors errors(Error ... errors) {
+    public static Errors errors(Error ... errors) {
         return new Errors(errors);
     }
 

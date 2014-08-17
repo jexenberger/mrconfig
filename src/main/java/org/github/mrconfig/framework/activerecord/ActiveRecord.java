@@ -1,8 +1,10 @@
 package org.github.mrconfig.framework.activerecord;
 
+import org.github.mrconfig.framework.service.*;
 import org.github.mrconfig.framework.util.Inflector;
 
 import javax.xml.bind.annotation.XmlTransient;
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Optional;
@@ -14,7 +16,7 @@ import static java.util.Objects.requireNonNull;
 /**
  * Created by w1428134 on 2014/07/11.
  */
-public interface ActiveRecord<T extends ActiveRecord, K> {
+public interface ActiveRecord<T extends ActiveRecord, K extends Serializable> extends Identified<K>{
 
 
     public static  <T> Optional<T> findById(Class<T> type, Object id) {
@@ -79,7 +81,7 @@ public interface ActiveRecord<T extends ActiveRecord, K> {
 
     static <T> Collection<T> page(Class<T> type,  int start, int pageSize) {
         requireNonNull(type, "type required");
-        return getProvider().page(type,start, pageSize);
+        return getProvider().pageWhere(type,start, pageSize);
     }
 
 

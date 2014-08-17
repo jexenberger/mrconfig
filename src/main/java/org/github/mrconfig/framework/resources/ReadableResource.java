@@ -1,7 +1,8 @@
 package org.github.mrconfig.framework.resources;
 
-import org.github.mrconfig.framework.activerecord.*;
-import org.github.mrconfig.framework.activerecord.Link;
+import org.github.mrconfig.framework.Resource;
+import org.github.mrconfig.framework.ResourceRegistry;
+import org.github.mrconfig.framework.service.Link;
 import org.github.mrconfig.framework.service.Listable;
 import org.github.mrconfig.framework.service.UniqueLookup;
 import org.github.mrconfig.framework.util.GenericsUtil;
@@ -15,24 +16,29 @@ import java.util.stream.Collectors;
 
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
-import static org.github.mrconfig.domain.KeyEntity.resolveByKeyOrId;
-import static org.github.mrconfig.framework.activerecord.ActiveRecord.*;
-import static org.github.mrconfig.framework.activerecord.Parameter.p;
-import static org.github.mrconfig.framework.resources.ResourceUtil.getResourcePath;
+import static org.github.mrconfig.framework.resources.Error.error;
+import static org.github.mrconfig.framework.resources.Error.notFound;
+import static org.github.mrconfig.framework.resources.Errors.errors;
 import static org.github.mrconfig.framework.util.Pair.cons;
 
 /**
  * Created by julian3 on 2014/07/18.
  */
 public interface ReadableResource<T,K extends Serializable> {
+
+
+    default String getPath() {
+        Path path = getClass().getAnnotation(Path.class);
+        return path.value();
+    }
+
     @GET
     @Path("{id}")
     default Response get(@Context SecurityContext context, @PathParam("id") String id) {
 
-        K value = TransformerService.convert(id, getResourceTypeId());
-        Optional<T> byId = getLookup().get(value);
+        Optional<T> byId = getLookup().resolve(id, getResourceIdType());
         if (!byId.isPresent()) {
-           return Response.status(Response.Status.NOT_FOUND).build();
+           return Response.status(Response.Status.NOT_FOUND).entity(errors(notFound())).build();
         }
 
         if (!isAllowed(byId.get())) {
@@ -41,7 +47,7 @@ public interface ReadableResource<T,K extends Serializable> {
         return Response.ok(byId.get()).build();
     }
 
-    default Class<K> getResourceTypeId() {
+    default Class<K> getResourceIdType() {
        return (Class<K>) GenericsUtil.getClass(this.getClass(),1);
     }
 
@@ -52,6 +58,22 @@ public interface ReadableResource<T,K extends Serializable> {
         return true;
     }
 
+    @GET
+    @Path("{view}.htm")
+    @Produces({MediaType.TEXT_HTML})
+    default Response get(@PathParam("view") String id) {
+        final Resource resource = ResourceRegistry.get(getPath());
+        if (resource == null) {
+            return Response.status(Response.Status.NOT_FOUND).entity(errors(notFound())).build();
+        }
+        if (resource.getUxModule() == null) {
+            return Response.status(Response.Status.NOT_FOUND).entity(errors(notFound())).build();
+        }
+        StreamingOutput stream = (output)-> {
+           resource.getUxModule().render(id,output);
+        };
+        return Response.ok().entity(stream).build();
+    }
 
     @GET
     default Response get(@Context UriInfo ui) {

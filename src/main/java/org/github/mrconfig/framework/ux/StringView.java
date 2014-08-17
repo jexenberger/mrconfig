@@ -18,7 +18,7 @@ public class StringView implements View{
     }
 
     @Override
-    public void render(Map<String, Object> model, OutputStream target) {
+    public void render(Object model, OutputStream target) {
         try {
             target.write(content.getBytes());
         } catch (IOException e) {

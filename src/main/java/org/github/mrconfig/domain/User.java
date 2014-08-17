@@ -1,7 +1,5 @@
 package org.github.mrconfig.domain;
 
-import org.github.mrconfig.framework.activerecord.Keyed;
-
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.security.auth.Subject;

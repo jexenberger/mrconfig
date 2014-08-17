@@ -6,7 +6,6 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import static org.github.mrconfig.framework.macro.BeanFormBuilder.form;
 import static org.github.mrconfig.framework.macro.ResourceResolver.getRelativeHref;
 
 /**
@@ -39,7 +38,8 @@ public class FormRegistry {
 
     public FormRegistry register(Class entity) {
         String formId = getRelativeHref(entity);
-        return register(formId,form(entity,formId,true,null));
+        //return register(formId,formBuilder(entity,formId,true,null));
+        return null;
     }
 
     public Form getForm(String entity) {

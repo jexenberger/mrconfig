@@ -74,7 +74,7 @@ public class Templating {
         config.setTemplateLoader(new MultiTemplateLoader(loaderArray));
     }
 
-    public void write(String name, Map<String, Object> model, OutputStream target) {
+    public void write(String name, Object model, OutputStream target) {
         try {
             Template template = config.getTemplate(name);
             template.process(model, new OutputStreamWriter(target));

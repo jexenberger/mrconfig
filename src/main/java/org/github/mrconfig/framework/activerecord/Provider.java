@@ -1,5 +1,6 @@
 package org.github.mrconfig.framework.activerecord;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Optional;
@@ -22,7 +23,7 @@ public interface Provider {
 
     <T> T doWork(Supplier<T> work);
 
-    <K> ActiveRecord<?,K> save(ActiveRecord<?,K> activeRecord, K existingId);
+    <K extends Serializable> ActiveRecord<?,K> save(ActiveRecord<?,K> activeRecord, K existingId);
 
     <T> Optional<T> single(Class<T> type, String name, Parameter... parameters);
 
@@ -35,9 +36,8 @@ public interface Provider {
 
     <T> Collection<T> page(Class<T> type,  String name, int start, int pageSize, Parameter... parameters);
 
-    <T> Collection<T> page(Class<T> type, int start, int pageSize);
-
     <T> Collection<T> findWhere(Class<T> type, Parameter... parameters);
+
     <T> Collection<T> pageWhere(Class<T> type, int start, int pageSize, Parameter... parameters);
 
     void clear();

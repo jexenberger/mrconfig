@@ -3,6 +3,7 @@ package org.github.mrconfig.framework.ux.form;
 import org.github.mrconfig.framework.Resource;
 import org.github.mrconfig.framework.util.Inflector;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -21,6 +22,7 @@ public class FormBuilder {
         this.resource = resource;
         this.form = new Form();
         this.form.setName(inflector.phrase(resource.getResourceClass().getSimpleName()));
+        this.form.setId(resource.getResourceClass().getSimpleName());
         this.form.setResourceName(resource.getPath());
         this.form.setGroup(resource.getGroup());
 
@@ -32,7 +34,7 @@ public class FormBuilder {
 
     public FormBuilder addField(FormField formField) {
         requireNonNull(formField, "formField cannot be null");
-        form.getFields().add(formField);
+        form.addField(formField);
         return this;
     }
 
@@ -100,8 +102,11 @@ public class FormBuilder {
         return this;
     }
 
+    public Form getForm() {
+        return form;
+    }
 
-
-
-
+    public void addFields(List<FormField> fields) {
+        fields.forEach(form::addField);
+    }
 }

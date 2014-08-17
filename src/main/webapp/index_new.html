@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="application">
 <head>
     <meta charset="utf-8">
     <!-- Set the viewport so this responsive site displays correctly on mobile devices -->
@@ -8,6 +8,19 @@
     <!-- Include bootstrap CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
+
+    <script src="js/angular.js"></script>
+    <script src="js/angular-resource.js"></script>
+    <script src="js/angular-route.js"></script>
+    <script src="app/app.js"></script>
+    <script src="app/framework.js"></script>
+    <script src="../views/navigation.js"></script>
+    <script src="../views/controllers.js"></script>
+    <script src="js/ui-bootstrap-tpls-0.11.0.js"></script>
+    <style>
+        .nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
+    </style>
+
 </head>
 <body>
 <!-- Site header and navigation -->
@@ -163,7 +176,7 @@
 </div>
 
 <!-- Include jQuery and bootstrap JS plugins -->
-<script src="js/jquery-2.1.1.min.js"></script>
+<script src="js/jquery-2.1.0.js"></script>
 <script src="js/bootstrap.min.js"></script>
 </body>
 </html>

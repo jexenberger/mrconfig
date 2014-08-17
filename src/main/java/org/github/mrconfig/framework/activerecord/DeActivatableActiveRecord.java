@@ -1,9 +1,11 @@
 package org.github.mrconfig.framework.activerecord;
 
+import java.io.Serializable;
+
 /**
  * Created by julian3 on 2014/07/18.
  */
-public interface DeActivatableActiveRecord<T  extends ActiveRecord,K> extends ActiveRecord<T,K> {
+public interface DeActivatableActiveRecord<T  extends ActiveRecord,K extends Serializable> extends ActiveRecord<T,K> {
 
    void deactivate();
 

@@ -1,9 +1,8 @@
 package org.github.mrconfig.service;
 
 import org.github.mrconfig.domain.KeyEntity;
-import org.github.mrconfig.framework.activerecord.JPAProvider;
+import org.github.mrconfig.framework.activerecord.jpa.JPAProvider;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 
@@ -30,7 +29,7 @@ public abstract class BaseDomainJPATest{
             entityManager = entityManagerFactory.createEntityManager();
             System.getProperties().put(ENTITY_MANAGER, entityManager);
         }
-        JPAProvider.setPersistenceUnit(UNIT_NAME);
+        JPAProvider.setPERSISTENCE_UNIT(UNIT_NAME);
     }
 
     @Before

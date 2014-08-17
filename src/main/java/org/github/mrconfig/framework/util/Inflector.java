@@ -17,6 +17,7 @@ public class Inflector {
     // Pfft, can't think of a better name, but this is needed to avoid the price of initializing the pattern on each call.
     private static final Pattern UNDERSCORE_PATTERN_1 = Pattern.compile("([A-Z]+)([A-Z][a-z])");
     private static final Pattern UNDERSCORE_PATTERN_2 = Pattern.compile("([a-z\\d])([A-Z])");
+    private static final Pattern ALL_LOWERCASE = Pattern.compile("([a-z\\d])");
 
     private static List<RuleAndReplacement> plurals = new ArrayList<RuleAndReplacement>();
     private static List<RuleAndReplacement> singulars = new ArrayList<RuleAndReplacement>();
@@ -92,8 +93,11 @@ public class Inflector {
     }
 
     public String underscore(String camelCasedWord) {
+        if (ALL_LOWERCASE.matcher(camelCasedWord).matches()) {
+            return camelCasedWord;
+        }
 
-        // Regexes in Java are fucking stupid...
+        // Regexes in Java are stupid...
         String underscoredWord = UNDERSCORE_PATTERN_1.matcher(camelCasedWord).replaceAll("$1_$2");
         underscoredWord = UNDERSCORE_PATTERN_2.matcher(underscoredWord).replaceAll("$1_$2");
         underscoredWord = underscoredWord.replace('-', '_').toLowerCase();

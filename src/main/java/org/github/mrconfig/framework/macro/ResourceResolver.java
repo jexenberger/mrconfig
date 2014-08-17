@@ -1,7 +1,7 @@
 package org.github.mrconfig.framework.macro;
 
-import org.github.mrconfig.framework.activerecord.Keyed;
-import org.github.mrconfig.framework.activerecord.Named;
+import org.github.mrconfig.framework.service.Keyed;
+import org.github.mrconfig.framework.service.Named;
 import org.github.mrconfig.framework.util.Inflector;
 
 /**

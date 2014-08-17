@@ -137,7 +137,8 @@ public class Property extends KeyEntity<Property> {
                         Property car = propAndVal.getCar();
                         car.save();
                     }
-                    Collection<PropertyValue> values = ActiveRecord.findWhere(PropertyValue.class, p("property", propAndVal.getCar().getKey()), p("environment", result.get().getKey()));
+                    Property property = new Property();
+                    Collection<PropertyValue> values = ActiveRecord.findWhere(PropertyValue.class, p("property", propAndVal.getCar()), p("environment", result.get()));
                     if (values.size() == 0) {
                         propAndVal.getCdr().save();
                     }

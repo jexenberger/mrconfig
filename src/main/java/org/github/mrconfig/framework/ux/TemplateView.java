@@ -26,7 +26,7 @@ public class TemplateView implements View{
     }
 
     @Override
-    public void render(Map<String, Object> model, OutputStream target) {
+    public void render(Object model, OutputStream target) {
         Templating.getTemplating().write(source, model, target);
     }
 

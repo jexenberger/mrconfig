@@ -64,6 +64,8 @@ public class GenericsUtil {
         return typeArgumentsAsClasses;
     }
 
+
+
     /**
      * Get the underlying class for a type, or null if the type is a variable type.
      * @param type the type
@@ -101,6 +103,16 @@ public class GenericsUtil {
             return null;
         }
     }
+
+
+    public static Class<?> getGenericType(Field field) {
+        Type genericType = field.getGenericType();
+        if (genericType instanceof ParameterizedType) {
+            return (Class<?>) ((ParameterizedType) genericType).getActualTypeArguments()[0];
+        }
+        return null;
+    }
+
 
 
 

@@ -1,7 +1,5 @@
 package org.github.mrconfig.framework.service;
 
-import org.github.mrconfig.framework.activerecord.Link;
-
 import java.io.Serializable;
 import java.util.Optional;
 
@@ -11,6 +9,7 @@ import java.util.Optional;
 public interface UniqueLookup<T, K extends Serializable> {
 
 
+    public Optional<T> resolve(Serializable id, Class<K> idType);
     public Optional<T> get(K id);
     public Link toLink(T instance);
 
