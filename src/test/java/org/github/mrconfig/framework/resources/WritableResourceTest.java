@@ -56,7 +56,7 @@ public class WritableResourceTest implements WritableResource<MyEntity,Long>{
     }
 
     @Override
-    public Updateable<MyEntity> getUpdateable() {
+    public Updateable<MyEntity,Long> getUpdateable() {
         return service;
     }
 }

@@ -24,12 +24,12 @@ public class Resource {
     Class<?> resourceController;
     Creatable<?, ?> creatable;
     Listable<?> listable;
-    Updateable<?> updateable;
+    Updateable<?,?> updateable;
     Deletable<?> deletable;
     UniqueLookup<?, ?> uniqueLookup;
     UXModule uxModule;
 
-    public Resource(String path, String group, Class<?> resourceClass, Class<?> resourceController, Creatable<?, ?> creatable, Listable<?> listable, Updateable<?> updateable, Deletable<?> deletable, UniqueLookup<?, ?> uniqueLookup) {
+    public Resource(String path, String group, Class<?> resourceClass, Class<?> resourceController, Creatable<?, ?> creatable, Listable<?> listable, Updateable<?,?> updateable, Deletable<?> deletable, UniqueLookup<?, ?> uniqueLookup) {
         this.path = path;
         this.group = group;
         this.resourceClass = resourceClass;
@@ -113,7 +113,7 @@ public class Resource {
         return listable;
     }
 
-    public Updateable<?> getUpdateable() {
+    public Updateable<?,?> getUpdateable() {
         return updateable;
     }
 
@@ -145,7 +145,7 @@ public class Resource {
         this.listable = listable;
     }
 
-    public void setUpdateable(Updateable<?> updateable) {
+    public void setUpdateable(Updateable<?,?> updateable) {
         this.updateable = updateable;
     }
 

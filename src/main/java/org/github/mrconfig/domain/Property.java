@@ -12,6 +12,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.Properties;
@@ -47,7 +48,7 @@ public class Property extends KeyEntity<Property> {
     public static Pair<Property, PropertyValue> fromKeyValue(Property p, String key, String value, Environment owner) {
         String[] split = key.split("\\.");
         p = (p == null) ? new Property() : p;
-        p.setKey(key);
+        p.setId(key);
         if (split.length >= 1) {
             p.setName(split[split.length - 1]);
         }
@@ -130,7 +131,7 @@ public class Property extends KeyEntity<Property> {
                     return false;
                 }
                 props.forEach((key, value) -> {
-                    Optional<Property> byKey = findByKey(Property.class, key.toString().trim());
+                    Optional<Property> byKey = ActiveRecord.findById(Property.class, (Serializable) key);
                     Pair<Property, PropertyValue> propAndVal = fromKeyValue(byKey.orElseGet(()->null), (String) key, (String) value, result.get());
                     if (!byKey.isPresent()) {
                         System.out.println("saving!! ***** -> "+propAndVal.getCar());

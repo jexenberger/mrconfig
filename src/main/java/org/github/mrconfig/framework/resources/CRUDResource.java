@@ -32,7 +32,7 @@ public interface CRUDResource<T,K extends Serializable> extends ReadableResource
     }
 
     @Override
-    default Updateable<T> getUpdateable() {
+    default Updateable<T,K> getUpdateable() {
         return getService();
     }
 

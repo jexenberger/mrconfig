@@ -20,7 +20,7 @@ public class IntegrationTest {
         EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("org.github.mrconfig.domain");
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         Environment environment = new Environment();
-        environment.setKey("test");
+        environment.setId("test");
         environment.setName("Test");
         EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
@@ -31,7 +31,7 @@ public class IntegrationTest {
         entityManager.persist(environment);
 
         Server server = new Server();
-        server.setKey("server");
+        server.setId("server");
         server.setName("Server");
         server.setOwner(adminGroup);
         entityManager.persist(server);

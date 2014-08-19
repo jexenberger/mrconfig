@@ -19,7 +19,7 @@ public interface Provider {
 
     void commitOrRollback(boolean success);
 
-    void getTransaction();
+    void startTransaction();
 
     <T> T doWork(Supplier<T> work);
 

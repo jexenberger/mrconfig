@@ -18,7 +18,7 @@ import javax.ws.rs.core.MediaType;
 @Path("/servers")
 @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-public class ServerResource extends BaseCRUDResource<Server,Long> {
+public class ServerResource extends BaseCRUDResource<Server,String> {
 
 
 }

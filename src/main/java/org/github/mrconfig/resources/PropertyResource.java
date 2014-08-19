@@ -17,7 +17,7 @@ import javax.ws.rs.core.MediaType;
 @Path("/properties")
 @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-public class PropertyResource extends BaseCRUDResource<Property,Long> {
+public class PropertyResource extends BaseCRUDResource<Property,String> {
 
 
 }

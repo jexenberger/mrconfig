@@ -9,8 +9,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
 import java.util.Optional;
 
-import static org.github.mrconfig.domain.KeyEntity.resolveByKeyOrId;
 import static org.github.mrconfig.framework.activerecord.ActiveRecord.doWork;
+import static org.github.mrconfig.framework.activerecord.ActiveRecord.findById;
 
 /**
  * Created by julian3 on 2014/07/18.
@@ -20,7 +20,7 @@ public interface DeletableResource<T> {
     @Path("{id}")
     default Response delete(@PathParam("id") String id) {
         return doWork(()-> {
-            Optional<EnvironmentGroup> result =  resolveByKeyOrId(id, getType());
+            Optional<EnvironmentGroup> result =  findById(getType(), id);
             result.ifPresent((value)-> value.delete());
             return Response.status(204).build();
         });

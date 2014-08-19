@@ -20,7 +20,7 @@ public class TemplateTest extends BaseDomainJPATest{
     public void testGenerate() throws Exception {
 
         EnvironmentGroup group = new EnvironmentGroup("parent",null).save();
-        Server server = new Server("test",group,"test","qweqwe","linux","test","test").save();
+        Server server = new Server("test","test",group,"test","qweqwe","linux","test","test").save();
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/org/github/mrconfig/test.ftl")));
 

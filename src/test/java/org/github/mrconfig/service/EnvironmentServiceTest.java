@@ -24,7 +24,7 @@ public class EnvironmentServiceTest extends BaseDomainJPATest{
         Environment environment = new EnvironmentGroup();
         environment.setName("Test environment");
         key = UUID.randomUUID().toString();
-        environment.setKey(key);
+        environment.setId(key);
         environmentService.add(environment);
         getEntityManager().clear();
         System.out.println("ENV -> " +environment.getId());
@@ -40,7 +40,7 @@ public class EnvironmentServiceTest extends BaseDomainJPATest{
         EnvironmentService environmentService = new EnvironmentService(getEntityManager());
         Optional<Environment> result = lookupByKey(Environment.class, key);
         assertTrue(result.isPresent());
-        result.get().setKey("habbanagero");
+        result.get().setId("habbanagero");
         environmentService.save(result.get());
 
         result = lookupByKey(Environment.class, "habbanagero");

@@ -17,6 +17,6 @@ import javax.ws.rs.core.MediaType;
 @Path("/users")
 @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-public class UserResource extends BaseCRUDResource<User,Long> {
+public class UserResource extends BaseCRUDResource<User,String> {
 
 }

@@ -22,7 +22,7 @@ public class EnvironmentTest extends BaseDomainJPATest {
     @Test
     public void testGetValues() throws Exception {
 
-        Server server = new Server("test",null,"test","qweqwe","linux","test","test").save();
+        Server server = new Server("test","test",null,"test","qweqwe","linux","test","test").save();
         InputStream resourceAsStream = getClass().getResourceAsStream("/test.properties");
         importProperties(server, resourceAsStream);
 
@@ -37,7 +37,7 @@ public class EnvironmentTest extends BaseDomainJPATest {
     @Test
     public void testGetValuesWithParentHierachy() throws Exception {
         EnvironmentGroup group = new EnvironmentGroup("parent",null).save();
-        Server server = new Server("test",group,"test","qweqwe","linux","test","test").save();
+        Server server = new Server("test","test",group,"test","qweqwe","linux","test","test").save();
 
         Properties groupP = new Properties();
         groupP.load(getClass().getResourceAsStream("/parent.properties"));

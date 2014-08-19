@@ -63,7 +63,7 @@ public class JPAProvider implements Provider {
         boolean nested = false;
         try {
             PROVIDER.set(entityManager);
-            transaction = entityManager.getTransaction();
+            transaction = getTransaction(entityManager);
             if (!transaction.isActive()) {
                 transaction.begin();
             } else {
@@ -71,7 +71,7 @@ public class JPAProvider implements Provider {
             }
             T result = supplier.get();
             entityManager.flush();
-            success = true;
+            success = !transaction.getRollbackOnly();
             return result;
         } catch (RuntimeException e) {
             success = false;
@@ -88,14 +88,20 @@ public class JPAProvider implements Provider {
         }
     }
 
+    public EntityTransaction getTransaction(EntityManager entityManager) {
+        EntityTransaction transaction = entityManager.getTransaction();
+        System.out.println(transaction);
+        return transaction;
+    }
+
 
     @Override
-    public void getTransaction() {
+    public void startTransaction() {
         EntityTransaction transaction = null;
         EntityManager entityManager = getEntityManager();
         if (!entityManager.isJoinedToTransaction()) {
+            transaction = getTransaction(entityManager);
             transaction.begin();
-            transaction = entityManager.getTransaction();
         }
 
     }
@@ -164,7 +170,7 @@ public class JPAProvider implements Provider {
     @Override
     public <T> Collection<T> all(Class<T> type) {
         return transact(() -> {
-            return helper.findWhere(getEntityManager(),type);
+            return helper.findWhere(getEntityManager(), type);
         });
     }
 
@@ -241,7 +247,7 @@ public class JPAProvider implements Provider {
     public void commitOrRollback(boolean success) {
         EntityTransaction transaction = null;
         EntityManager entityManager = getEntityManager();
-        transaction = getEntityManager().getTransaction();
+        transaction = getTransaction(getEntityManager());
         if (transaction != null && transaction.isActive()) {
             if (success) {
                 transaction.commit();

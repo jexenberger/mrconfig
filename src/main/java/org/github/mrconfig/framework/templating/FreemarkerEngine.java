@@ -14,8 +14,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 
-import static org.github.mrconfig.domain.KeyEntity.findByKey;
-import static org.github.mrconfig.domain.KeyEntity.resolveByKeyOrId;
 import static org.github.mrconfig.framework.activerecord.ActiveRecord.findById;
 
 /**
@@ -34,7 +32,7 @@ public class FreemarkerEngine {
                 @Override
                 public Object findTemplateSource(String s) throws IOException {
                     s = removeI18N(s);
-                    Optional<Template> template = resolveByKeyOrId(s,Template.class);
+                    Optional<Template> template = findById(Template.class,s);
                     return template.get();
                 }
 

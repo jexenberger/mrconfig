@@ -19,11 +19,11 @@ import static org.github.mrconfig.framework.activerecord.Parameter.p;
 @DiscriminatorColumn(name = "type")
 @NamedQueries({
         @NamedQuery(name = "Environment.findNameLike", query = "SELECT e FROM Environment e where e.name like :name"),
-        @NamedQuery(name = "Environment.findByKey", query = "SELECT e FROM Environment e where e.key = :key")
+        @NamedQuery(name = "Environment.findByKey", query = "SELECT e FROM Environment e where e.id = :key")
 })
 @XmlRootElement(namespace = "http://www.github.org/mrconfig")
 @XmlAccessorType(XmlAccessType.PROPERTY)
-public class Environment<T extends Environment> extends KeyEntity<T> implements  Named, ActiveRecord<T, Long> {
+public class Environment<T extends Environment> extends KeyEntity<T> implements  Named {
 
     enum Type {
         cloud,
@@ -43,21 +43,23 @@ public class Environment<T extends Environment> extends KeyEntity<T> implements 
     @Enumerated
     Type deployment;
 
-
     public Environment() {
+    }
+
+    public Environment(String id, String name, Environment parent) {
+        this(name,parent);
+        setId(id);
     }
 
     public Environment(String name, Environment parent) {
         this.name = name;
         this.parent = parent;
-        setKey(UUID.randomUUID().toString());
         getOwner();
     }
 
     public Environment(String name, Environment parent, AdminGroup owner) {
         this.name = name;
         this.parent = parent;
-        setKey(name);
         this.owner = owner;
     }
 
@@ -143,7 +145,6 @@ public class Environment<T extends Environment> extends KeyEntity<T> implements 
     public static Environment newRoot(String name) {
         EnvironmentGroup environmentGroup = new EnvironmentGroup();
         environmentGroup.setName(name);
-        environmentGroup.setKey(name);
         return environmentGroup;
     }
 }

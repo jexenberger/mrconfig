@@ -1,6 +1,7 @@
 package org.github.mrconfig.resources;
 
 import org.github.mrconfig.domain.Environment;
+import org.github.mrconfig.framework.activerecord.ActiveRecordCRUDService;
 import org.github.mrconfig.framework.resources.ReadableResource;
 import org.github.mrconfig.framework.service.Listable;
 import org.github.mrconfig.framework.service.UniqueLookup;
@@ -24,17 +25,17 @@ public class EnvironmentResource implements ReadableResource<Environment,Long> {
 
     @Override
     public Class getResourceIdType() {
-        return null;
+        return Long.class;
     }
 
     @Override
     public Listable<Environment> getListableResource() {
-        return null;
+        return new ActiveRecordCRUDService(Environment.class);
     }
 
     @Override
     public UniqueLookup getLookup() {
-        return null;
+        return new ActiveRecordCRUDService(Environment.class);
     }
 
 }

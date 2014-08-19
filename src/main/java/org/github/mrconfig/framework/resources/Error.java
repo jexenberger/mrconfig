@@ -10,6 +10,8 @@ import javax.xml.bind.annotation.*;
 public class Error {
 
     private static final String NOT_FOUND = "not.found";
+    private static final String SAVE_ERROR = "save.error";
+    private static final String INVALID_ID = "save.error";
 
 
     @XmlAttribute(namespace = "http://www.github.org/mrconfig",required=true)
@@ -47,6 +49,9 @@ public class Error {
 
     public static Error notFound() {
         return error(NOT_FOUND,"Requsted resource was not found");
+    }
+    public static Error invalidID(Object id) {
+        return error(INVALID_ID,"'"+id+"' is not a valid id");
     }
 
     @Override

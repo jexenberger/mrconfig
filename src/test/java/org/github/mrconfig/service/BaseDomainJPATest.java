@@ -1,6 +1,7 @@
 package org.github.mrconfig.service;
 
 import org.github.mrconfig.domain.KeyEntity;
+import org.github.mrconfig.framework.activerecord.ProviderFactory;
 import org.github.mrconfig.framework.activerecord.jpa.JPAProvider;
 import org.junit.After;
 import org.junit.Before;
@@ -30,6 +31,7 @@ public abstract class BaseDomainJPATest{
             System.getProperties().put(ENTITY_MANAGER, entityManager);
         }
         JPAProvider.setPERSISTENCE_UNIT(UNIT_NAME);
+        ProviderFactory.setProvider(new JPAProvider());
     }
 
     @Before
@@ -63,7 +65,7 @@ public abstract class BaseDomainJPATest{
 
     protected <T extends KeyEntity> Optional<T> lookupByKey(Class<T> environmentClass, String key) {
         String environment = environmentClass.getSimpleName();
-        Query query = getEntityManager().createQuery("select e from " + environment + " e where e.key = ?");
+        Query query = getEntityManager().createQuery("select e from " + environment + " e where e.id = ?");
         query.setParameter(1, key);
         try {
             return Optional.ofNullable((T) query.getSingleResult());

@@ -15,11 +15,10 @@ import java.util.Collection;
 import java.util.Optional;
 import java.util.Properties;
 
-import static org.github.mrconfig.domain.KeyEntity.resolveByKeyOrId;
 import static org.github.mrconfig.framework.activerecord.ActiveRecord.doWork;
+import static org.github.mrconfig.framework.activerecord.ActiveRecord.findById;
 import static org.github.mrconfig.framework.activerecord.ActiveRecord.findWhere;
 import static org.github.mrconfig.framework.activerecord.Parameter.p;
-import static org.github.mrconfig.domain.KeyEntity.findByKey;
 import static org.github.mrconfig.domain.Property.fromKeyValue;
 
 /**
@@ -37,17 +36,17 @@ public class PropertiesImportResource {
         try {
             props.load(file);
             doWork(()-> {
-                Optional<Environment> result = resolveByKeyOrId(environmentKey, Environment.class);
+                Optional<Environment> result = findById(Environment.class, environmentKey);
                 if (!result.isPresent()) {
                     return Response.status(404).entity(environmentKey + " not found").build();
                 }
                 props.forEach((key, value) -> {
-                    Optional<Property> byKey = findByKey(Property.class, key.toString().trim());
+                    Optional<Property> byKey = findById(Property.class, key.toString().trim());
                     Pair<Property, PropertyValue> propAndVal = fromKeyValue(byKey.get(), (String) key, (String) value, result.get());
                     if (!byKey.isPresent()) {
                         propAndVal.getCar().save();
                     }
-                    Collection<PropertyValue> values = findWhere(PropertyValue.class, p("property", propAndVal.getCar().getKey()), p("environment", result.get().getKey()));
+                    Collection<PropertyValue> values = findWhere(PropertyValue.class, p("property", propAndVal.getCar().getId()), p("environment", result.get().getId()));
                     if (values.size() == 0) {
                         propAndVal.getCdr().save();
                     }

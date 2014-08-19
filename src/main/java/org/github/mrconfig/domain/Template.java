@@ -48,7 +48,6 @@ public class Template extends KeyEntity<Template> {
 
     public Template(String key, byte[] content) {
         this();
-        setKey(key);
         this.content = content;
     }
 

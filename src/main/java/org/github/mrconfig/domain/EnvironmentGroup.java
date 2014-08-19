@@ -16,6 +16,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class EnvironmentGroup extends Environment<EnvironmentGroup> {
 
     public EnvironmentGroup() {
+        super();
     }
 
     public EnvironmentGroup(String name, Environment parent) {

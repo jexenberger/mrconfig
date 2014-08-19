@@ -42,8 +42,8 @@ public class Server extends Environment<Server> {
         super();
     }
 
-    public Server(String name, Environment parent, String fullyQualifiedDomainName, String ipAddress, String os, String userName, String password) {
-        super(name, parent);
+    public Server(String id,String name, Environment parent, String fullyQualifiedDomainName, String ipAddress, String os, String userName, String password) {
+        super(id,name, parent);
         this.dnsName = fullyQualifiedDomainName;
         this.ipAddress = ipAddress;
         this.operatingSystem = os;

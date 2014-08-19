@@ -29,16 +29,15 @@ public class User extends KeyEntity<User> implements Principal {
     }
 
     public User(String userId, String password) {
-        setKey(userId);
         this.password = password;
     }
 
     public String getUserId() {
-        return getKey();
+        return getId();
     }
 
     public void setUserId(String userId) {
-        setKey(userId);
+        setId(userId);
     }
 
     public String getPassword() {
@@ -59,7 +58,7 @@ public class User extends KeyEntity<User> implements Principal {
 
     @Override
     public String getName() {
-        return getKey();
+        return getName();
     }
 
     @Override

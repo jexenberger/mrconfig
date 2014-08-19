@@ -13,7 +13,7 @@ import java.util.Map;
  */
 @Entity
 @NamedQueries({
-        @NamedQuery(name = "PropertyValue.findByPropertyAndEnvironment", query = "select pv from PropertyValue pv JOIN FETCH pv.property JOIN FETCH pv.environment where pv.property.key = :key AND pv.environment.key = :key")
+        @NamedQuery(name = "PropertyValue.findByPropertyAndEnvironment", query = "select pv from PropertyValue pv JOIN FETCH pv.property JOIN FETCH pv.environment where pv.property.id = :key AND pv.environment.id = :key")
 })
 @XmlRootElement(namespace = "http://www.github.org/mrconfig")
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -65,11 +65,11 @@ public class PropertyValue extends BaseEntity<PropertyValue> {
     }
 
     public boolean isSameProperty(PropertyValue value) {
-        return getProperty().getKey().equals(value.getProperty().getKey());
+        return getProperty().getId().equals(value.getProperty().getId());
     }
 
     public String getPropertyKey() {
-        return getProperty().getKey();
+        return getProperty().getId();
     }
 
     public Wrapper getWrapper() {

@@ -28,9 +28,6 @@ public class BaseEntity<T extends ActiveRecord> implements ActiveRecord<T, Long>
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public Long getVersion() {
         return version;
@@ -40,10 +37,7 @@ public class BaseEntity<T extends ActiveRecord> implements ActiveRecord<T, Long>
         this.version = version;
     }
 
-    public void markForUpdate(BaseEntity persistentVersion) {
-        this.id = persistentVersion.getId();
-        this.version = persistentVersion.getVersion();
-    }
+
 
 
     @Override

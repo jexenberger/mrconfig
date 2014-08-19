@@ -14,7 +14,7 @@ import javax.ws.rs.core.MediaType;
 @Path("/environmentgroups")
 @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-public class EnvironmentGroupResource extends BaseCRUDResource<EnvironmentGroup,Long>{
+public class EnvironmentGroupResource extends BaseCRUDResource<EnvironmentGroup,String>{
 
 
 

@@ -124,7 +124,12 @@ public class JPAQueryHelper {
                 }
             } else {
                 if (!parameterValue.getClass().equals(field.getType())) {
-                    parameterValue = TransformerService.convert(parameterValue, field.getType());
+                    try {
+                        parameterValue = TransformerService.convert(parameterValue, field.getType());
+                    } catch (Exception e) {
+                        System.out.println(parameterValue+" - "+field.getType().getName()+ " - "+field.getName()+" - "+type.getName());
+                        throw e;
+                    }
                 }
                 clause = cb.equal(path.get(fieldName), parameterValue);
             }

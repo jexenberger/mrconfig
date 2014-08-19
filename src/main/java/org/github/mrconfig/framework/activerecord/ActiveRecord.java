@@ -19,7 +19,7 @@ import static java.util.Objects.requireNonNull;
 public interface ActiveRecord<T extends ActiveRecord, K extends Serializable> extends Identified<K>{
 
 
-    public static  <T> Optional<T> findById(Class<T> type, Object id) {
+    public static  <T,K extends Serializable> Optional<T> findById(Class<T> type, K id) {
         requireNonNull(type, "type required");
         requireNonNull(id, "id cannot be null");
         return getProvider().findById(type, id);

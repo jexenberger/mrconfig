@@ -19,7 +19,7 @@ public class FreemarkerEngineTest extends BaseDomainJPATest{
     public void testGenerate() throws Exception {
 
         Template t = new Template();
-        t.setKey(TEST_TEMPLATE);
+        t.setId(TEST_TEMPLATE);
         t.setContent("${name}".getBytes());
         t.save();
 

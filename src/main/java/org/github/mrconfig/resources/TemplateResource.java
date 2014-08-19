@@ -37,7 +37,7 @@ public class TemplateResource implements ReadableResource<Template,Long>, Writab
     }
 
     @Override
-    public Updateable<Template> getUpdateable() {
+    public Updateable<Template,Long> getUpdateable() {
         return null;
     }
 
