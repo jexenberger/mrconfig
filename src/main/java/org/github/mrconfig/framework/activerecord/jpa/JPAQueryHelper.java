@@ -106,6 +106,7 @@ public class JPAQueryHelper {
             Predicate clause = null;
             String fieldName = parameter.getName();
             Field field = fieldMap.get(fieldName);
+            Class<?> fieldType = field.getType();
             if (isRelationship) {
                 if (!isNull && (parameterValue.getClass().getPackage().getName().startsWith("java") || parameterValue.getClass().isPrimitive())) {
                     path = root.join(parameter.getName());
@@ -115,23 +116,25 @@ public class JPAQueryHelper {
             }
             if(isNull) {
                 clause = cb.isNull(path.get(fieldName));
-            } else if (isLike) {
-                if (Date.class.isAssignableFrom(field.getType()) && parameterValue instanceof String) {
-                    Pair<Date, Date> datePair = calcWildCardDateRange(parameterValue.toString());
-                    clause = cb.between(path.get(fieldName), datePair.getCar(), datePair.getCdr());
-                } else {
-                    clause = cb.like(path.get(fieldName), parameterValue.toString().replace('*', '%'));
-                }
             } else {
-                if (!parameterValue.getClass().equals(field.getType())) {
-                    try {
-                        parameterValue = TransformerService.convert(parameterValue, field.getType());
-                    } catch (Exception e) {
-                        System.out.println(parameterValue+" - "+field.getType().getName()+ " - "+field.getName()+" - "+type.getName());
-                        throw e;
+                if (isLike) {
+                    if (Date.class.isAssignableFrom(fieldType) && parameterValue instanceof String) {
+                        Pair<Date, Date> datePair = calcWildCardDateRange(parameterValue.toString());
+                        clause = cb.between(path.get(fieldName), datePair.getCar(), datePair.getCdr());
+                    } else {
+                        clause = cb.like(path.get(fieldName), parameterValue.toString().replace('*', '%'));
                     }
+                } else {
+                    if (!parameterValue.getClass().equals(fieldType)) {
+                        try {
+                            parameterValue = TransformerService.convert(parameterValue, fieldType);
+                        } catch (Exception e) {
+                            System.out.println(parameterValue+" - "+ fieldType.getName()+ " - "+field.getName()+" - "+type.getName());
+                            throw e;
+                        }
+                    }
+                    clause = cb.equal(path.get(fieldName), parameterValue);
                 }
-                clause = cb.equal(path.get(fieldName), parameterValue);
             }
             if (isFirst) {
                 predicates.add(clause);
