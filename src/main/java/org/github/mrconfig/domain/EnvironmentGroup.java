@@ -19,6 +19,11 @@ public class EnvironmentGroup extends Environment<EnvironmentGroup> {
         super();
     }
 
+    public EnvironmentGroup(String id, String name, Environment parent, AdminGroup owner) {
+        super(id, name, parent);
+        setOwner(owner);
+    }
+
     public EnvironmentGroup(String name, Environment parent) {
         super(name, parent);
     }

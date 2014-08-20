@@ -130,7 +130,7 @@ public class MrConfigApplication extends ResourceConfig {
         User julian = new User("julian", "password").save();
         AdminGroup mainAdminGroup = new AdminGroup("all", "Main admin group", adminUser, julian).save();
 
-        EnvironmentGroup root = new EnvironmentGroup("VitalityInternational",null,mainAdminGroup).save();
+        EnvironmentGroup root = new EnvironmentGroup("VitalityInternational","VitalityInternational",null,mainAdminGroup).save();
         createDiscovery(root);
         createPru(root);
         createPingAn(root);
@@ -143,15 +143,15 @@ public class MrConfigApplication extends ResourceConfig {
 
     public static void createDiscovery(EnvironmentGroup root) {
         //main environments
-        EnvironmentGroup disc = new EnvironmentGroup("Discovery", root).save();
+        EnvironmentGroup disc = new EnvironmentGroup("Discovery","Discovery", root,null).save();
         //sub envs
-        EnvironmentGroup dev = new EnvironmentGroup("DiscoveryDevelopment", disc).save();
+        EnvironmentGroup dev = new EnvironmentGroup("DiscoveryDevelopment","DiscoveryDevelopment", disc,null).save();
         Server dhdvitintwl01 = new Server("dhdvitintwl01","dhdvitintwl01", dev,"dhdvitintwl01.discsrv.co.za","127.0.0.1","linux",null,null).save();
 
-        EnvironmentGroup test = new EnvironmentGroup("DiscoveryTest", disc).save();
+        EnvironmentGroup test = new EnvironmentGroup("DiscoveryTest","DiscoveryTest", disc,null).save();
         Server dhtvitintwl01 = new Server("dhtvitintwl01","dhtvitintwl01", test,"dhtvitintwl01.discsrv.co.za","127.0.0.1","linux",null,null).save();
 
-        EnvironmentGroup prod = new EnvironmentGroup("DiscoveryProduction", disc).save();
+        EnvironmentGroup prod = new EnvironmentGroup("DiscoveryProduction","DiscoveryProduction", disc,null).save();
         Server dhpvitintwl01 = new Server("dhpvitintwl01","dhpvitintwl01", prod,"dhpvitintwl01.discsrv.co.za","127.0.0.1","linux",null,null).save();
         Server dhpvitintwl02 = new Server("dhpvitintwl02","dhpvitintwl02", prod,"dhpvitintwl02.discsrv.co.za","127.0.0.1","linux",null,null).save();
 
@@ -166,53 +166,53 @@ public class MrConfigApplication extends ResourceConfig {
 
     public static void createPru(EnvironmentGroup root) {
         //main environments
-        EnvironmentGroup pru = new EnvironmentGroup("PruVitality", root).save();
+        EnvironmentGroup pru = new EnvironmentGroup("PruVitality","PruVitality", root,null).save();
         //sub envs
-        EnvironmentGroup dev = new EnvironmentGroup("PruVitalityDevelopment", pru).save();
+        EnvironmentGroup dev = new EnvironmentGroup("PruVitalityDevelopment","PruVitalityDevelopment", pru, null).save();
         Server dhdvitintwl01 = new Server("dhdvitintwl01_pru","dhdvitintwl01_pru", dev,"dhdvitintwl01.discsrv.co.za","127.0.0.1","linux",null,null).save();
 
-        EnvironmentGroup test = new EnvironmentGroup("PruVitalityTest", pru).save();
+        EnvironmentGroup test = new EnvironmentGroup("PruVitalityTest","PruVitalityTest", pru,null).save();
         Server dhtvitintwl01 = new Server("phtvmim02","phtvmim02", test,"phtvmim02.discsrv.co.za","127.0.0.1","linux",null,null).save();
 
-        EnvironmentGroup prod = new EnvironmentGroup("PruVitalityProduction", pru).save();
+        EnvironmentGroup prod = new EnvironmentGroup("PruVitalityProduction","PruVitalityProduction", pru, null).save();
         Server dhpvitintwl01 = new Server("phpvi01","phpvi01", prod,"phpvi01.discsrv.co.za","127.0.0.1","linux",null,null).save();
         Server dhpvitintwl02 = new Server("phpvi02","phpvi02", prod,"phpvi02.discsrv.co.za","127.0.0.1","linux",null,null).save();
     }
 
     public static void createPingAn(EnvironmentGroup root) {
         //main environments
-        EnvironmentGroup environment = new EnvironmentGroup("PingAnVitality", root).save();
+        EnvironmentGroup environment = new EnvironmentGroup("PingAnVitality","PingAnVitality", root,null).save();
         //sub envs
-        EnvironmentGroup dev = new EnvironmentGroup("PingAnVitalityDevelopment", environment).save();
+        EnvironmentGroup dev = new EnvironmentGroup("PingAnVitalityDevelopment","PingAnVitalityDevelopment", environment,null).save();
         Server dhdvitintwl01 = new Server("dhdvitintwl01_pa","dhdvitintwl01_pa", dev,"dhdvitintwl01.discsrv.co.za","127.0.0.1","linux",null,null).save();
 
-        EnvironmentGroup integration = new EnvironmentGroup("PingAnVitalityIntegration", environment).save();
+        EnvironmentGroup integration = new EnvironmentGroup("PingAnVitalityIntegration","PingAnVitalityIntegration", environment,null).save();
         Server dhtvitintwl01 = new Server("paivitint01","paivitint01", integration,"paivitint01","127.0.0.1","linux",null,null).save();
 
-        EnvironmentGroup stage = new EnvironmentGroup("PingAnVitalityStaging", environment).save();
+        EnvironmentGroup stage = new EnvironmentGroup("PingAnVitalityStaging","PingAnVitalityStaging", environment,null).save();
         Server pasvitint01 = new Server("pasvitint01","pasvitint01", stage,"pasvitint01","127.0.0.1","linux",null,null).save();
         Server pasvitint02 = new Server("pasvitint02","pasvitint02", stage,"pasvitint02","127.0.0.1","linux",null,null).save();
 
-        EnvironmentGroup prod = new EnvironmentGroup("PingAnVitalityProduction", environment).save();
+        EnvironmentGroup prod = new EnvironmentGroup("PingAnVitalityProduction","PingAnVitalityProduction", environment,null).save();
         Server papvitint01 = new Server("papvitint01","papvitint01", prod,"papvitint01.discsrv.co.za","127.0.0.1","linux",null,null).save();
         Server papvitint02 = new Server("papvitint02","papvitint02", prod,"papvitint02.discsrv.co.za","127.0.0.1","linux",null,null).save();
     }
 
     public static void createAIA(EnvironmentGroup root) {
         //main environments
-        EnvironmentGroup environment = new EnvironmentGroup("AIAVitality", root).save();
+        EnvironmentGroup environment = new EnvironmentGroup("AIAVitality","AIAVitality", root,null).save();
         //sub envs
-        EnvironmentGroup dev = new EnvironmentGroup("AIAVitalityDevelopment", environment).save();
+        EnvironmentGroup dev = new EnvironmentGroup("AIAVitalityDevelopment","AIAVitalityDevelopment", environment,null).save();
         Server dhdvitintwl01 = new Server("dhdvitintwl01_aia","dhdvitintwl01_aia", dev,"dhdvitintwl01.discsrv.co.za","127.0.0.1","linux",null,null).save();
 
-        EnvironmentGroup test = new EnvironmentGroup("AIAVitalityTest", environment).save();
+        EnvironmentGroup test = new EnvironmentGroup("AIAVitalityTest","AIAVitalityTest", environment,null).save();
         Server dhtvitintwl01 = new Server("avtvitint02","avtvitint02", test,"avpvitint01","127.0.0.1","linux",null,null).save();
 
-        EnvironmentGroup qa = new EnvironmentGroup("AIAVitalityQA", environment).save();
+        EnvironmentGroup qa = new EnvironmentGroup("AIAVitalityQA","AIAVitalityQA", environment,null).save();
         Server pasvitint01 = new Server("avqvitint01","avqvitint01", qa,"avqvitint01","127.0.0.1","linux",null,null).save();
         Server pasvitint02 = new Server("avqvitint02","avqvitint02", qa,"avqvitint02","127.0.0.1","linux",null,null).save();
 
-        EnvironmentGroup prod = new EnvironmentGroup("AIAVitalityProduction", environment).save();
+        EnvironmentGroup prod = new EnvironmentGroup("AIAVitalityProduction","AIAVitalityProduction", environment,null).save();
         Server papvitint01 = new Server("avpvitint01","avpvitint01", prod,"avpvitint01","127.0.0.1","linux",null,null).save();
         Server papvitint02 = new Server("avpvitint02","avpvitint02", prod,"avpvitint02","127.0.0.1","linux",null,null).save();
         Server papvitint03 = new Server("avpvitint03","avpvitint03", prod,"avpvitint03","127.0.0.1","linux",null,null).save();

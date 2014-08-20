@@ -29,6 +29,7 @@ public class User extends KeyEntity<User> implements Principal {
     }
 
     public User(String userId, String password) {
+        setId(userId);
         this.password = password;
     }
 

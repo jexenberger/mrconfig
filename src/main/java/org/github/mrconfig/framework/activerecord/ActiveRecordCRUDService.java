@@ -112,7 +112,6 @@ public class ActiveRecordCRUDService<T extends ActiveRecord<T, K>, K extends Ser
                 if (!existing.isPresent()) {
                     return error(cons("does.not.exist","instance doesn't exist"));
                 }
-
                 T result = instance.save();
                 return success((T) result);
             } catch (Exception e) {

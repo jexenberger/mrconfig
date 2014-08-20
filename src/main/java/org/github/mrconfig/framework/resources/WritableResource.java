@@ -6,6 +6,10 @@ import org.github.mrconfig.framework.util.Box;
 import org.github.mrconfig.framework.util.GenericsUtil;
 import org.github.mrconfig.framework.util.TransformerService;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -13,6 +17,7 @@ import javax.ws.rs.core.UriBuilder;
 import java.io.Serializable;
 import java.net.URI;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.github.mrconfig.framework.resources.Error.invalidID;
 import static org.github.mrconfig.framework.resources.Error.notFound;
@@ -64,6 +69,12 @@ public interface WritableResource<T, K extends Serializable> {
             return Response.status(Response.Status.BAD_REQUEST).entity(errors(invalidID(id))).build();
         }
 
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        Validator validator = factory.getValidator();
+        Set<ConstraintViolation<T>> violations = validator.validate(group);
+
+
+        violations.stream().map(())
         Optional<T> result = getUpdateable().get(actualId);
         if (!result.isPresent()) {
             return Response.status(Response.Status.NOT_FOUND).entity(errors(notFound())).build();

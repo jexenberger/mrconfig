@@ -20,17 +20,11 @@ public class KeyEntity<T extends ActiveRecord> implements ActiveRecord<T,String>
 
 
     @Id
-    @XmlElement(namespace = "http://www.github.org/mrconfig")
-    @Column()
     String id;
 
     @Version
-    @XmlAttribute(namespace = "http://www.github.org/mrconfig")
     Long version;
 
-    public String getId() {
-        return id;
-    }
 
     public void setId(String id) {
         this.id = id;
@@ -45,5 +39,9 @@ public class KeyEntity<T extends ActiveRecord> implements ActiveRecord<T,String>
         this.version = version;
     }
 
-
+    @Override
+    @XmlAttribute(namespace = "http://www.github.org/mrconfig")
+    public String getId() {
+        return id;
+    }
 }

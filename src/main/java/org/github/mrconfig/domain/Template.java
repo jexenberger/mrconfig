@@ -19,22 +19,22 @@ public class Template extends KeyEntity<Template> {
 
     @Lob()
     @Basic(fetch = FetchType.LAZY)
-    @XmlElement(namespace = "http://www.github.org/mrconfig")
+
     byte[] content;
 
     @Lob()
     @Basic(fetch = FetchType.LAZY)
-    @XmlElement(namespace = "http://www.github.org/mrconfig")
+
     byte[] preScript;
 
     @Lob()
     @Basic(fetch = FetchType.LAZY)
-    @XmlElement(namespace = "http://www.github.org/mrconfig")
     byte[] postScript;
 
-    @XmlElement(namespace = "http://www.github.org/mrconfig")
+
     String namePattern;
-    @XmlElement(namespace = "http://www.github.org/mrconfig")
+
+    @Lob
     byte[] targetPath;
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -48,6 +48,7 @@ public class Template extends KeyEntity<Template> {
 
     public Template(String key, byte[] content) {
         this();
+        this.setId(key);
         this.content = content;
     }
 

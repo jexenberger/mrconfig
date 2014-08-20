@@ -1,6 +1,7 @@
 package org.github.mrconfig.framework.activerecord.jpa;
 
 import org.github.mrconfig.framework.activerecord.Parameter;
+import org.github.mrconfig.framework.util.GenericsUtil;
 import org.github.mrconfig.framework.util.Pair;
 import org.github.mrconfig.framework.util.ReflectionUtil;
 import org.github.mrconfig.framework.util.TransformerService;
@@ -112,6 +113,7 @@ public class JPAQueryHelper {
                     path = root.join(parameter.getName());
                     fieldName = idField.get().getName();
                     field = idField.get();
+                    fieldType = ReflectionUtil.getAllFields(fieldType).stream().filter((typeField)->typeField.isAnnotationPresent(Id.class)).findFirst().get().getType();
                 }
             }
             if(isNull) {

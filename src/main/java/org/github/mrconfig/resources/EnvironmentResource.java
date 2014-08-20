@@ -17,7 +17,7 @@ import javax.ws.rs.core.MediaType;
 @Path("/environments")
 @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-public class EnvironmentResource implements ReadableResource<Environment,Long> {
+public class EnvironmentResource implements ReadableResource<Environment,String> {
 
 
     public EnvironmentResource() {
@@ -25,7 +25,7 @@ public class EnvironmentResource implements ReadableResource<Environment,Long> {
 
     @Override
     public Class getResourceIdType() {
-        return Long.class;
+        return String.class;
     }
 
     @Override
