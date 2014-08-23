@@ -7,6 +7,7 @@ import org.junit.Test;
 import java.io.InputStream;
 import java.util.Collection;
 import java.util.Properties;
+import java.util.UUID;
 
 import static org.github.mrconfig.domain.Property.importProperties;
 import static org.junit.Assert.assertEquals;
@@ -36,8 +37,8 @@ public class EnvironmentTest extends BaseDomainJPATest {
 
     @Test
     public void testGetValuesWithParentHierachy() throws Exception {
-        EnvironmentGroup group = new EnvironmentGroup("parent",null).save();
-        Server server = new Server("test","test",group,"test","qweqwe","linux","test","test").save();
+        EnvironmentGroup group = new EnvironmentGroup("parent","parent",null,null).save();
+        Server server = new Server(UUID.randomUUID().toString(),"test",group,"test","qweqwe","linux","test","test").save();
 
         Properties groupP = new Properties();
         groupP.load(getClass().getResourceAsStream("/parent.properties"));

@@ -9,7 +9,7 @@ import org.github.mrconfig.framework.activerecord.ProviderFactory;
 public class JPAModule extends Module {
 
     public JPAModule(String persistenceUnit) {
-        JPAProvider.setPERSISTENCE_UNIT(persistenceUnit);
+        JPAProvider.setPersistenceUnit(persistenceUnit);
     }
 
     @Override

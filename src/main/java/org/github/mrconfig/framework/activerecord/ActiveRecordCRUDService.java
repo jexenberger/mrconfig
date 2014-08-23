@@ -9,11 +9,12 @@ import org.github.mrconfig.framework.util.Box;
 import org.github.mrconfig.framework.util.Pair;
 import org.github.mrconfig.framework.util.TransformerService;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 import java.io.Serializable;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
@@ -29,6 +30,7 @@ import static org.github.mrconfig.framework.util.Pair.cons;
 public class ActiveRecordCRUDService<T extends ActiveRecord<T, K>, K extends Serializable> implements CRUDService<T, K> {
 
     Class<T> type;
+    public static final ValidatorFactory VALIDATOR_FACTORY = Validation.buildDefaultValidatorFactory();
 
     public ActiveRecordCRUDService(Class<T> type) {
         this.type = type;
@@ -36,7 +38,8 @@ public class ActiveRecordCRUDService<T extends ActiveRecord<T, K>, K extends Ser
 
     @Override
     public Box<K> create(T instance) {
-        return activeRecordSave(instance, false);
+        Box<K> result = activeRecordSave(instance, false);
+        return result;
     }
 
     @Override
@@ -45,17 +48,35 @@ public class ActiveRecordCRUDService<T extends ActiveRecord<T, K>, K extends Ser
     }
 
     private Box<K> activeRecordSave(T instance, boolean loadFirst) {
+
         return doWork(() -> {
             try {
                 if (loadFirst) {
                     Optional<T> result = findById((Class<T>) instance.getClass(), instance.getId());
+                    if (!result.isPresent()) {
+                        return error(cons("not.found", instance.getId() + " not found"));
+                    }
+                }
+                Collection<Pair<String, String>> converted = validate(instance);
+                if (!converted.isEmpty()) {
+                    return error(converted.toArray(new Pair[]{}));
                 }
                 T save = instance.save();
-                return success(save.getId());
+                return success((K) instance.getId());
             } catch (Exception e) {
                 return error(cons(e.getClass().getSimpleName(), e.getMessage()));
             }
         });
+    }
+
+    private Collection<Pair<String, String>> validate(T instance) {
+        Validator validator = VALIDATOR_FACTORY.getValidator();
+        Set<ConstraintViolation<T>> violations = validator.validate(instance);
+        Collection<Pair<String,String>> converted = Collections.emptyList();
+        if (!violations.isEmpty()) {
+            converted =  violations.stream().map((violation)-> cons("value.invalid",violation.getPropertyPath().toString()+":"+violation.getMessage())).collect(toList());
+        }
+        return converted;
     }
 
 
@@ -110,7 +131,11 @@ public class ActiveRecordCRUDService<T extends ActiveRecord<T, K>, K extends Ser
             try {
                 Optional<T> existing = findById((Class<T>) instance.getClass(), instance.getId());
                 if (!existing.isPresent()) {
-                    return error(cons("does.not.exist","instance doesn't exist"));
+                    return error(cons("does.not.exist", "instance doesn't exist"));
+                }
+                Collection<Pair<String, String>> converted = validate(instance);
+                if (!converted.isEmpty()) {
+                    return error(converted.toArray(new Pair[]{}));
                 }
                 T result = instance.save();
                 return success((T) result);

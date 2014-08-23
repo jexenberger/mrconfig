@@ -5,6 +5,7 @@ import org.github.mrconfig.framework.service.Named;
 import javax.persistence.CascadeType;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ import static java.util.Arrays.asList;
 public class AdminGroup extends BaseEntity<AdminGroup> implements Named {
 
     @XmlElement(namespace = "http://www.github.org/mrconfig")
+    @NotNull
     String name;
     @XmlElement(namespace = "http://www.github.org/mrconfig")
     String description;

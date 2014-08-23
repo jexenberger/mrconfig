@@ -44,7 +44,7 @@ public class WritableResourceTest implements WritableResource<MyEntity,Long>{
 
     @Test
     public void testSave() throws Exception {
-        Response response = this.save("1", instance);
+        Response response = this.save(instance);
         assertNotNull(response.getEntity());
         verify(service);
     }

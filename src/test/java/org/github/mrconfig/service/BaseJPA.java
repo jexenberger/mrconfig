@@ -17,52 +17,53 @@ public class BaseJPA {
     public static final String ENTITY_MANAGER = "entity.manager";
     public static final String UNIT_NAME = "org.github.mrconfig.framework.testdomain";
     private static EntityManagerFactory entityManagerFactory;
-    private static EntityManager entityManager;
-    private EntityTransaction transaction;
+    private EntityManager entityManager;
 
     @BeforeClass
     public static void setup() throws Exception {
-        entityManager = (EntityManager) System.getProperties().get("domain_"+ENTITY_MANAGER);
-        if (entityManager == null) {
+        if (entityManagerFactory == null) {
             entityManagerFactory = Persistence.createEntityManagerFactory(UNIT_NAME);
-            entityManager = entityManagerFactory.createEntityManager();
-            System.getProperties().put("domain_"+ENTITY_MANAGER, entityManager);
         }
-        JPAProvider.setPERSISTENCE_UNIT(UNIT_NAME);
+        JPAProvider.setPersistenceUnit(UNIT_NAME);
         ProviderFactory.setProvider(new JPAProvider());
     }
 
     @Before
     public void before() throws Exception {
-        transaction = entityManager.getTransaction();
-        if (!transaction.isActive()) {
-            transaction.begin();
-        }
+        entityManager = entityManagerFactory.createEntityManager();
+        JPAProvider.setThreadEntityManager(entityManager);
+        entityManager.getTransaction().begin();
     }
 
     @After
     public void after() throws Exception {
         try {
             entityManager.flush();
+            entityManager.clear();
         } finally {
-            if (transaction != null) {
-                transaction.setRollbackOnly();
+            try {
+                JPAProvider.unsetThreadEntityManager();
+                getEntityManager().getTransaction().setRollbackOnly();
+                getEntityManager().getTransaction().rollback();
+                System.out.println("TRANSACTION ROLLED BACK!!!!!");
+            } catch (Exception e) {
+                e.printStackTrace();
             }
+            getEntityManager().close();
         }
     }
-
 
 
     public static EntityManagerFactory getEntityManagerFactory() {
         return entityManagerFactory;
     }
 
-    public static EntityManager getEntityManager() {
+    public EntityManager getEntityManager() {
         return entityManager;
     }
 
     public EntityTransaction getTransaction() {
-        return transaction;
+        return getEntityManager().getTransaction();
     }
 
     protected <T extends KeyEntity> Optional<T> lookupByKey(Class<T> environmentClass, String key) {

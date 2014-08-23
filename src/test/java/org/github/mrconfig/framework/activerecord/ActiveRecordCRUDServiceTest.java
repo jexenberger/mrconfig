@@ -28,7 +28,7 @@ public class ActiveRecordCRUDServiceTest extends BaseJPA {
     @Before
     public void before() throws Exception {
         super.before();
-        JPAProvider.setPERSISTENCE_UNIT(BaseJPA.UNIT_NAME);
+        JPAProvider.setPersistenceUnit(BaseJPA.UNIT_NAME);
 
         service = new ActiveRecordCRUDService<MyEntity, Long>(MyEntity.class);
         environment = getMyEntity();

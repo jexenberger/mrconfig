@@ -30,7 +30,7 @@ public abstract class BaseDomainJPATest{
             entityManager = entityManagerFactory.createEntityManager();
             System.getProperties().put(ENTITY_MANAGER, entityManager);
         }
-        JPAProvider.setPERSISTENCE_UNIT(UNIT_NAME);
+        JPAProvider.setPersistenceUnit(UNIT_NAME);
         ProviderFactory.setProvider(new JPAProvider());
     }
 

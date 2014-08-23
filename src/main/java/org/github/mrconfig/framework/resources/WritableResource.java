@@ -19,6 +19,7 @@ import java.net.URI;
 import java.util.Optional;
 import java.util.Set;
 
+import static java.util.stream.Collectors.toList;
 import static org.github.mrconfig.framework.resources.Error.invalidID;
 import static org.github.mrconfig.framework.resources.Error.notFound;
 import static org.github.mrconfig.framework.resources.Errors.errors;
@@ -58,27 +59,18 @@ public interface WritableResource<T, K extends Serializable> {
 
     @PUT
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @Path("/{id}")
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    default Response save(@PathParam("id") String id, T group) {
-
-        K actualId = null;
-        try {
-            actualId = TransformerService.convert(id,getResourceIdType());
-        } catch (Exception e) {
-            return Response.status(Response.Status.BAD_REQUEST).entity(errors(invalidID(id))).build();
-        }
+    default Response save( T group) {
 
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();
         Set<ConstraintViolation<T>> violations = validator.validate(group);
-
-
-        violations.stream().map(())
-        Optional<T> result = getUpdateable().get(actualId);
-        if (!result.isPresent()) {
-            return Response.status(Response.Status.NOT_FOUND).entity(errors(notFound())).build();
+        if (!violations.isEmpty()) {
+            Error[] errors = violations.stream().map((violation)-> Error.invalidValue(violation.getMessage())).collect(toList()).toArray(new Error[] {});
+            Response build = Response.status(Response.Status.BAD_REQUEST).entity(errors(errors)).build();
+            return build;
         }
+
         Box<T> save = getUpdateable().save(group);
         if (save.isSuccess()) {
             return Response.ok(group).build();

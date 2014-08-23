@@ -26,10 +26,10 @@ public class ReflectionUtilTest {
 
         Collection<Field> allFields = ReflectionUtil.getAllFields(KeyEntity.class);
         boolean foundAll = true;
-        assertEquals(3, allFields.size());
+        assertEquals(2, allFields.size());
         for (Field allField : allFields) {
             //check for fields both on key entity and on base entity
-            foundAll &= allField.getName().equals("key") | allField.getName().equals("id") | allField.getName().equals("version");
+            foundAll &=  allField.getName().equals("id") | allField.getName().equals("version");
             System.out.println(allField.getName());
         }
         assertTrue(foundAll);
@@ -43,10 +43,10 @@ public class ReflectionUtilTest {
 
         Collection<Field> allFields = ReflectionUtil.getAllFields(KeyEntity.class, (field)-> !field.getName().equals("version"));
         boolean foundAll = true;
-        assertEquals(2, allFields.size());
+        assertEquals(1, allFields.size());
         for (Field allField : allFields) {
             //check for fields both on key entity and on base entity
-            foundAll &= allField.getName().equals("key") | allField.getName().equals("id");
+            foundAll &=   allField.getName().equals("id");
             System.out.println(allField.getName());
         }
         assertTrue(foundAll);

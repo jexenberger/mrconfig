@@ -1,7 +1,6 @@
 package org.github.mrconfig.service;
 
 import org.github.mrconfig.domain.Environment;
-import org.github.mrconfig.domain.Environment_;
 
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -42,15 +41,6 @@ public class EnvironmentService {
         return Optional.ofNullable(environment);
     }
 
-    public Collection<Environment> findBy(String name, String parent) {
-        CriteriaBuilder cb = entityMananager.getCriteriaBuilder();
-
-        CriteriaQuery<Environment> c = cb.createQuery(Environment.class);
-        Root<Environment> root = c.from(Environment.class);
-        c.where(cb.equal(root.get
-                (Environment_.key), name));
-        return entityMananager.createQuery(c).getResultList();
-    }
 
 
 }

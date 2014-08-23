@@ -17,7 +17,7 @@ public class HibernateProviderTest extends BaseJPA{
     @Before
     public void before() throws Exception{
         super.before();
-        JPAProvider.setPERSISTENCE_UNIT(BaseJPA.UNIT_NAME);
+        JPAProvider.setPersistenceUnit(BaseJPA.UNIT_NAME);
         provider = new JPAProvider();
 
         for (int i = 0; i < 100; i++) {

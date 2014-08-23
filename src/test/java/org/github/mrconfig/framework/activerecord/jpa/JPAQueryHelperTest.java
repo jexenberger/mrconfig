@@ -4,6 +4,7 @@ import org.github.mrconfig.framework.testdomain.MyEntity;
 import org.github.mrconfig.framework.testdomain.TestEnum;
 import org.github.mrconfig.framework.util.Pair;
 import org.github.mrconfig.service.BaseJPA;
+import org.junit.After;
 import org.junit.Test;
 
 import java.text.SimpleDateFormat;
@@ -46,6 +47,7 @@ public class JPAQueryHelperTest extends BaseJPA {
 
         System.out.println(parent.getId());
         Collection<MyEntity> results = new JPAQueryHelper().findWhere(getEntityManager(), MyEntity.class, p("name", "test"),p("parent",parent));
+        System.out.println(results);
         assertNotNull(results);
         assertEquals(1, results.size());
         System.out.println(results.iterator().next().getParent());
@@ -57,6 +59,7 @@ public class JPAQueryHelperTest extends BaseJPA {
 
         //result test2 with a null parent
         results = new JPAQueryHelper().findWhere(getEntityManager(), MyEntity.class, p("name", "test2"),p("parent",null));
+        System.out.println(results);
         assertEquals(1, results.size());
 
         //result test2 with a null parent
@@ -118,6 +121,12 @@ public class JPAQueryHelperTest extends BaseJPA {
         assertNotNull(results);
         assertEquals(1, results);
 
+    }
+
+    @Override
+    @After
+    public void after() throws Exception {
+        super.after();
     }
 
     @Test

@@ -20,8 +20,6 @@ public class MyEntity implements ActiveRecord<MyEntity, Long>{
     @Id
     @SequenceGenerator(name="myEntitySeq",sequenceName="TEST_SEQ", allocationSize = 1, initialValue = 1 )
     @GeneratedValue( strategy = GenerationType.SEQUENCE, generator = "myEntitySeq" )
-    @NotNull
-    @Min(10000)
     Long id;
 
 
@@ -114,5 +112,19 @@ public class MyEntity implements ActiveRecord<MyEntity, Long>{
 
     public void setValue(int value) {
         this.value = value;
+    }
+
+    @Override
+    public String toString() {
+        return "MyEntity{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", aDate=" + aDate +
+                ", doStuff=" + doStuff +
+                ", readOnly='" + readOnly + '\'' +
+                ", value=" + value +
+                ", enumType=" + enumType +
+                ", parent=" + parent +
+                '}';
     }
 }

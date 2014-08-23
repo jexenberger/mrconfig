@@ -34,6 +34,8 @@ public class IntegrationTest {
         server.setId("server");
         server.setName("Server");
         server.setOwner(adminGroup);
+        server.setDnsName("dnsName");
+        server.setIpAddress("ipAddress");
         entityManager.persist(server);
 
         entityManager.flush();

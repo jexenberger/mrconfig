@@ -32,9 +32,22 @@ public class JPAProvider implements Provider {
         helper = new JPAQueryHelper();
     }
 
-    public static void setPERSISTENCE_UNIT(String unit) {
+    public static void setThreadEntityManager(EntityManager entityManager) {
+        PROVIDER.set(entityManager);
+    }
+
+    public static void unsetThreadEntityManager() {
+        PROVIDER.remove();
+    }
+
+    public static void setPersistenceUnit(String unit) {
         reset();
         PERSISTENCE_UNIT = unit;
+    }
+
+    public static void setEntityManagerFactory(EntityManagerFactory factory) {
+        reset();
+        ENTITY_MANAGER_FACTORY = factory;
     }
 
     public static String getEmptyIndicator() {
@@ -45,7 +58,7 @@ public class JPAProvider implements Provider {
         JPAProvider.NULL = NULL;
     }
 
-    public static String getPERSISTENCE_UNIT() {
+    public static String getPersistenceUnit() {
         return PERSISTENCE_UNIT;
     }
 
@@ -62,7 +75,7 @@ public class JPAProvider implements Provider {
         boolean success = false;
         boolean nested = false;
         try {
-            PROVIDER.set(entityManager);
+            setThreadEntityManager(entityManager);
             transaction = getTransaction(entityManager);
             if (!transaction.isActive()) {
                 transaction.begin();
@@ -83,7 +96,7 @@ public class JPAProvider implements Provider {
                 } else {
                     transaction.setRollbackOnly();
                 }
-                PROVIDER.remove();
+                unsetThreadEntityManager();
             }
         }
     }
@@ -260,14 +273,18 @@ public class JPAProvider implements Provider {
 
 
     public <T> EntityManager getEntityManager() {
-        if (ENTITY_MANAGER_FACTORY == null) {
-            ENTITY_MANAGER_FACTORY = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT);
-        }
-        EntityManager entityManager = PROVIDER.get();
+        EntityManager entityManager = getThreadEntityManager();
         if (entityManager != null) {
             return entityManager;
         }
+        if (ENTITY_MANAGER_FACTORY == null) {
+            ENTITY_MANAGER_FACTORY = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT);
+        }
         return ENTITY_MANAGER_FACTORY.createEntityManager();
+    }
+
+    private EntityManager getThreadEntityManager() {
+        return PROVIDER.get();
     }
 
     public static void reset() {

@@ -11,11 +11,14 @@ public class Error {
 
     private static final String NOT_FOUND = "not.found";
     private static final String SAVE_ERROR = "save.error";
-    private static final String INVALID_ID = "save.error";
+    private static final String INVALID_ID = "invalid.id";
+    private static final String INVALID_VALUE = "invalid.value";
 
 
     @XmlAttribute(namespace = "http://www.github.org/mrconfig",required=true)
     String code;
+    @XmlAttribute(namespace = "http://www.github.org/mrconfig")
+    String ref;
     @XmlElement(namespace = "http://www.github.org/mrconfig")
     String description;
 
@@ -24,6 +27,12 @@ public class Error {
 
     public Error(String code, String description) {
         this.code = code;
+        this.description = description;
+    }
+
+    public Error(String code, String ref, String description) {
+        this.code = code;
+        this.ref = ref;
         this.description = description;
     }
 
@@ -45,6 +54,10 @@ public class Error {
 
     public static Error error(String code, String description) {
         return new Error(code, description);
+    }
+
+    public static Error error(String code, String ref, String description) {
+        return new Error(code, ref,description);
     }
 
     public static Error notFound() {
@@ -74,11 +87,23 @@ public class Error {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("Error{");
-        sb.append("code='").append(code).append('\'');
-        sb.append(", description='").append(description).append('\'');
-        sb.append('}');
-        return sb.toString();
+        return "Error{" +
+                "code='" + code + '\'' +
+                ", ref='" + ref + '\'' +
+                ", description='" + description + '\'' +
+                '}';
+    }
+
+    public String getRef() {
+        return ref;
+    }
+
+    public static Error invalidValue(String message) {
+        return error(INVALID_VALUE,message);
+    }
+
+    public static Error invalidValue(String code, String message) {
+        return error(INVALID_VALUE,message);
     }
 }
 

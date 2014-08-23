@@ -7,6 +7,7 @@ import org.junit.Test;
 import java.util.Optional;
 import java.util.UUID;
 
+import static org.github.mrconfig.framework.activerecord.ActiveRecord.findById;
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertTrue;
@@ -23,13 +24,13 @@ public class EnvironmentServiceTest extends BaseDomainJPATest{
         EnvironmentService environmentService = new EnvironmentService(getEntityManager());
         Environment environment = new EnvironmentGroup();
         environment.setName("Test environment");
-        key = UUID.randomUUID().toString();
+        key = "test_environment";
         environment.setId(key);
         environmentService.add(environment);
         getEntityManager().clear();
         System.out.println("ENV -> " +environment.getId());
 
-        Optional<Environment> result = lookupByKey(Environment.class, key);
+        Optional<Environment> result = findById(Environment.class, key);
         assertThat(result.get(), equalTo(environment));
 
     }

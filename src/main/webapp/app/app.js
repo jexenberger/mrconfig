@@ -54,6 +54,7 @@ controllers.controller('rs_menu_Controller',['$scope','$rootScope','$http', '$lo
         });
     }
 
+
 }]);
 
 
