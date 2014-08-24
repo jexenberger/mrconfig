@@ -16,7 +16,6 @@ import java.util.stream.Collectors;
 
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
-import static org.github.mrconfig.framework.resources.Error.error;
 import static org.github.mrconfig.framework.resources.Error.notFound;
 import static org.github.mrconfig.framework.resources.Errors.errors;
 import static org.github.mrconfig.framework.util.Pair.cons;
@@ -24,40 +23,50 @@ import static org.github.mrconfig.framework.util.Pair.cons;
 /**
  * Created by julian3 on 2014/07/18.
  */
-public interface ReadableResource<T,K extends Serializable> {
+public interface ReadableResource<T, K extends Serializable> extends BaseResource{
 
 
-    default String getPath() {
-        Path path = getClass().getAnnotation(Path.class);
-        return path.value();
-    }
 
     @GET
     @Path("{id}")
     default Response get(@Context SecurityContext context, @PathParam("id") String id) {
 
+        Resource resource = ResourceRegistry.get(getPath());
+        if (notAuthorized(context, resource.getLookupRole())) {
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        }
+
         Optional<T> byId = getLookup().resolve(id, getResourceIdType());
         if (!byId.isPresent()) {
-           return Response.status(Response.Status.NOT_FOUND).entity(errors(notFound())).build();
+            return Response.status(Response.Status.NOT_FOUND).entity(errors(notFound())).build();
         }
 
         if (!isAllowed(byId.get())) {
-           return Response.status(Response.Status.FORBIDDEN).build();
+            return Response.status(Response.Status.FORBIDDEN).build();
         }
         return Response.ok(byId.get()).build();
     }
 
+    default boolean notAuthorized(SecurityContext context,  String role) {
+        if (role != null) {
+            if (!context.isUserInRole(role)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     default Class<K> getResourceIdType() {
-       return (Class<K>) GenericsUtil.getClass(this.getClass(),1);
+        return (Class<K>) GenericsUtil.getClass(this.getClass(), 1);
     }
 
     Listable<T> getListableResource();
-    UniqueLookup<T,K> getLookup();
+
+    UniqueLookup<T, K> getLookup();
 
     default boolean isAllowed(T t) {
         return true;
     }
-
 
 
     @GET
@@ -71,14 +80,20 @@ public interface ReadableResource<T,K extends Serializable> {
         if (resource.getUxModule() == null) {
             return Response.status(Response.Status.NOT_FOUND).entity(errors(notFound())).build();
         }
-        StreamingOutput stream = (output)-> {
-           resource.getUxModule().render(id,output);
+        StreamingOutput stream = (output) -> {
+            resource.getUxModule().render(id, output);
         };
         return Response.ok().entity(stream).build();
     }
 
     @GET
     default Response get(@Context SecurityContext context, @Context UriInfo ui) {
+
+        Resource resource = ResourceRegistry.get(getPath());
+        if (notAuthorized(context, resource.getListRole())) {
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        }
+
         MultivaluedMap<String, String> queryParameters = ui.getQueryParameters();
         Collection<Pair<String, Object>> parameters = new ArrayList<>();
         queryParameters.forEach((key, value) -> {
@@ -88,9 +103,9 @@ public interface ReadableResource<T,K extends Serializable> {
         });
         addFilterParameters(parameters);
         Pair<String, Object>[] paramArray = parameters.toArray(new Pair[]{});
-        Listable<T> resource = getListableResource();
-        long totalResults = resource.count(paramArray);
-        Integer page = (totalResults <100) ? -1 : 1;
+        Listable<T> listable = getListableResource();
+        long totalResults = listable.count(paramArray);
+        Integer page = (totalResults < 100) ? -1 : 1;
 
         if (queryParameters.containsKey(getPageParameter())) {
             page = Integer.valueOf(queryParameters.getFirst(getPageParameter()));
@@ -114,19 +129,19 @@ public interface ReadableResource<T,K extends Serializable> {
             if (page > maxPages) {
                 throw new BadRequestException("specified page exceeds total pages of " + pages);
             }
-            int offset= ((page > 1) ? (page-1)* maxPageSize :0);
-            results = resource.page(offset, maxPageSize, paramArray);
+            int offset = ((page > 1) ? (page - 1) * maxPageSize : 0);
+            results = listable.page(offset, maxPageSize, paramArray);
             response.setTotalPages(maxPages);
             response.setCurrentPage(page);
             if (page < maxPages) {
-                response.getLink().add(new Link("next", null, buildPath(ui, page+1), "Next Page"));
+                response.getLink().add(new Link("next", null, buildPath(ui, page + 1), "Next Page"));
             }
             if (page > 1) {
-                response.getLink().add(new Link("prev", null, buildPath(ui, page-1), "Previous Page"));
+                response.getLink().add(new Link("prev", null, buildPath(ui, page - 1), "Previous Page"));
             }
             response.setCurrentPage(page);
         } else {
-            results = resource.list(paramArray);
+            results = listable.list(paramArray);
             response.setTotalPages(1);
             response.setCurrentPage(1);
         }
@@ -134,7 +149,7 @@ public interface ReadableResource<T,K extends Serializable> {
         if (queryParameters.containsKey(getDetailsParameter())) {
             response.setResource(results);
         } else {
-            response.setResult(results.stream().map(resource::toLink).collect(toList()));
+            response.setResult(results.stream().map(listable::toLink).collect(toList()));
         }
         return Response.ok(new GenericEntity<>(response, response.getClass())).build();
 
@@ -163,9 +178,9 @@ public interface ReadableResource<T,K extends Serializable> {
     default String buildPath(UriInfo ui, int pageNumber) {
         Map<String, List<String>> parameters = new HashMap<>();
         parameters.putAll(ui.getQueryParameters());
-        parameters.put(getPageParameter(),asList(Integer.toString(pageNumber)));
+        parameters.put(getPageParameter(), asList(Integer.toString(pageNumber)));
 
-        return  ui.getPath() +"?" + parameters.entrySet().stream().map((entry)-> entry.getKey()+"="+entry.getValue().get(0)).collect(Collectors.joining("&"));
+        return ui.getPath() + "?" + parameters.entrySet().stream().map((entry) -> entry.getKey() + "=" + entry.getValue().get(0)).collect(Collectors.joining("&"));
     }
 
 

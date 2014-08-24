@@ -35,6 +35,7 @@ application.factory('myInterceptor', ['$log', function($log) {
               'request': function(config) {
                 // do something on success
                  $log.debug(JSON.stringify(config));
+                config.headers.Authorization = 'Basic YWRtaW46cGFzc3dvcmQ='
                 return config;
               },
     };

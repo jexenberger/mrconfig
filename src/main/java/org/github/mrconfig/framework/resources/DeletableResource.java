@@ -1,5 +1,7 @@
 package org.github.mrconfig.framework.resources;
 
+import org.github.mrconfig.framework.Resource;
+import org.github.mrconfig.framework.ResourceRegistry;
 import org.github.mrconfig.framework.activerecord.ActiveRecord;
 import org.github.mrconfig.domain.EnvironmentGroup;
 import org.github.mrconfig.framework.service.Deletable;
@@ -23,16 +25,26 @@ import static org.github.mrconfig.framework.resources.Errors.errors;
 /**
  * Created by julian3 on 2014/07/18.
  */
-public interface DeletableResource<T, K extends Serializable> {
+public interface DeletableResource<T, K extends Serializable> extends BaseResource {
 
     Deletable<T,K> getDeletable();
 
     @DELETE
     @Path("{id}")
     default Response delete(@Context SecurityContext context, @PathParam("id") String id) {
+
+        Resource resource = ResourceRegistry.get(getPath());
+        if (notAuthorized(context, resource.getDeleteRole())) {
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        }
+
+
         if (id == null) {
             return Response.status(Response.Status.BAD_REQUEST).entity(errors(Error.invalidID(id))).build();
         }
+
+
+
 
         K convertedId = null;
         try {
@@ -51,5 +63,7 @@ public interface DeletableResource<T, K extends Serializable> {
     default Class<K> getResourceIdType() {
         return (Class<K>) GenericsUtil.getClass(this.getClass(), 1);
     }
+
+
 
 }

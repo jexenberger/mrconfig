@@ -1,5 +1,7 @@
 package org.github.mrconfig.framework.resources;
 
+import org.github.mrconfig.framework.Resource;
+import org.github.mrconfig.framework.ResourceRegistry;
 import org.github.mrconfig.framework.service.Creatable;
 import org.github.mrconfig.framework.service.Updateable;
 import org.github.mrconfig.framework.util.Box;
@@ -25,13 +27,19 @@ import static org.github.mrconfig.framework.resources.Errors.errors;
 /**
  * Created by julian3 on 2014/07/18.
  */
-public interface WritableResource<T, K extends Serializable> {
+public interface WritableResource<T, K extends Serializable> extends BaseResource{
 
 
     @POST
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     default Response create(@Context SecurityContext context, T instance) {
+
+
+        Resource resource = ResourceRegistry.get(getPath());
+        if (notAuthorized(context, resource.getCreateRole())) {
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        }
 
         Creatable<T, K> service = getCreatable();
         Box<K> result = service.create(instance);
@@ -60,6 +68,10 @@ public interface WritableResource<T, K extends Serializable> {
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     default Response save(@Context SecurityContext context, T group) {
 
+        Resource resource = ResourceRegistry.get(getPath());
+        if (notAuthorized(context, resource.getUpdateRole())) {
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        }
 
         Box<T> save = getUpdateable().save(group);
         if (save.isSuccess()) {
@@ -69,5 +81,6 @@ public interface WritableResource<T, K extends Serializable> {
         }
 
     }
+
 
 }

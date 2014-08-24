@@ -28,6 +28,11 @@ public class Resource {
     Deletable<?,?> deletable;
     UniqueLookup<?, ?> uniqueLookup;
     UXModule uxModule;
+    String createRole;
+    String listRole;
+    String lookupRole;
+    String updateRole;
+    String deleteRole;
 
     public Resource(String path, String group, Class<?> resourceClass, Class<?> resourceController, Creatable<?, ?> creatable, Listable<?> listable, Updateable<?,?> updateable, Deletable<?,?> deletable, UniqueLookup<?, ?> uniqueLookup) {
         this.path = path;
@@ -180,8 +185,45 @@ public class Resource {
        getUxModule().render(method, outputStream);
     }
 
+    public Resource setListRole(String listRole) {
+        this.listRole = listRole;
+        return this;
+    }
 
+    public Resource setLookupRole(String lookupRole) {
+        this.lookupRole = lookupRole;
+        return this;
+    }
 
+    public Resource setUpdateRole(String updateRole) {
+        this.updateRole = updateRole;
+        return this;
+    }
+
+    public Resource setDeleteRole(String deleteRole) {
+        this.deleteRole = deleteRole;
+        return this;
+    }
+
+    public String getCreateRole() {
+        return createRole;
+    }
+
+    public String getListRole() {
+        return listRole;
+    }
+
+    public String getLookupRole() {
+        return lookupRole;
+    }
+
+    public String getUpdateRole() {
+        return updateRole;
+    }
+
+    public String getDeleteRole() {
+        return deleteRole;
+    }
 
     public String buildIDForResource(Object v) {
         if (v instanceof Identified) {
