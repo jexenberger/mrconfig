@@ -10,7 +10,9 @@ import org.github.mrconfig.framework.util.TransformerService;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.SecurityContext;
 import java.io.Serializable;
 import java.util.Optional;
 
@@ -27,7 +29,7 @@ public interface DeletableResource<T, K extends Serializable> {
 
     @DELETE
     @Path("{id}")
-    default Response delete(@PathParam("id") String id) {
+    default Response delete(@Context SecurityContext context, @PathParam("id") String id) {
         if (id == null) {
             return Response.status(Response.Status.BAD_REQUEST).entity(errors(Error.invalidID(id))).build();
         }
