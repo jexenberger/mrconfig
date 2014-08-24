@@ -3,6 +3,8 @@ package org.github.mrconfig.framework.service;
 
 import org.github.mrconfig.framework.Resource;
 import org.github.mrconfig.framework.ResourceRegistry;
+import org.github.mrconfig.framework.util.GenericsUtil;
+import org.github.mrconfig.framework.util.TransformerService;
 
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 import java.io.Serializable;
@@ -35,7 +37,10 @@ public abstract class LinkAdapter<T> extends XmlAdapter<Link, T> {
         Serializable resourceId = getResourceId(v.getHref());
         //had to do this unchecked to get by the wildcard typing, Julian : 0, Java Generics: 99999999999
         UniqueLookup uniqueLookup = resource.getUniqueLookup();
-        Optional<T> byId = uniqueLookup.get(resourceId);
+        Class<?> keyType = GenericsUtil.getClass(resource.getResourceController(), 1);
+        T result = (T) TransformerService.convert(resourceId, keyType);
+        Serializable targetId = (Serializable) result;
+        Optional<T> byId = uniqueLookup.get(targetId);
         return byId.get();
 
     }

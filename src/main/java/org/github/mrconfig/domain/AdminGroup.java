@@ -6,6 +6,8 @@ import javax.persistence.CascadeType;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.ArrayList;
@@ -23,6 +25,8 @@ public class AdminGroup extends BaseEntity<AdminGroup> implements Named {
 
     @XmlElement(namespace = "http://www.github.org/mrconfig")
     @NotNull
+    @Pattern(regexp = "[a-zA-Z]+")
+    @Size(min=3, max=25)
     String name;
     @XmlElement(namespace = "http://www.github.org/mrconfig")
     String description;

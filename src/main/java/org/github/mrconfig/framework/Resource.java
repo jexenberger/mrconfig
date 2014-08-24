@@ -25,11 +25,11 @@ public class Resource {
     Creatable<?, ?> creatable;
     Listable<?> listable;
     Updateable<?,?> updateable;
-    Deletable<?> deletable;
+    Deletable<?,?> deletable;
     UniqueLookup<?, ?> uniqueLookup;
     UXModule uxModule;
 
-    public Resource(String path, String group, Class<?> resourceClass, Class<?> resourceController, Creatable<?, ?> creatable, Listable<?> listable, Updateable<?,?> updateable, Deletable<?> deletable, UniqueLookup<?, ?> uniqueLookup) {
+    public Resource(String path, String group, Class<?> resourceClass, Class<?> resourceController, Creatable<?, ?> creatable, Listable<?> listable, Updateable<?,?> updateable, Deletable<?,?> deletable, UniqueLookup<?, ?> uniqueLookup) {
         this.path = path;
         this.group = group;
         this.resourceClass = resourceClass;
@@ -77,7 +77,6 @@ public class Resource {
 
     public static Resource scaffold(Class<?> resourceController, Function<Resource,Form> formSupplier) {
         Resource resource = resource(resourceController, null, null);
-        ResourceRegistry.register(resource);
         ActiveRecordCRUDService service = new ActiveRecordCRUDService((Class<ActiveRecord>) resource.getResourceClass());
         resource.setCreatable(service);
         resource.setGroup(resource.getResourceClass().getPackage().getName());
@@ -117,7 +116,7 @@ public class Resource {
         return updateable;
     }
 
-    public Deletable<?> getDeletable() {
+    public Deletable<?,?> getDeletable() {
         return deletable;
     }
 
@@ -149,7 +148,7 @@ public class Resource {
         this.updateable = updateable;
     }
 
-    public void setDeletable(Deletable<?> deletable) {
+    public void setDeletable(Deletable<?,?> deletable) {
         this.deletable = deletable;
     }
 
@@ -180,6 +179,8 @@ public class Resource {
        }
        getUxModule().render(method, outputStream);
     }
+
+
 
 
     public String buildIDForResource(Object v) {

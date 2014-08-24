@@ -12,10 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.lang.reflect.Modifier;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -31,8 +29,8 @@ public class BeanFormBuilder {
     private Collection<Consumer<FormBuilder>> helpers;
     private Resource resource;
 
-    public BeanFormBuilder(Resource resource, Consumer<FormBuilder> ... helpers) {
-        this.helpers =  asList(helpers);
+    public BeanFormBuilder(Resource resource, Consumer<FormBuilder> ... formBuildHelpers) {
+        this.helpers =  (formBuildHelpers != null) ? asList(formBuildHelpers) : Collections.emptyList();
         this.resource = resource;
     }
 
@@ -44,6 +42,9 @@ public class BeanFormBuilder {
         Class<?> resourceClass = resource.getResourceClass();
         Collection<Field> declaredFields = ReflectionUtil.getAllFields(resourceClass);
         for (Field declaredField : declaredFields) {
+            if (Modifier.isStatic(declaredField.getModifiers())) {
+                continue;
+            }
             Class<?> declaredFieldType = declaredField.getType();
             Class<?> fieldClazz = declaredFieldType;
             if (Collection.class.isAssignableFrom(fieldClazz) || fieldClazz.isArray()) {
@@ -72,6 +73,9 @@ public class BeanFormBuilder {
                 builder.addField(field);
             } else {
                 FormField field = FormField.fromField(declaredField, resourceClass, null);
+                if (field.getId().equals("id")) {
+                    field.setKey(true);
+                }
                 builder.addField(field);
             }
         }
@@ -123,6 +127,8 @@ public class BeanFormBuilder {
                 }
             });
         }
+
+        builder.sortAsc();
 
         return builder;
 

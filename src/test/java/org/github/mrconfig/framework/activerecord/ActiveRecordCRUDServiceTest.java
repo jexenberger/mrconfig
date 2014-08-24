@@ -22,6 +22,7 @@ public class ActiveRecordCRUDServiceTest extends BaseJPA {
 
     private ActiveRecordCRUDService<MyEntity, Long> service;
     private MyEntity environment;
+    private Long id;
 
 
     @Override
@@ -38,6 +39,7 @@ public class ActiveRecordCRUDServiceTest extends BaseJPA {
     public void testCreate() throws Exception {
 
         Box<Long> save = service.create(environment);
+        id = save.get();
         assertNotNull(save);
         save.mapError((code, val)-> {
             System.out.println(code+ " "+val);
@@ -61,7 +63,7 @@ public class ActiveRecordCRUDServiceTest extends BaseJPA {
     @Test
     public void testFindWhere() throws Exception {
         testCreate();
-        Collection<MyEntity> save = service.list(cons("id", 1));
+        Collection<MyEntity> save = service.list(cons("id", id));
         assertNotNull(save);
         assertEquals(1,save.size());
 
@@ -70,7 +72,7 @@ public class ActiveRecordCRUDServiceTest extends BaseJPA {
     @Test
     public void testPage() throws Exception {
         testCreate();
-        Collection<MyEntity> save = service.page(0, 10, cons("id", 1));
+        Collection<MyEntity> save = service.page(0, 10, cons("id", id));
         assertNotNull(save);
         assertEquals(1,save.size());
 
@@ -88,7 +90,7 @@ public class ActiveRecordCRUDServiceTest extends BaseJPA {
     @Test
     public void testDelete() throws Exception {
         testCreate();
-        Box<MyEntity> save = service.delete(environment);
+        Box<MyEntity> save = service.delete(environment.getId());
         assertNotNull(save);
         System.out.println(save.getErrors());
         assertTrue(save.isSuccess());

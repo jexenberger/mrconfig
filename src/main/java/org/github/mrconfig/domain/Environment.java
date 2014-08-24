@@ -4,6 +4,7 @@ import org.github.mrconfig.framework.activerecord.ActiveRecord;
 import org.github.mrconfig.framework.service.Named;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.*;
@@ -25,14 +26,10 @@ import static org.github.mrconfig.framework.activerecord.Parameter.p;
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class Environment<T extends Environment> extends KeyEntity<T> implements  Named {
 
-    enum Type {
-        cloud,
-        physical,
-        mainDataCentre,
-        DRDataCentre
-    }
+
 
     @Column(name = "name")
+    @NotNull
     String name;
 
     @ManyToOne(targetEntity = AdminGroup.class, fetch = FetchType.LAZY)
@@ -41,7 +38,7 @@ public class Environment<T extends Environment> extends KeyEntity<T> implements 
     @JoinColumn(referencedColumnName = "id")
     Environment parent;
     @Enumerated
-    Type deployment;
+    EnvironmentType deployment;
 
     public Environment() {
     }
@@ -124,12 +121,12 @@ public class Environment<T extends Environment> extends KeyEntity<T> implements 
     }
 
     @XmlElement(namespace = "http://www.github.org/mrconfig")
-    public Type getDeployment() {
+    public EnvironmentType getDeployment() {
         return deployment;
     }
 
 
-    public void setDeployment(Type deployment) {
+    public void setDeployment(EnvironmentType deployment) {
         this.deployment = deployment;
     }
 

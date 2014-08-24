@@ -146,14 +146,20 @@ public class ActiveRecordCRUDService<T extends ActiveRecord<T, K>, K extends Ser
     }
 
     @Override
-    public Box<T> delete(T instance) {
+    public Box<T> delete(K id) {
         try {
-            if (instance instanceof Active) {
-                ((Active) instance).deactivate();
+            Optional<T> result = findById(getType(), id);
+            if (result.isPresent()) {
+                T instance = result.get();
+                if (instance instanceof Active) {
+                    ((Active) instance).deactivate();
+                } else {
+                    instance.delete();
+                }
+                return success(instance);
             } else {
-                instance.delete();
+                return error(cons("not.found",id.toString()));
             }
-            return success(instance);
         } catch (Exception e) {
             return error(cons(e.getClass().getSimpleName(), e.getMessage()));
         }

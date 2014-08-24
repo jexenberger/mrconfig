@@ -34,6 +34,7 @@ public class FormField {
     Collection<UXConstraint> constraints;
     String group;
     Collection<Pair<String,String>> defaultValueList;
+    boolean key;
 
 
     public FormField(String id) {
@@ -71,7 +72,13 @@ public class FormField {
         return lookupFilter;
     }
 
+    public void setKey(boolean key) {
+        this.key = key;
+    }
 
+    public boolean isKey() {
+        return key;
+    }
 
     public boolean isReadOnly() {
         return readOnly;

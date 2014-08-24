@@ -180,4 +180,7 @@ public class Component {
         return Optional.ofNullable(component);
     }
 
+    public String getType() {
+        return type;
+    }
 }

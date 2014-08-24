@@ -11,9 +11,7 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriBuilder;
+import javax.ws.rs.core.*;
 import java.io.Serializable;
 import java.net.URI;
 import java.util.Optional;
@@ -33,7 +31,7 @@ public interface WritableResource<T, K extends Serializable> {
     @POST
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    default Response create(T instance) {
+    default Response create(@Context SecurityContext context, T instance) {
 
         Creatable<T, K> service = getCreatable();
         Box<K> result = service.create(instance);
@@ -60,16 +58,8 @@ public interface WritableResource<T, K extends Serializable> {
     @PUT
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    default Response save( T group) {
+    default Response save(@Context SecurityContext context, T group) {
 
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        Validator validator = factory.getValidator();
-        Set<ConstraintViolation<T>> violations = validator.validate(group);
-        if (!violations.isEmpty()) {
-            Error[] errors = violations.stream().map((violation)-> Error.invalidValue(violation.getMessage())).collect(toList()).toArray(new Error[] {});
-            Response build = Response.status(Response.Status.BAD_REQUEST).entity(errors(errors)).build();
-            return build;
-        }
 
         Box<T> save = getUpdateable().save(group);
         if (save.isSuccess()) {

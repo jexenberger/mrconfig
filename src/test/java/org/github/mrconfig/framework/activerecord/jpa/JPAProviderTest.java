@@ -1,5 +1,6 @@
 package org.github.mrconfig.framework.activerecord.jpa;
 
+import org.github.mrconfig.framework.activerecord.ProviderFactory;
 import org.github.mrconfig.framework.activerecord.jpa.JPAProvider;
 import org.github.mrconfig.framework.testdomain.MyEntity;
 import org.github.mrconfig.service.BaseJPA;
@@ -22,26 +23,24 @@ import static org.junit.Assert.*;
  */
 public class JPAProviderTest extends BaseJPA{
 
-    private static JPAProvider provider;
+    private JPAProvider provider;
 
     @Before
     public  void before() throws Exception{
         super.before();
-        provider = new JPAProvider();
+        provider = (JPAProvider) ProviderFactory.getProvider();
+        //provider.deleteAll(MyEntity.class);
 
         for (int i = 0; i < 100; i++) {
             MyEntity environment = new MyEntity();
             environment.setName("Name ->" + i);
-            provider.save(environment, null);
+            //provider.save(environment, null);
+            environment.save();
         }
 
 
     }
 
-    @After
-    public void after() {
-        provider.getEntityManager().clear();
-    }
 
     @Test
     public void testTransaction() throws Exception {
@@ -112,7 +111,6 @@ public class JPAProviderTest extends BaseJPA{
         Optional<MyEntity> stream = provider.single(MyEntity.class, "findNameLike", p("name", "Name%"));
         assertNotNull(stream);
         assertTrue(stream.isPresent());
-        assertEquals(new Long(1), stream.get().getId());
 
 
     }
@@ -126,7 +124,7 @@ public class JPAProviderTest extends BaseJPA{
 
     @Test
     public void testFindWhere() throws Exception {
-        Collection<MyEntity> result = provider.findWhere(MyEntity.class, p("id", "1"));
+        Collection<MyEntity> result = provider.findWhere(MyEntity.class, p("name", "Name ->0"));
         assertNotNull(result);
         assertTrue(result.size() > 0);
 

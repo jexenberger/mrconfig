@@ -3,6 +3,7 @@ package org.github.mrconfig.framework.ux.form;
 import org.github.mrconfig.framework.Resource;
 import org.github.mrconfig.framework.util.Inflector;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -87,6 +88,22 @@ public class FormBuilder {
     public FormBuilder withListField(String id, Consumer<FormField> handler) {
         Optional<FormField> result = form.getListFields().stream().filter((field) -> id.equals(field.getId())).findFirst();
         result.ifPresent(handler);
+        return this;
+    }
+
+    public FormBuilder sortAsc()  {
+        Collections.sort(this.form.getFields(),(fieldA, fieldB)-> {
+            if (fieldA.isKey() && fieldB.isKey()) {
+                return 0;
+            }
+            if (fieldA.isKey()) {
+                return -1;
+            }
+            if (fieldB.isKey()) {
+                return 1;
+            }
+            return fieldA.getId().compareTo(fieldB.getId());
+        });
         return this;
     }
 

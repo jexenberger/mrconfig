@@ -65,7 +65,7 @@ public class ReadableResourceTest implements ReadableResource<MyEntity,Long> {
         expect(uriInfo.getPath()).andReturn("/helloworld").times(1);
         replay(uriInfo);
 
-        Response response = this.get(uriInfo);
+        Response response = this.get(createMock(SecurityContext.class), uriInfo);
         assertNotNull(response);
         assertNotNull(response.getEntity());
         assertEquals(200, response.getStatus());
@@ -105,14 +105,14 @@ public class ReadableResourceTest implements ReadableResource<MyEntity,Long> {
 
         replay(service, uriInfo);
 
-        Response response = this.get(uriInfo);
+        Response response = this.get(createMock(SecurityContext.class), uriInfo);
         assertNotNull(response);
         assertNotNull(response.getEntity());
         assertEquals(200, response.getStatus());
 
         Results<MyEntity> results = (Results<MyEntity>) response.getEntity();
         assertNotNull(results.getResult());
-        assertEquals(5, results.getResult().size());
+        assertEquals(this.getPageSize(), results.getResult().size());
         assertEquals(totalPages, results.getTotalPages());
         assertEquals(totalItems, results.getTotalResults());
         assertEquals(1, results.getCurrentPage());

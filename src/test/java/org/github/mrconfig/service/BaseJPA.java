@@ -30,7 +30,9 @@ public class BaseJPA {
 
     @Before
     public void before() throws Exception {
-        entityManager = entityManagerFactory.createEntityManager();
+        if (entityManager == null) {
+            entityManager = entityManagerFactory.createEntityManager();
+        }
         JPAProvider.setThreadEntityManager(entityManager);
         entityManager.getTransaction().begin();
     }
@@ -43,7 +45,6 @@ public class BaseJPA {
         } finally {
             try {
                 JPAProvider.unsetThreadEntityManager();
-                getEntityManager().getTransaction().setRollbackOnly();
                 getEntityManager().getTransaction().rollback();
                 System.out.println("TRANSACTION ROLLED BACK!!!!!");
             } catch (Exception e) {

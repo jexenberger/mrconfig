@@ -52,7 +52,7 @@ public class UXModule {
 
 
     public static UXModule defaultView(Resource resource, Function<Resource,Form> formSupplier) {
-        return new UXModule(templateView("list_form.ftl"),templateView("edit_view.ftl"), resource).formSupplier(formSupplier);
+        return new UXModule(templateView("list_form.ftl"),templateView("edit_form.ftl"), resource).formSupplier(formSupplier);
     }
 
     public void registerDefaultViews() {
@@ -143,7 +143,7 @@ public class UXModule {
 
     public String getLink() {
         String defaultView = "list";
-        return resource.getPath()+"/"+defaultView+".htm";
+        return resource.getPath()+"/"+defaultView;
     }
 
 

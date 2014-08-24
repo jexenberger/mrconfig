@@ -1,4 +1,4 @@
-package org.github.mrconfig.framework.macro;
+package org.github.mrconfig.framework.resources;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

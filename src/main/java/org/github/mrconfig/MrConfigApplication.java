@@ -1,29 +1,19 @@
 package org.github.mrconfig;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
 import org.github.mrconfig.domain.*;
 import org.github.mrconfig.framework.Module;
 import org.github.mrconfig.framework.Resource;
-import org.github.mrconfig.framework.ResourceRegistry;
 import org.github.mrconfig.framework.activerecord.jpa.JPAModule;
-import org.github.mrconfig.framework.activerecord.jpa.JPAProvider;
 import org.github.mrconfig.framework.activerecord.ProviderFactory;
 import org.github.mrconfig.framework.resources.GenerateExceptionMapper;
 import org.github.mrconfig.framework.resources.JaxbProvider;
-import org.github.mrconfig.framework.resources.MenuResource;
-import org.github.mrconfig.framework.macro.FormRegistry;
-import org.github.mrconfig.framework.macro.FormResource;
-import org.github.mrconfig.framework.macro.StaticResource;
 import org.github.mrconfig.framework.resources.SessionInViewInterceptor;
+import org.github.mrconfig.framework.resources.TestObjectResource;
 import org.github.mrconfig.framework.ux.form.BeanFormBuilder;
 import org.github.mrconfig.framework.ux.form.DefaultUXModule;
-import org.github.mrconfig.resources.TemplateResource;
 import org.github.mrconfig.resources.*;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
-import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.server.ServerProperties;
@@ -57,7 +47,7 @@ public class MrConfigApplication extends ResourceConfig {
             public void run() {
 
 
-                Module myModule = new Module() {
+                Module myModule = new Module("Main") {
 
                     @Override
                     public void init() {
@@ -66,24 +56,20 @@ public class MrConfigApplication extends ResourceConfig {
                         this.addModule(new JPAModule("org.github.mrconfig.domain"));
                         this.addModule(new DefaultUXModule());
 
-                        Resource.scaffold(EnvironmentResource.class, BeanFormBuilder::form);
-                        Resource.scaffold(EnvironmentGroupResource.class,BeanFormBuilder::form);
-                        Resource.scaffold(ServerResource.class,BeanFormBuilder::form);
-                        Resource.scaffold(PropertyResource.class,BeanFormBuilder::form);
-                        Resource.scaffold(AdminGroupResource.class,BeanFormBuilder::form);
-                        Resource.scaffold(UserResource.class,BeanFormBuilder::form);
-                        Resource.scaffold(ManeeshResource.class,BeanFormBuilder::form);
-                        Resource.scaffold(PropertyValueResource.class,BeanFormBuilder::form);
-                        Resource.scaffold(TemplateResource.class,BeanFormBuilder::form);
+                        register(Resource.scaffold(EnvironmentResource.class, BeanFormBuilder::form));
+                        register(Resource.scaffold(EnvironmentGroupResource.class,BeanFormBuilder::form));
+                        register(Resource.scaffold(ServerResource.class,BeanFormBuilder::form));
+                        register(Resource.scaffold(PropertyResource.class,BeanFormBuilder::form));
+                        register(Resource.scaffold(AdminGroupResource.class,BeanFormBuilder::form));
+                        register(Resource.scaffold(UserResource.class,BeanFormBuilder::form));
+                        register(Resource.scaffold(PropertyValueResource.class,BeanFormBuilder::form));
 
                         addResourceClass(PropertiesImportResource.class);
                         addResourceClass(FileResource.class);
 
                         addResourceClass(JaxbProvider.class);
                         addResourceClass(JaxbProvider.class);
-                        addResourceClass(GenerateExceptionMapper.class);
                         addResourceClass(MultiPartFeature.class);
-
                         addResourceClass(SessionInViewInterceptor.class);
                     }
                 };
@@ -125,6 +111,12 @@ public class MrConfigApplication extends ResourceConfig {
     }
 
     public static void bootstrap() {
+
+        TestObject to = new TestObject();
+        to.setName("test");
+        to.setSurname("test");
+        to.save();
+
 
         User adminUser = new User("admin", "admin").save();
         User julian = new User("julian", "password").save();

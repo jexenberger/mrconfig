@@ -41,7 +41,8 @@ public class HibernateProviderTest extends BaseJPA{
     }
 
     @After
-    public void after() {
+    public void after() throws Exception{
+        super.after();
         provider.getEntityManager().clear();
     }
 

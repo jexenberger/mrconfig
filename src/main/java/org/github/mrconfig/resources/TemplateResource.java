@@ -4,10 +4,7 @@ import org.github.mrconfig.domain.Template;
 import org.github.mrconfig.framework.resources.DeletableResource;
 import org.github.mrconfig.framework.resources.ReadableResource;
 import org.github.mrconfig.framework.resources.WritableResource;
-import org.github.mrconfig.framework.service.Creatable;
-import org.github.mrconfig.framework.service.Listable;
-import org.github.mrconfig.framework.service.UniqueLookup;
-import org.github.mrconfig.framework.service.Updateable;
+import org.github.mrconfig.framework.service.*;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Path;
@@ -20,7 +17,12 @@ import javax.ws.rs.core.MediaType;
 @Path("/templates")
 @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-public class TemplateResource implements ReadableResource<Template,Long>, WritableResource<Template,Long>, DeletableResource<Template> {
+public class TemplateResource implements ReadableResource<Template,Long>, WritableResource<Template,Long>, DeletableResource<Template,Long> {
+    @Override
+    public Deletable<Template, Long> getDeletable() {
+        return null;
+    }
+
     @Override
     public Class<Long> getResourceIdType() {
         return null;
@@ -46,8 +48,4 @@ public class TemplateResource implements ReadableResource<Template,Long>, Writab
         return null;
     }
 
-    @Override
-    public Class<Template> getType() {
-        return Template.class;
-    }
 }

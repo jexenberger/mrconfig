@@ -14,7 +14,7 @@ public class ResourceRegistry {
     private static Map<String, Resource> RESOURCES = new HashMap<>();
 
     public static Resource get(String path) {
-        if (RESOURCES == null || RESOURCES.size() > 0) {
+        if (RESOURCES == null || RESOURCES.size()  == 0) {
             throw new IllegalStateException("no resources registered");
         }
         return RESOURCES.get(path);

@@ -265,7 +265,7 @@ public class JPAProvider implements Provider {
             if (success) {
                 transaction.commit();
             } else {
-                transaction.setRollbackOnly();
+                transaction.rollback();
             }
         }
 
@@ -281,6 +281,10 @@ public class JPAProvider implements Provider {
             ENTITY_MANAGER_FACTORY = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT);
         }
         return ENTITY_MANAGER_FACTORY.createEntityManager();
+    }
+
+    public <T> Object deleteAll(Class<T> entity) {
+        return getEntityManager().createQuery("delete from "+entity.getSimpleName()).getSingleResult();
     }
 
     private EntityManager getThreadEntityManager() {

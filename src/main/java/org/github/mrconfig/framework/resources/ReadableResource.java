@@ -58,10 +58,12 @@ public interface ReadableResource<T,K extends Serializable> {
         return true;
     }
 
+
+
     @GET
-    @Path("{view}.htm")
+    @Path("{view}.html")
     @Produces({MediaType.TEXT_HTML})
-    default Response get(@PathParam("view") String id) {
+    default Response get(@Context SecurityContext context, @PathParam("view") String id, @Context UriInfo ui) {
         final Resource resource = ResourceRegistry.get(getPath());
         if (resource == null) {
             return Response.status(Response.Status.NOT_FOUND).entity(errors(notFound())).build();
@@ -76,7 +78,7 @@ public interface ReadableResource<T,K extends Serializable> {
     }
 
     @GET
-    default Response get(@Context UriInfo ui) {
+    default Response get(@Context SecurityContext context, @Context UriInfo ui) {
         MultivaluedMap<String, String> queryParameters = ui.getQueryParameters();
         Collection<Pair<String, Object>> parameters = new ArrayList<>();
         queryParameters.forEach((key, value) -> {
@@ -155,7 +157,7 @@ public interface ReadableResource<T,K extends Serializable> {
     }
 
     default int getPageSize() {
-        return 5;
+        return 15;
     }
 
     default String buildPath(UriInfo ui, int pageNumber) {

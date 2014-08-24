@@ -123,11 +123,6 @@ public class JPAQueryHelperTest extends BaseJPA {
 
     }
 
-    @Override
-    @After
-    public void after() throws Exception {
-        super.after();
-    }
 
     @Test
     public void testCalcWildCardDateRange() throws Exception {

@@ -1,5 +1,7 @@
 package org.github.mrconfig.framework.resources;
 
+import org.glassfish.grizzly.utils.Exceptions;
+
 import javax.xml.bind.annotation.*;
 
 /**
@@ -12,6 +14,7 @@ public class Error {
     private static final String NOT_FOUND = "not.found";
     private static final String SAVE_ERROR = "save.error";
     private static final String INVALID_ID = "invalid.id";
+    private static final String GENERAL_FAILURE = "general.failure";
     private static final String INVALID_VALUE = "invalid.value";
 
 
@@ -104,6 +107,10 @@ public class Error {
 
     public static Error invalidValue(String code, String message) {
         return error(INVALID_VALUE,message);
+    }
+
+    public static Error generalFailure(Exception e) {
+        return error(INVALID_VALUE, Exceptions.getStackTraceAsString(e));
     }
 }
 

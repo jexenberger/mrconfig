@@ -1,7 +1,7 @@
-<#list forms as form>
+<#list resources as resource>
 
-createService(services,'${form.id}Service','${form.resourceName}');
-createGenericController(controllers, '${form.id}Controller', '${form.id}Service', '${form.resourceName}');
+createService(services,'${resource.name}Service','${resource.path}');
+createGenericController(controllers, '${resource.name}Controller', '${resource.name}Service', '${resource.path}','${resource.name}Form' );
 
 
 </#list>

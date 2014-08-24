@@ -18,8 +18,17 @@ var application = angular.module('application', [
 var services = angular.module('services',[]);
 var controllers = angular.module('controllers', []);
 
+isLink = function(val) {
+ if (val == null) {
+    return false;
+ }
+ if (val.hasOwnProperty("href")) {
+    return true;
+ }
+
+}
+
 application.factory('myInterceptor', ['$log', function($log) {
-    $log.debug('$log is here to show you that this is a regular factory with injection');
 
     var myInterceptor = {
         // optional method

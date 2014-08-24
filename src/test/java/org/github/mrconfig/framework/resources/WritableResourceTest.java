@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.SecurityContext;
 
 import static org.easymock.EasyMock.*;
 import static org.github.mrconfig.framework.util.Box.success;
@@ -36,7 +37,7 @@ public class WritableResourceTest implements WritableResource<MyEntity,Long>{
 
     @Test
     public void testCreate() throws Exception {
-        Response response = this.create(instance);
+        Response response = this.create(createMock(SecurityContext.class), instance);
         assertNotNull(response.getHeaderString("Location"));
         assertNotNull(response.getEntity());
         verify(service);
@@ -44,7 +45,7 @@ public class WritableResourceTest implements WritableResource<MyEntity,Long>{
 
     @Test
     public void testSave() throws Exception {
-        Response response = this.save(instance);
+        Response response = this.save(createMock(SecurityContext.class), instance);
         assertNotNull(response.getEntity());
         verify(service);
     }

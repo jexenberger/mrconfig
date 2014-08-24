@@ -5,7 +5,8 @@
     <!-- SCROLLS -->
     <!-- load bootstrap and fontawesome via CDN -->
     <link rel="stylesheet" href="css/bootstrap.css"/>
-    <link rel="stylesheet" href="css/font-awesome.css">
+    <link rel="stylesheet" href="css/codepen.css"/>
+    <!--link rel="stylesheet" href="css/font-awesome.css"-->
 
     <!-- SPELLS -->
     <!-- load angular via CDN -->
@@ -24,74 +25,76 @@
 <body>
 
 <!-- HEADER AND NAVBAR -->
-<header>
-    <nav class="navbar navbar-default">
-        <div class="container">
-            <div class="navbar-header">
-                <a class="navbar-brand" href="/">Mr Configurer</a>
-            </div>
-
-
-            <ul class="nav navbar-nav navbar-right">
-                <li><a href="/index.html"><i class="fa fa-home"></i> Home</a></li>
-                <li><a href="#about"><i class="fa fa-shield"></i> About</a></li>
-                <li><a href="#contact"><i class="fa fa-comment"></i> Contact</a></li>
-                <li><a href="#contact"><i class="fa fa-comment"></i> Contact II</a></li>
-
+<!-- Site header and navigation -->
+<header class="top" role="header">
+    <div class="container-fluid navbar-inverse">
+        <a href="#" class="navbar-brand pull-left ">
+            My Application
+        </a>
+        <button class="navbar-toggle" data-toggle="collapse" data-target="#topNav">
+            <span class="glyphicon glyphicon-align-justify"></span>
+        </button>
+        <nav id="topNav" class="navbar-collapse collapse" role="navigation">
+            <ul class="navbar-nav nav pull-right">
+                <li><a href="#">username</a></li>
             </ul>
 
-
-
-
-        </div>
-    </nav>
-
-    <div class="container-fluid col-md-3 pull-left" role="navigation" ng-controller="rs_menu_Controller">
-        <div ng-repeat="group in $root.menu">
-         <span class="dropdown" >
-              <a href class="dropdown-toggle">
-                  <b>{{group.name}}</b>
-              </a>
-              <ul class="dropdown-menu">
-                  <li ng-repeat="item in group.items">
-                      <a ng-href="#{{item.link}}/list">{{item.name}}</a>
-                  </li>
-              </ul>
-            </span>
-        </div>
+        </nav>
     </div>
 
 </header>
 
+<br/>
+<br/>
 
-<!-- MAIN CONTENT AND INJECTED VIEWS -->
-<div id="main" class="container">
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-2">
 
+            <div class="panel-group" id="accordion" ng-controller="rs_menu_Controller">
+                <div class="panel panel-default " ng-repeat="group in $root.menu">
+                    <div class="panel-heading">
+                        <h4 class="panel-title nav">
+                            <a data-toggle="collapse" class="nav" data-parent="#accordion" href="#{{group.name}}Menu">
+                                <i class="glyphicon glyphicon-th"></i>&nbsp;{{group.name}}
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="{{group.name}}Menu" class="panel-collapse collapse in">
+                        <div class="panel-body">
+                            <ul class="nav">
+                                <li ng-repeat="item in group.items"><a href="#{{item.link}}.html">{{item.name}}</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-    <!-- angular templating -->
-    <!-- this is where content will be injected -->
-    <div class="row ng-view ">
-            <!--
-        <div class="sidebar-offcanvas pull-right col-md-3" id="sidebar" role="navigation" ng-controller="rs_menu_Controller">
-            <accordion close-others="true" >
-                <accordion-group heading="{{group.name}}" ng-repeat="group in $root.menu">
-                    <ul ng-repeat="item in group.items">
-                        <a ng-href="#{{item.link}}/list">{{item.name}}</a>
-                    </ul>
-                </accordion-group>
-            </accordion>
         </div>
+
+        <!-- MAIN CONTENT AND INJECTED VIEWS -->
+        <div class="col-md-10">
+
+
+            <!-- angular templating -->
+            <!-- this is where content will be injected -->
+            <div class="panel panel-default nav-stacked" ng-view>
+            </div>
+
+
         </div>
-        -->
+
+
     </div>
-
-
 </div>
+
 
 <!-- FOOTER -->
 <footer class="text-center">
     Copyright (2014)
 </footer>
-
+<!-- Include jQuery and bootstrap JS plugins -->
+<script src="js/jquery-2.1.0.js"></script>
+<script src="js/bootstrap.min.js"></script>
 </body>
 </html>

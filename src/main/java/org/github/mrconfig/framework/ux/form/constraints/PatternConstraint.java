@@ -15,8 +15,8 @@ public class PatternConstraint extends IDConstraint {
 
     String pattern;
 
-    public PatternConstraint(@Name("pattern") String pattern) {
-        this.pattern = pattern;
+    public PatternConstraint(@Name("regexp") String pattern) {
+        this.pattern = "/^"+pattern+"$/";
     }
 
     @Override
