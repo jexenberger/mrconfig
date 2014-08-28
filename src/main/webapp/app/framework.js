@@ -10,7 +10,6 @@ createService = function(services, serviceName, resourcePath ) {
           'create':   {method:'POST', headers:{Accept:'application/json'}},
           'save':   {method:'PUT', headers:{Accept:'application/json'}},
           'query':  {method:'GET', isArray:false, headers:{Accept:'application/json'}},
-          'remove': {method:'DELETE', headers:{Accept:'application/json'}},
           'remove': {method:'DELETE', headers:{Accept:'application/json'}}
         });
         
@@ -21,7 +20,6 @@ createService = function(services, serviceName, resourcePath ) {
 createGenericController = function(module, controllerName, serviceName, resourceName, formName) {
 
     module.controller(controllerName,['$scope', '$routeParams','$window', '$http', '$location', serviceName, function($scope, $routeParams, $window, $http, $location, service) {
-      alert(JSON.stringify($routeParams));
       $scope.resourceName = resourceName;
       $scope.master = {};
       $scope.isNew = ($routeParams.p_id == null);
@@ -33,7 +31,31 @@ createGenericController = function(module, controllerName, serviceName, resource
         service.get({p_id:$routeParams.p_id}, function(result) {
             $scope.master = result;
             $scope.model = angular.copy($scope.master);
+        }, function(error) {
+            $scope.processError(error,$routeParams.p_id);
         });
+      }
+
+      $scope.processError = function(error, ref) {
+          var message = '';
+          if (error.status == 500) {
+             message = 'An error has occured during this operation';
+          }
+          if (error.status == 401) {
+            message = 'You are not Authorized to view this record';
+          }
+          if (error.status == 400) {
+            message = 'There was a problem with the data that was submitted for this record';
+          }
+          $scope.alerts.push({ type: 'danger', msg: message});
+          if (error.data.errors != null) {
+            for (i=0;i < error.data.errors.length;i++) {
+                $scope.alerts.push({ type: 'danger', msg: error.errors[i].description});
+            }
+          } else {
+             $scope.alerts.push({ type: 'danger', msg: JSON.stringify(error)});
+          }
+
       }
     
       if (!$scope.isNew) {
@@ -43,7 +65,6 @@ createGenericController = function(module, controllerName, serviceName, resource
       $scope.open = function($event) {
           $event.preventDefault();
           $event.stopPropagation();
-    
           $scope.opened = true;
         };
     
@@ -63,12 +84,7 @@ createGenericController = function(module, controllerName, serviceName, resource
              $scope.alerts.push({ type: 'success', msg: 'Record Created' });
              $scope.isNew = false;
            },function(error) {
-             $scope.alerts.push({ type: 'danger', msg: 'There was an error creating the record'});
-             if (error.errors != null) {
-                for (i=0;i < error.errors.length;i++) {
-                  $scope.alerts.push({ type: 'danger', msg: error.errors[i].description});
-                }
-             }
+             $scope.processError(error, null);
            });
         } else {
            service.save( model,function(success) {
@@ -76,7 +92,7 @@ createGenericController = function(module, controllerName, serviceName, resource
              $scope.model = angular.copy($scope.master);
              $scope.alerts.push({ type: 'success', msg: 'Record Saved' })
            },function(error) {
-             $scope.alerts.push({ type: 'danger', msg: 'There was an error saving the record' })
+             $scope.processError(error, null);
            });
         }
       };
@@ -186,6 +202,10 @@ createGenericController = function(module, controllerName, serviceName, resource
 
       $scope.doDelete = function(id) {
         $scope.alerts = [];
+        var result = confirm('Are you sure you want to delete this record');
+        if (!result) {
+            return;
+        }
         service.remove({p_id:id}, function(success) {
                $scope.alerts.push({ type: 'success', msg: 'recorded removed' });
                $scope.doSearch($scope.model, $scope.searchModel, 1);

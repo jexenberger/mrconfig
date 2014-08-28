@@ -26,6 +26,8 @@ import java.util.Map;
 
 import static java.util.stream.Collectors.joining;
 import static org.github.mrconfig.domain.Property.importProperties;
+import static org.github.mrconfig.framework.ux.ClasspathSource.classpath;
+import static org.github.mrconfig.framework.ux.StaticView.staticView;
 
 /**
  * Created by w1428134 on 2014/07/16.
@@ -56,13 +58,14 @@ public class MrConfigApplication extends ResourceConfig {
                         register(Resource.scaffold(EnvironmentResource.class, BeanFormBuilder::form));
                         register(Resource.scaffold(EnvironmentGroupResource.class, BeanFormBuilder::form));
                         register(Resource.scaffold(ServerResource.class, BeanFormBuilder::form)
-                                .setLookupRole("lookup")
-                                .setListRole("admin")
                         );
                         register(Resource.scaffold(PropertyResource.class, BeanFormBuilder::form));
                         register(Resource.scaffold(AdminGroupResource.class, BeanFormBuilder::form));
                         register(Resource.scaffold(UserResource.class, BeanFormBuilder::form));
-                        register(Resource.scaffold(PropertyValueResource.class, BeanFormBuilder::form));
+                        Resource scaffold = Resource.scaffold(PropertyValueResource.class, BeanFormBuilder::form);
+                        scaffold.getUxModule()
+                                .addView("controller", staticView(classpath("myController.js")));
+                        register(scaffold);
 
                         addResourceClass(PropertiesImportResource.class);
                         addResourceClass(FileResource.class);
@@ -71,7 +74,7 @@ public class MrConfigApplication extends ResourceConfig {
                         addResourceClass(JaxbProvider.class);
                         addResourceClass(MultiPartFeature.class);
                         addResourceClass(SessionInViewInterceptor.class);
-                        addResourceClass(BasicAuthFilter.class);
+                        //addResourceClass(BasicAuthFilter.class);
                     }
                 };
 
@@ -112,11 +115,6 @@ public class MrConfigApplication extends ResourceConfig {
     }
 
     public static void bootstrap() {
-
-        TestObject to = new TestObject();
-        to.setName("test");
-        to.setSurname("test");
-        to.save();
 
 
         User adminUser = new User("admin", "admin").save();
