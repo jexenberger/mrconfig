@@ -107,15 +107,14 @@ public class FormBuilder {
         return this;
     }
 
-    public FormBuilder setListField(FormField field) {
-        requireNonNull(field, "formField cannot be null");
-        form.getListFields().removeIf((searchField)-> searchField.getId().equals(field.getId()));
-        form.getListFields().add(field);
-        return this;
-    }
 
     public FormBuilder withForm(Consumer<Form> handler) {
         handler.accept(this.form);
+        return this;
+    }
+
+    public FormBuilder addCollection(String modelProperty, Form collectionForm) {
+        this.form.addCollectionForm(modelProperty, collectionForm);
         return this;
     }
 

@@ -40,6 +40,12 @@ public class BeanFormBuilder {
 
 
         Class<?> resourceClass = resource.getResourceClass();
+        return fromClass(builder, resourceClass, this.helpers.toArray(new Consumer[] {}));
+
+
+    }
+
+    public static FormBuilder fromClass(FormBuilder builder, Class<?> resourceClass, Consumer<FormBuilder> ... formHelpers) {
         Collection<Field> declaredFields = ReflectionUtil.getAllFields(resourceClass);
         for (Field declaredField : declaredFields) {
             if (Modifier.isStatic(declaredField.getModifiers())) {
@@ -87,8 +93,7 @@ public class BeanFormBuilder {
                 .withField("name",builder::addSearchField);
 
 
-
-        this.helpers.forEach((helper)-> {
+        Arrays.stream(formHelpers).forEach((helper) -> {
             helper.accept(builder);
         });
 
@@ -131,8 +136,6 @@ public class BeanFormBuilder {
         builder.sortAsc();
 
         return builder;
-
-
     }
 
     public BeanFormBuilder addHelper(Consumer<FormBuilder> helper) {

@@ -21,6 +21,7 @@ public class Form {
     String group = "Main";
     boolean sorted = false;
     boolean sortedSearch = false;
+    Map<String, Form> collectionForms;
 
 
     public void setId(String id) {
@@ -119,6 +120,13 @@ public class Form {
         }
         this.fields.add(field);
         return this;
+    }
+
+    public void addCollectionForm(String modelProperty, Form collectionForm) {
+        if (this.collectionForms == null) {
+            this.collectionForms = new HashMap<>();
+        }
+        this.collectionForms.put(modelProperty, collectionForm);
     }
 
     public String getGroup() {

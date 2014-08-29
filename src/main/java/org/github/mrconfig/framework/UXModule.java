@@ -111,6 +111,7 @@ public class UXModule {
     public UXModule form(Form form) {
         Objects.requireNonNull(form);
         this.form = form;
+        this.form.setGroup(getGroup());
         return this;
     }
 

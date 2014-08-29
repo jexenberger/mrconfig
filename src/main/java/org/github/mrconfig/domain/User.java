@@ -23,7 +23,7 @@ public class User extends KeyEntity<User> implements Principal {
     @ElementCollection()
     @XmlElement(name="role",namespace="http://www.github.org/mrconfig")
     @XmlElementWrapper(name="roles",namespace="http://www.github.org/mrconfig")
-    Set<String> roles;
+    Set<RoleMapping> roles;
 
     public User() {
     }
@@ -49,7 +49,7 @@ public class User extends KeyEntity<User> implements Principal {
         this.password = password;
     }
 
-    public Set<String> getRoles() {
+    public Set<RoleMapping> getRoles() {
         if (roles == null) {
             roles = new LinkedHashSet<>();
         }

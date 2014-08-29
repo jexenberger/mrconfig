@@ -44,6 +44,12 @@
             </#list>
             </fieldset>
            </#list>
+           <#list collectionForms?keys as key>
+               <#assign collectionForm=collectionForms[key]>
+               <fieldset>
+                  <legend>collectionForm.name</legend>
+               </fieldset>
+           </#list>
         </form>
         <div class="btn-group">
                 <label class="btn btn-primary" ng-disabled="${id}Form.$invalid" ng-click="update(model);">Save</label>

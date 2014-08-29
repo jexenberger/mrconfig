@@ -5,11 +5,12 @@ import org.github.mrconfig.framework.Module;
 import org.github.mrconfig.framework.Resource;
 import org.github.mrconfig.framework.activerecord.ProviderFactory;
 import org.github.mrconfig.framework.activerecord.jpa.JPAModule;
-import org.github.mrconfig.framework.resources.BasicAuthFilter;
 import org.github.mrconfig.framework.resources.JaxbProvider;
 import org.github.mrconfig.framework.resources.SessionInViewInterceptor;
 import org.github.mrconfig.framework.ux.form.BeanFormBuilder;
 import org.github.mrconfig.framework.ux.form.DefaultUXModule;
+import org.github.mrconfig.framework.ux.form.Form;
+import org.github.mrconfig.framework.ux.form.FormBuilder;
 import org.github.mrconfig.resources.*;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
@@ -61,7 +62,10 @@ public class MrConfigApplication extends ResourceConfig {
                         );
                         register(Resource.scaffold(PropertyResource.class, BeanFormBuilder::form));
                         register(Resource.scaffold(AdminGroupResource.class, BeanFormBuilder::form));
-                        register(Resource.scaffold(UserResource.class, BeanFormBuilder::form));
+                        register(Resource.scaffold(UserResource.class, (resource) -> {
+                            Form roleForm = BeanFormBuilder.formBuilder(resource, (builder) -> builder.addCollection("roles", BeanFormBuilder.fromClass(new FormBuilder(resource), RoleMapping.class).getForm()).getForm()).create().getForm();
+                            return roleForm;
+                        }));
                         Resource scaffold = Resource.scaffold(PropertyValueResource.class, BeanFormBuilder::form);
                         scaffold.getUxModule()
                                 .addView("controller", staticView(classpath("myController.js")));
