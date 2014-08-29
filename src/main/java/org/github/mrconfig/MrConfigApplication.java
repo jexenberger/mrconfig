@@ -57,13 +57,14 @@ public class MrConfigApplication extends ResourceConfig {
                         this.addModule(new DefaultUXModule());
 
                         register(Resource.scaffold(EnvironmentResource.class, BeanFormBuilder::form));
+                        register(Resource.scaffold(JerryRecordResource.class, BeanFormBuilder::form));
                         register(Resource.scaffold(EnvironmentGroupResource.class, BeanFormBuilder::form));
                         register(Resource.scaffold(ServerResource.class, BeanFormBuilder::form)
                         );
                         register(Resource.scaffold(PropertyResource.class, BeanFormBuilder::form));
                         register(Resource.scaffold(AdminGroupResource.class, BeanFormBuilder::form));
                         register(Resource.scaffold(UserResource.class, (resource) -> {
-                            Form roleForm = BeanFormBuilder.formBuilder(resource, (builder) -> builder.addCollection("roles", BeanFormBuilder.fromClass(new FormBuilder(resource), RoleMapping.class).getForm()).getForm()).create().getForm();
+                            Form roleForm = BeanFormBuilder.formBuilder(resource, (builder) -> builder.addCollection("roles", BeanFormBuilder.fromClass(new FormBuilder("roles", "Roles"), RoleMapping.class).getForm()).getForm()).create().getForm();
                             return roleForm;
                         }));
                         Resource scaffold = Resource.scaffold(PropertyValueResource.class, BeanFormBuilder::form);

@@ -9,11 +9,9 @@
                                  Actions <span class="caret"></span>
                              </button>
                              <ul class="dropdown-menu" role="menu">
-                                 <li><a href="#">Action</a></li>
-                                 <li><a href="#">Another action</a></li>
-                                 <li><a href="#">Something else here</a></li>
-                                 <li class="divider"></li>
-                                 <li><a href="#">Separated link</a></li>
+                                 <li ng-repeat="link in model.links">
+                                   <a ng-href="javascript:applyAction(link.href, link.rel)">{{link.title}}</a>
+                                 </li>
                              </ul>
                          </div>
 </div>
@@ -44,12 +42,26 @@
             </#list>
             </fieldset>
            </#list>
+           <#if collectionForms??>
            <#list collectionForms?keys as key>
                <#assign collectionForm=collectionForms[key]>
-               <fieldset>
-                  <legend>collectionForm.name</legend>
-               </fieldset>
+                             <div class="form-group">
+                             <legend>${collectionForm.name}</legend>
+                              <table class="table table-striped" ng-if="searchPage != null">
+                                  <thead>
+                                      <tr>
+                                        <th>test</th>
+                                      </tr>
+                                  </thead>
+                                  <tbody>
+                                      <tr>
+                                         <td>hello</td>
+                                      </tr>
+                                  </tbody>
+                              </table>
+                              </div>
            </#list>
+           </#if>
         </form>
         <div class="btn-group">
                 <label class="btn btn-primary" ng-disabled="${id}Form.$invalid" ng-click="update(model);">Save</label>

@@ -1,13 +1,12 @@
 package org.github.mrconfig.domain;
 
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
+import org.github.mrconfig.framework.service.Link;
+
+import javax.persistence.*;
 import javax.security.auth.Subject;
 import javax.xml.bind.annotation.*;
 import java.security.Principal;
-import java.util.LinkedHashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by julian3 on 2014/07/17.
@@ -15,6 +14,7 @@ import java.util.Set;
 @Entity
 @XmlRootElement(namespace="http://www.github.org/mrconfig")
 @XmlAccessorType(XmlAccessType.FIELD)
+@Table(indexes = {@Index(unique = false, columnList = "state")})
 public class User extends KeyEntity<User> implements Principal {
 
 
@@ -24,6 +24,14 @@ public class User extends KeyEntity<User> implements Principal {
     @XmlElement(name="role",namespace="http://www.github.org/mrconfig")
     @XmlElementWrapper(name="roles",namespace="http://www.github.org/mrconfig")
     Set<RoleMapping> roles;
+
+    @XmlElementWrapper(name="roles",namespace="http://www.github.org/mrconfig")
+    @Enumerated
+    UserState state = UserState.Pending;
+
+
+    @Transient
+    Collection<Link> links;
 
     public User() {
     }
@@ -56,6 +64,20 @@ public class User extends KeyEntity<User> implements Principal {
         return roles;
     }
 
+    public void setRoles(Set<RoleMapping> roles) {
+        this.roles = roles;
+    }
+
+    public Collection<Link> getLinks() {
+        if (links == null) {
+            links = new ArrayList<>();
+        }
+        return links;
+    }
+
+    public void setLinks(Collection<Link> links) {
+        this.links = links;
+    }
 
     @Override
     public String getName() {
@@ -68,4 +90,11 @@ public class User extends KeyEntity<User> implements Principal {
         return first.isPresent();
     }
 
+    public UserState getState() {
+        return state;
+    }
+
+    public void setState(UserState state) {
+        this.state = state;
+    }
 }

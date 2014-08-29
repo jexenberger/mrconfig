@@ -41,10 +41,17 @@ public interface ReadableResource<T, K extends Serializable> extends BaseResourc
             return Response.status(Response.Status.NOT_FOUND).entity(errors(notFound())).build();
         }
 
-        if (!isAllowed(byId.get())) {
+        T entity = byId.get();
+        if (!isAllowed(entity)) {
             return Response.status(Response.Status.FORBIDDEN).build();
         }
-        return Response.ok(byId.get()).build();
+        populateGetLinks(entity);
+
+        return Response.ok(entity).build();
+    }
+
+    default void populateGetLinks(T entity) {
+
     }
 
     default boolean notAuthorized(SecurityContext context,  String role) {

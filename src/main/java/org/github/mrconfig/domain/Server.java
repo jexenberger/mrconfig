@@ -37,6 +37,26 @@ public class Server extends Environment<Server> {
     @XmlElement(namespace = "http://www.github.org/mrconfig")
     Date dateCommissioned = null;
 
+    String helloWorld = null;
+
+    String jerrysProperty = null;
+
+
+    public String getHelloWorld() {
+        return helloWorld;
+    }
+
+    public void setHelloWorld(String helloWorld) {
+        this.helloWorld = helloWorld;
+    }
+
+    public String getJerrysProperty() {
+        return jerrysProperty;
+    }
+
+    public void setJerrysProperty(String jerrysProperty) {
+        this.jerrysProperty = jerrysProperty;
+    }
 
     public Server() {
         super();

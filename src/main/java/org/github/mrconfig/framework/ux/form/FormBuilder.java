@@ -20,13 +20,19 @@ public class FormBuilder {
     Inflector inflector = Inflector.getInstance();
 
     public FormBuilder(Resource resource) {
+        this(null,null);
         this.resource = resource;
-        this.form = new Form();
         this.form.setName(inflector.phrase(resource.getResourceClass().getSimpleName()));
         this.form.setId(resource.getResourceClass().getSimpleName());
         this.form.setResourceName(resource.getPath());
         this.form.setGroup(resource.getGroup());
 
+    }
+
+    public FormBuilder(String id, String name) {
+        this.form = new Form();
+        this.form.setId(id);
+        this.form.setName(name);
     }
 
     public static FormBuilder newInstance(Resource resource) {

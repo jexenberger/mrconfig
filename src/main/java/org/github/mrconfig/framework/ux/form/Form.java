@@ -106,9 +106,6 @@ public class Form {
         return field1.getLabel().compareTo(field2.getLabel());
     }
 
-    public void setSearchFields(Set<FormField> searchFields) {
-        this.searchFields = searchFields;
-    }
 
     public Optional<FormField> getField(String id) {
         return fields.stream().filter((field) -> field.getId().equals(id)).findFirst();
@@ -126,7 +123,14 @@ public class Form {
         if (this.collectionForms == null) {
             this.collectionForms = new HashMap<>();
         }
+        collectionForm.getFields().forEach((field)-> {
+            field.setId(modelProperty+"."+field.getId());
+        });
         this.collectionForms.put(modelProperty, collectionForm);
+    }
+
+    public Map<String, Form> getCollectionForms() {
+        return collectionForms;
     }
 
     public String getGroup() {

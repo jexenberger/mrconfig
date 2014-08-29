@@ -41,6 +41,10 @@ public class FormField {
         this.id = id;
     }
 
+    void setId(String id) {
+        this.id = id;
+    }
+
     public FormField(String id, String label, String group, Component type, String lookup, String lookupFilter, boolean readOnly, UXConstraint ... constraints) {
         this(id);
         this.label = label;

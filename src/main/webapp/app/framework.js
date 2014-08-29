@@ -53,10 +53,12 @@ createGenericController = function(module, controllerName, serviceName, resource
                 $scope.alerts.push({ type: 'danger', msg: error.errors[i].description});
             }
           } else {
-             $scope.alerts.push({ type: 'danger', msg: JSON.stringify(error)});
+             $scope.flash('danger',JSON.stringify(error));
           }
 
       }
+
+
     
       if (!$scope.isNew) {
         $scope.load();
@@ -66,7 +68,39 @@ createGenericController = function(module, controllerName, serviceName, resource
           $event.preventDefault();
           $event.stopPropagation();
           $scope.opened = true;
-        };
+      };
+
+      $scope.clearFlash = function() {
+        $scope.alerts = [];
+      }
+
+      $scope.flash = function(type, message) {
+        $scope.alerts.push({ type: type, msg: message});
+      }
+
+      $scope.addToCollection = function(modelFieldName, item) {
+      }
+
+      $scope.applyAction = function(link,rel) {
+        var relParts = rel.split(":");
+        var relationShip = rel[0];
+        var action = rel[1];
+        if (relationShip == 'self') {
+           //we need to call the action, then trigger a refresh
+           var uriParts = link.split("?");
+           var queryParams = uriParts[1].split("&");
+           var applyParms = {};
+           for (i=0;i<queryParams.length;i++) {
+              var paramParts = queryParams.split("=");
+              $scope.model[paramParts[0]] = paramParts[1];
+           }
+
+           if (action == 'PUT') {
+               $scope.update($scope.model);
+           }
+
+        }
+      }
     
     
     
@@ -100,9 +134,7 @@ createGenericController = function(module, controllerName, serviceName, resource
       $scope.doPage = function(model, searchModel, page) {
          $scope.doSearch(model, searchModel, page);
       }
-    
-    
-    
+
       $scope.doSearch = function(model, searchModel, page) {
             for (key in searchModel) {
                 model[key] =  searchModel[key].rel;
