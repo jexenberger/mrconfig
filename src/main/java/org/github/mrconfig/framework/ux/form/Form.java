@@ -124,7 +124,8 @@ public class Form {
             this.collectionForms = new HashMap<>();
         }
         collectionForm.getFields().forEach((field)-> {
-            field.setId(modelProperty+"."+field.getId());
+            field.setParent(modelProperty);
+            field.setIndexed(true);
         });
         this.collectionForms.put(modelProperty, collectionForm);
     }

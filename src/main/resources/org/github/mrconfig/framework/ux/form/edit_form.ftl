@@ -28,7 +28,7 @@
             </#if>
             <#list fields as field>
                 <div class="form-group has-feedback" ng-class="validationClass(${id}Form.${field.id}Field);">
-                 <#include "fields/"+field.type.templatePath>
+                 <#include "fields/"+field.type.templatePath+".ftl">
                  <#if !field.readOnly>
                  <span ng-show="${id}Form.${field.id}Field.$error.required" class="help-block has-warning">Field is required</span>
                  <span ng-show="${id}Form.${field.id}Field.$error.max" class="help-block has-warning">Field is greater than allowed value</span>
@@ -42,25 +42,36 @@
             </#list>
             </fieldset>
            </#list>
+
+
            <#if collectionForms??>
+           <fieldset>
            <#list collectionForms?keys as key>
                <#assign collectionForm=collectionForms[key]>
-                             <div class="form-group">
+
                              <legend>${collectionForm.name}</legend>
-                              <table class="table table-striped" ng-if="searchPage != null">
+                              <table class="table table-striped">
                                   <thead>
                                       <tr>
-                                        <th>test</th>
+                                      <#list collectionForm.fields as field>
+                                        <th>${field.label}</th>
+                                      </#list>
                                       </tr>
                                   </thead>
                                   <tbody>
-                                      <tr>
-                                         <td>hello</td>
+                                      <tr ng-repeat="${key}Item in model.${key}">
+                                         <#list collectionForm.fields as field>
+                                         <td><#include "fields/"+field.type.templatePath+"_type.ftl"></td>
+                                         </#list>
                                       </tr>
                                   </tbody>
                               </table>
-                              </div>
+
+           <div class="btn-group">
+                  <label class="btn btn-primary"  ng-click="addToCollection('${key}');">Add</label>
+           </div>
            </#list>
+           </fieldset>
            </#if>
         </form>
         <div class="btn-group">

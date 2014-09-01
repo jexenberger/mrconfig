@@ -1,6 +1,7 @@
 package org.github.mrconfig.domain;
 
 import javax.persistence.Entity;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
@@ -10,6 +11,7 @@ import java.util.Date;
 public class JerryRecord extends BaseEntity<JerryRecord> {
 
 
+    @NotNull
     String name;
     String surname;
     Date dob;

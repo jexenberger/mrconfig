@@ -25,6 +25,7 @@ public class FormField {
 
 
 
+    String parent;
     String id;
     String label;
     Component type;
@@ -35,6 +36,7 @@ public class FormField {
     String group;
     Collection<Pair<String,String>> defaultValueList;
     boolean key;
+    boolean indexed;
 
 
     public FormField(String id) {
@@ -145,6 +147,22 @@ public class FormField {
         this.defaultValueList = defaultValueList;
     }
 
+    public String getParent() {
+        return parent;
+    }
+
+    public void setParent(String parent) {
+        this.parent = parent;
+    }
+
+    public boolean isIndexed() {
+        return indexed;
+    }
+
+    public void setIndexed(boolean indexed) {
+        this.indexed = indexed;
+    }
+
     public static FormField fromField(Field field, Class<?> owner, Component component) {
 
 
@@ -176,6 +194,8 @@ public class FormField {
         for (Annotation annotation : annotations) {
             UXConstraints.getConstraint(annotation).ifPresent(constraints::add);
         }
+
+
 
         return new FormField(name,label,groupName,component,lookupPath,lookupFilter,readOnly,constraints.toArray(new UXConstraint[] {}));
 

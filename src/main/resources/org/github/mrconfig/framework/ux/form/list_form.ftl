@@ -7,7 +7,7 @@
         <form novalidate class="form-horizontal" role="form">
         <#list searchFields as field>
           <div class="form-group">
-             <#include "fields/"+field.type.templatePath>
+             <#include "fields/"+field.type.templatePath+".ftl">
           </div>
         </#list>
         </form>

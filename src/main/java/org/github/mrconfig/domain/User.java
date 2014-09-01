@@ -20,9 +20,7 @@ public class User extends KeyEntity<User> implements Principal {
 
     @XmlElement(namespace="http://www.github.org/mrconfig")
     String password;
-    @ElementCollection()
-    @XmlElement(name="role",namespace="http://www.github.org/mrconfig")
-    @XmlElementWrapper(name="roles",namespace="http://www.github.org/mrconfig")
+    @OneToMany(cascade = CascadeType.ALL)
     Set<RoleMapping> roles;
 
     @XmlElementWrapper(name="roles",namespace="http://www.github.org/mrconfig")

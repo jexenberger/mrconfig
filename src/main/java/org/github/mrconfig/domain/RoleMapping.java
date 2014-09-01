@@ -14,8 +14,6 @@ import java.util.Date;
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class RoleMapping extends BaseEntity<RoleMapping>{
 
-    @ManyToOne()
-    User user;
     @Enumerated
     Roles role;
     @Temporal(TemporalType.DATE)
@@ -26,19 +24,11 @@ public class RoleMapping extends BaseEntity<RoleMapping>{
     public RoleMapping() {
     }
 
-    public RoleMapping(User user, Date getEffectiveFrom, Date effectiveTo) {
-        this.user = user;
+    public RoleMapping(Date getEffectiveFrom, Date effectiveTo) {
         this.getEffectiveFrom = getEffectiveFrom;
         this.effectiveTo = effectiveTo;
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
 
     public Date getGetEffectiveFrom() {
         return getEffectiveFrom;
@@ -67,7 +57,6 @@ public class RoleMapping extends BaseEntity<RoleMapping>{
         if (!effectiveTo.equals(that.effectiveTo)) return false;
         if (!getEffectiveFrom.equals(that.getEffectiveFrom)) return false;
         if (role != that.role) return false;
-        if (!user.equals(that.user)) return false;
 
         return true;
     }
@@ -75,7 +64,6 @@ public class RoleMapping extends BaseEntity<RoleMapping>{
     @Override
     public int hashCode() {
         int result = super.hashCode();
-        result = 31 * result + user.hashCode();
         result = 31 * result + role.hashCode();
         result = 31 * result + getEffectiveFrom.hashCode();
         result = 31 * result + effectiveTo.hashCode();

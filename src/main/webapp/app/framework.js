@@ -64,10 +64,10 @@ createGenericController = function(module, controllerName, serviceName, resource
         $scope.load();
       }
     
-      $scope.open = function($event) {
+      $scope.open = function(scopeName, $event) {
           $event.preventDefault();
           $event.stopPropagation();
-          $scope.opened = true;
+          $scope[scopeName] = true;
       };
 
       $scope.clearFlash = function() {
@@ -78,7 +78,12 @@ createGenericController = function(module, controllerName, serviceName, resource
         $scope.alerts.push({ type: type, msg: message});
       }
 
-      $scope.addToCollection = function(modelFieldName, item) {
+      $scope.addToCollection = function(modelFieldName) {
+         if ($scope.model[modelFieldName] == null) {
+            $scope.flash('danger','added '+modelFieldName);
+            $scope.model[modelFieldName] = [];
+         }
+         $scope.model[modelFieldName].push({});
       }
 
       $scope.applyAction = function(link,rel) {
