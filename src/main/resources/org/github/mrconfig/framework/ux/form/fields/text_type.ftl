@@ -1,13 +1,14 @@
+<#if field.parent?? && field.indexed>
+     <#assign fieldId = field.parent + "[$index]." + field.id>
+<#elseif field.parent?? && !field.indexed>
+     <#assign fieldId = field.parent + field.id>
+<#else>
+     <#assign fieldId = field.id>
+</#if>
             <input id="${field.id}"
                    placeholder="Enter ${field.label}"
-                   name="${field.id}Field"
+                   name="${fieldId}Field"
                    type="${field.type.id}"
-                   <#if field.parent?? && field.indexed>
-                   ng-model="model.${field.parent}($index).${field.id}"
-                   <#elseif field.parent?? && !field.indexed>
-                   ng-model="model.${field.parent}.${field.id}"
-                   <#else>
-                   ng-model="model.${field.id}"
-                   </#if>
+                   ng-model="model.${fieldId}"
                    class="form-control"
                    <#include '../constraints.ftl'/> />

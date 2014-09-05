@@ -1,14 +1,16 @@
+<#if field.parent?? && field.indexed>
+     <#assign fieldId = field.parent + "[$index]." + field.id>
+<#elseif field.parent?? && !field.indexed>
+     <#assign fieldId = field.parent + field.id>
+<#else>
+     <#assign fieldId = field.id>
+</#if>
             <input type="text"
                    class="form-control"
                    placeholder="Enter ${field.label}"
                    datepicker-popup="{{format}}"
-                   <#if field.parent?? && field.indexed>
-                   ng-model="model.${field.parent}($index).${field.id}"
-                   <#elseif field.parent?? && !field.indexed>
-                   ng-model="model.${field.parent}.${field.id}"
-                   <#else>
-                   ng-model="model.${field.id}"
-                   </#if>
+                   name="${fieldId}Field"
+                   ng-model="model.${fieldId}"
                    is-open="${field.id?replace(".","_")}Open"
                    datepicker-options="dateOptions"
                    close-text="Close"

@@ -23,7 +23,6 @@ public class User extends KeyEntity<User> implements Principal {
     @OneToMany(cascade = CascadeType.ALL)
     Set<RoleMapping> roles;
 
-    @XmlElementWrapper(name="roles",namespace="http://www.github.org/mrconfig")
     @Enumerated
     UserState state = UserState.Pending;
 

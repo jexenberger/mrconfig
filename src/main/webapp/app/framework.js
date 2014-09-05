@@ -80,7 +80,6 @@ createGenericController = function(module, controllerName, serviceName, resource
 
       $scope.addToCollection = function(modelFieldName) {
          if ($scope.model[modelFieldName] == null) {
-            $scope.flash('danger','added '+modelFieldName);
             $scope.model[modelFieldName] = [];
          }
          $scope.model[modelFieldName].push({});
@@ -112,6 +111,7 @@ createGenericController = function(module, controllerName, serviceName, resource
     
       $scope.update = function(model) {
         $scope.alerts = [];
+        $scope.flash('danger',JSON.stringify(model));
         if ($scope[formName].$invalid) {
             $scope.alerts.push({ type: 'danger', msg: 'Unable to save record while errors exist' });
             return;

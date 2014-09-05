@@ -17,25 +17,25 @@ public class RoleMapping extends BaseEntity<RoleMapping>{
     @Enumerated
     Roles role;
     @Temporal(TemporalType.DATE)
-    Date getEffectiveFrom;
+    Date effectiveFrom;
     @Temporal(TemporalType.DATE)
     Date effectiveTo;
 
     public RoleMapping() {
     }
 
-    public RoleMapping(Date getEffectiveFrom, Date effectiveTo) {
-        this.getEffectiveFrom = getEffectiveFrom;
+    public RoleMapping(Date effectiveFrom, Date effectiveTo) {
+        this.effectiveFrom = effectiveFrom;
         this.effectiveTo = effectiveTo;
     }
 
 
-    public Date getGetEffectiveFrom() {
-        return getEffectiveFrom;
+    public Date getEffectiveFrom() {
+        return effectiveFrom;
     }
 
-    public void setGetEffectiveFrom(Date getEffectiveFrom) {
-        this.getEffectiveFrom = getEffectiveFrom;
+    public void setEffectiveFrom(Date effectiveFrom) {
+        this.effectiveFrom = effectiveFrom;
     }
 
     public Date getEffectiveTo() {
@@ -44,6 +44,14 @@ public class RoleMapping extends BaseEntity<RoleMapping>{
 
     public void setEffectiveTo(Date effectiveTo) {
         this.effectiveTo = effectiveTo;
+    }
+
+    public Roles getRole() {
+        return role;
+    }
+
+    public void setRole(Roles role) {
+        this.role = role;
     }
 
     @Override
@@ -55,7 +63,7 @@ public class RoleMapping extends BaseEntity<RoleMapping>{
         RoleMapping that = (RoleMapping) o;
 
         if (!effectiveTo.equals(that.effectiveTo)) return false;
-        if (!getEffectiveFrom.equals(that.getEffectiveFrom)) return false;
+        if (!effectiveFrom.equals(that.effectiveFrom)) return false;
         if (role != that.role) return false;
 
         return true;
@@ -65,7 +73,7 @@ public class RoleMapping extends BaseEntity<RoleMapping>{
     public int hashCode() {
         int result = super.hashCode();
         result = 31 * result + role.hashCode();
-        result = 31 * result + getEffectiveFrom.hashCode();
+        result = 31 * result + effectiveFrom.hashCode();
         result = 31 * result + effectiveTo.hashCode();
         return result;
     }
