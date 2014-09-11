@@ -20,6 +20,7 @@ createService = function(services, serviceName, resourcePath ) {
 createGenericController = function(module, controllerName, serviceName, resourceName, formName) {
 
     module.controller(controllerName,['$scope', '$routeParams','$window', '$http', '$location', serviceName, function($scope, $routeParams, $window, $http, $location, service) {
+      $scope.state = {};
       $scope.resourceName = resourceName;
       $scope.master = {};
       $scope.isNew = ($routeParams.p_id == null);
@@ -64,11 +65,42 @@ createGenericController = function(module, controllerName, serviceName, resource
         $scope.load();
       }
     
-      $scope.open = function(scopeName, $event) {
+      $scope.open = function(scopeName, $event, $index) {
           $event.preventDefault();
           $event.stopPropagation();
-          $scope[scopeName] = true;
+          if ($scope.state[scopeName] == null) {
+            $scope.state[scopeName] = {}
+          }
+          if ($index >= 0) {
+            if ($scope.state[scopeName][$index] == null) {
+                $scope.state[scopeName][$index] = {};
+            }
+            $scope.state[scopeName][$index]['open'] = true;
+          } else {
+            if ($scope.state[scopeName] == null) {
+                $scope.state[scopeName] = {};
+            }
+            $scope.state[scopeName]['open'] = true;
+
+          }
+
       };
+
+      $scope.isDateFieldOpen = function(scopeName, index) {
+        if ($scope.state[scopeName] == null) {
+           return false;
+        }
+        if (index >= 0 && $scope.state[scopeName].length > index) {
+           return false;
+        }
+        return $scope.state[index][scopeName].open;
+      }
+
+       $scope.removeCollectionItem = function(collectionField, index) {
+              $scope.model[collectionField].splice(index, 1);
+       };
+
+
 
       $scope.clearFlash = function() {
         $scope.alerts = [];
@@ -105,13 +137,12 @@ createGenericController = function(module, controllerName, serviceName, resource
 
         }
       }
-    
-    
-    
+
+
+
     
       $scope.update = function(model) {
         $scope.alerts = [];
-        $scope.flash('danger',JSON.stringify(model));
         if ($scope[formName].$invalid) {
             $scope.alerts.push({ type: 'danger', msg: 'Unable to save record while errors exist' });
             return;

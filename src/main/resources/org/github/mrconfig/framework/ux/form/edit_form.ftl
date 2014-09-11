@@ -53,6 +53,7 @@
                               <table class="table table-striped">
                                   <thead>
                                       <tr>
+                                        <th>Delete</th>
                                       <#list collectionForm.fields as field>
                                         <th>${field.label}</th>
                                       </#list>
@@ -60,6 +61,7 @@
                                   </thead>
                                   <tbody>
                                       <tr ng-repeat="${key}Item in model.${key}">
+                                         <td><button class="btn btn-danger" ng-click="removeCollectionItem('${key}',$index);">Delete</button></td>
                                          <#list collectionForm.fields as field>
                                          <td><#include "fields/"+field.type.templatePath+"_type.ftl"></td>
                                          </#list>
@@ -71,9 +73,11 @@
                   <label class="btn btn-primary"  ng-click="addToCollection('${key}');">Add</label>
            </div>
            </#list>
+
            </fieldset>
            </#if>
         </form>
+        <br/>
         <div class="btn-group">
                 <label class="btn btn-primary" ng-disabled="${id}Form.$invalid" ng-click="update(model);">Save</label>
                 <label class="btn btn-primary" ng-click="reset();">Reset</label>

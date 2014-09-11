@@ -13,6 +13,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
+import java.util.UUID;
 
 import static java.util.Arrays.asList;
 import static org.github.mrconfig.framework.util.ReflectionUtil.hasSetterMethod;
@@ -37,10 +38,13 @@ public class FormField {
     Collection<Pair<String,String>> defaultValueList;
     boolean key;
     boolean indexed;
+    String uuid;
 
 
     public FormField(String id) {
         this.id = id;
+        this.uuid = id+(UUID.randomUUID().toString().replace('-','_'));
+
     }
 
     void setId(String id) {
@@ -202,7 +206,7 @@ public class FormField {
 
     }
 
-
-
-
+    public String getUuid() {
+        return uuid;
+    }
 }

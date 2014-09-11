@@ -5,9 +5,9 @@
 <#else>
      <#assign fieldId = field.id>
 </#if>
-              <select id="${field.id}"
-                      name="${field.id}Name"
-                      ng-model="model.${fieldIdx}"
+              <select id="${field.uuid}"
+                      name="${field.uuid}Name"
+                      ng-model="model.${fieldId}"
                       placeholder="Enter ${field.label}"
                       class="form-control"
                       <#include '../constraints.ftl'>>

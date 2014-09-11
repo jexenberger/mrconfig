@@ -5,8 +5,8 @@
 <#else>
      <#assign fieldId = field.id>
 </#if>
-                    <input id="${field.id}"
-                           name="${field.id}Name"
+                    <input id="${field.uuid}"
+                           name="${field.uuid}Name"
                            type="checkbox"
                            ng-model="model.${fieldId}"
                            <#include '../constraints.ftl'>/> ${field.label}

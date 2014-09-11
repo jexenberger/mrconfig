@@ -7,7 +7,7 @@
 </#if>
             <input id="${field.id}"
                    placeholder="Enter ${field.label}"
-                   name="${fieldId}Field"
+                   name="${field.uuid}Name"
                    type="${field.type.id}"
                    ng-model="model.${fieldId}"
                    class="form-control"

@@ -28,7 +28,7 @@ isLink = function(val) {
 
 }
 
-application.factory('myInterceptor', ['$log', function($log) {
+application.factory('basicAuthInterceptor', ['$log', '$rootScope', function($log, $rootScope) {
 
     var myInterceptor = {
         // optional method
@@ -45,7 +45,7 @@ application.factory('myInterceptor', ['$log', function($log) {
 
 application.config(['$httpProvider', function($httpProvider) {
 
-    $httpProvider.interceptors.push('myInterceptor');
+    $httpProvider.interceptors.push('basicAuthInterceptor');
 }]);
 
 controllers.controller('rs_menu_Controller',['$scope','$rootScope','$http', '$location',  function($scope, $rootScope, $http,$location) {
