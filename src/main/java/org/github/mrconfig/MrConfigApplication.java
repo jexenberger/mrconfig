@@ -6,6 +6,7 @@ import org.github.mrconfig.framework.Resource;
 import org.github.mrconfig.framework.activerecord.ProviderFactory;
 import org.github.mrconfig.framework.activerecord.jpa.JPAModule;
 import org.github.mrconfig.framework.resources.JaxbProvider;
+import org.github.mrconfig.framework.resources.RolesResources;
 import org.github.mrconfig.framework.resources.SessionInViewInterceptor;
 import org.github.mrconfig.framework.ux.form.BeanFormBuilder;
 import org.github.mrconfig.framework.ux.form.DefaultUXModule;
@@ -60,6 +61,8 @@ public class MrConfigApplication extends ResourceConfig {
                         register(Resource.scaffold(JerryRecordResource.class, BeanFormBuilder::form));
                         register(Resource.scaffold(EnvironmentGroupResource.class, BeanFormBuilder::form));
                         register(Resource.scaffold(ServerResource.class, BeanFormBuilder::form)
+                                        .setListRole("REPORTER")
+                                        .setLookupRole("VIEWER")
                         );
                         register(Resource.scaffold(PropertyResource.class, BeanFormBuilder::form));
                         register(Resource.scaffold(AdminGroupResource.class, BeanFormBuilder::form));
@@ -79,6 +82,7 @@ public class MrConfigApplication extends ResourceConfig {
                         addResourceClass(JaxbProvider.class);
                         addResourceClass(MultiPartFeature.class);
                         addResourceClass(SessionInViewInterceptor.class);
+                        addResourceClass(RolesResources.class);
                         //addResourceClass(BasicAuthFilter.class);
                     }
                 };

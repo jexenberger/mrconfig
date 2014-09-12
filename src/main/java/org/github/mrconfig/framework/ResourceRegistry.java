@@ -45,4 +45,17 @@ public class ResourceRegistry {
     }
 
 
+    public static Collection<String> getAllRoles() {
+        Set<String> roleSet = new LinkedHashSet<>();
+        for (Resource resource : RESOURCES.values()) {
+            Optional.ofNullable(resource.getCreateRole()).ifPresent(roleSet::add);
+            Optional.ofNullable(resource.getUpdateRole()).ifPresent(roleSet::add);
+            Optional.ofNullable(resource.getDeleteRole()).ifPresent(roleSet::add);
+            Optional.ofNullable(resource.getListRole()).ifPresent(roleSet::add);
+            Optional.ofNullable(resource.getLookupRole()).ifPresent(roleSet::add);
+        }
+        return roleSet;
+    }
+
+
 }
