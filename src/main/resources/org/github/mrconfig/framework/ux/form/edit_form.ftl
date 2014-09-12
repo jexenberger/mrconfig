@@ -61,10 +61,12 @@
                                   </thead>
                                   <tbody>
                                       <tr ng-repeat="${key}Item in model.${key}">
-                                         <td><button class="btn btn-danger" ng-click="removeCollectionItem('${key}',$index);">Delete</button></td>
-                                         <#list collectionForm.fields as field>
-                                         <td><#include "fields/"+field.type.templatePath+"_type.ftl"></td>
-                                         </#list>
+                                         <ng-form name="${key}Form">
+                                            <td><button class="btn btn-danger" ng-click="removeCollectionItem('${key}',$index);">Delete</button></td>
+                                            <#list collectionForm.fields as field>
+                                            <td><#include "fields/"+field.type.templatePath+"_type.ftl"></td>
+                                            </#list>
+                                         </ng-form>
                                       </tr>
                                   </tbody>
                               </table>

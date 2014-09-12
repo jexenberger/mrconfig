@@ -103,36 +103,53 @@ services.factory('base64', function() {
     };
 });
 
-var securityContext = application.factory('securityContext', 'base64', function($http, base64) {
+application.factory('securityContext', ['$http','base64', '$rootScope', function($http, base64, $rootScope) {
 
-   var securityContext = {};
+   var roles = [];
+   var authorization = null;
+   var userName = null;
 
-   securityContext.roles = [];
-
-   securityContext.authorization = null;
-
-   securityContext.login = function(userName, password) {
-        securityContext.authorization = Base64.encode(username + ':' + password);
+   login = function(userName, password) {
+        alert(JSON.stringify(base64));
+        authorization = base64.encode(userName + ':' + password);
         $http.get("/roles").success(function(data) {
             roles = data.roles;
         });
    }
 
-   securityContext.isInRole = function(role) {
-        return securityContext.roles.indexOf(role) > -1;
+   userName = function() {
+        return userName;
    }
 
-   securityContext.logout = function() {
-        securityContext.authorization = null;
-        securityContext.roles = []
+   isInRole = function(role) {
+        return roles.indexOf(role) > -1;
    }
 
-   securityContext.isLoggedIn = function() {
-        return securityContext.authorization != null;
+   logout = function() {
+        authorization = null;
+        roles = []
    }
 
-   return securityContext;
-})
+   isLoggedIn = function() {
+        return authorization != null;
+   }
+
+   authToken = function() {
+        return authorization;
+   }
+
+   var context = {
+    isInRole : isInRole,
+    login : login,
+    isLoggedIn : isLoggedIn,
+    logout : logout,
+    authToken : authToken,
+    userName : userName
+   };
+
+   $rootScope.securityContext = context;
+   return context;
+}]);
 
 isLink = function(val) {
  if (val == null) {
@@ -145,14 +162,16 @@ isLink = function(val) {
 }
 
 
-application.factory('basicAuthInterceptor', ['$log', '$rootScope','securityContext', function($log, $rootScope, securityContext) {
+application.factory('basicAuthInterceptor', ['$log', '$rootScope', function($log, $rootScope) {
 
     var myInterceptor = {
         // optional method
               'request': function(config) {
                 // do something on success
-                 $log.debug(JSON.stringify(config));
-                config.headers.Authorization = 'Basic YWRtaW46cGFzc3dvcmQ='
+                if ($rootScope.securityContext != null) {
+                    config.headers.Authorization = 'Basic '+$rootScope.securityContext.authToken();
+                }
+                $log.debug(JSON.stringify(config));
                 return config;
               },
     };
@@ -188,6 +207,7 @@ controllers.controller('rs_menu_Controller',['$scope','$rootScope','$http', '$lo
 controllers.controller('rs_modal_controller',['$scope','$rootScope','$http', '$location', '$modal', '$log','securityContext' ,function($scope, $rootScope, $http, $location, $modal, $log, securityContext) {
 
 
+
    $scope.open = function (size) {
 
        var modalInstance = $modal.open({
@@ -201,8 +221,8 @@ controllers.controller('rs_modal_controller',['$scope','$rootScope','$http', '$l
          }
        });
 
-       modalInstance.result.then(function (selectedItem) {
-         $scope.selected = selectedItem;
+       modalInstance.result.then(function (userName) {
+         $scope.userNameDisplay = userName;
        }, function () {
          $log.info('Modal dismissed at: ' + new Date());
        });
@@ -210,7 +230,13 @@ controllers.controller('rs_modal_controller',['$scope','$rootScope','$http', '$l
 
    $scope.login = function(userName, password) {
         securityContext.login(userName, password);
+        $scope.userIdDisplay = userName;
    }
+
+   if (!securityContext.isLoggedIn()) {
+        $scope.open();
+   }
+
 
 
 }]);
@@ -220,8 +246,9 @@ var LoginController = function ($scope, $modalInstance, securityContext) {
 
   $scope.securityContext = securityContext;
 
-  $scope.ok = function () {
-    $modalInstance.close($scope.selected.item);
+  $scope.ok = function (userName, password) {
+    securityContext.login(userName, password);
+    $modalInstance.close(userName);
   };
 
   $scope.cancel = function () {
