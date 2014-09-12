@@ -9,22 +9,10 @@
      <#assign idx = "-1">
 </#if>
             <input id="${fieldId}"
-                   type="text"
-                   class="form-control"
+                   class="form-control input-sm"
+                   type="date"
                    placeholder="Enter ${field.label}"
                    name="${fieldId}Name"
-                   datepicker-popup="{{format}}"
                    ng-model="model.${fieldId}"
-                <#if field.indexed>
-                   is-open="state['${field.uuid}'][${idx}].open"
-                <#else>
-                   is-open="state['${field.uuid}'].open"
-                </#if>
-                   datepicker-options="dateOptions"
-                   close-text="Close"
                    <#include '../constraints.ftl'>>
-
-                   <span class="input-group-btn">
-                        <button type="button" class="btn btn-default" ng-click="open('${field.uuid}',$event, ${idx})"><i class="glyphicon glyphicon-calendar"></i></button>
-                   </span>
             </input>

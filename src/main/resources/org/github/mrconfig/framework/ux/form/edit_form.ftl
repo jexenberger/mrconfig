@@ -27,7 +27,7 @@
             <legend>${group}</legend>
             </#if>
             <#list fields as field>
-                <div class="form-group has-feedback" ng-class="validationClass(${id}Form.${field.id}Field);">
+                <div class="form-group has-feedback form-group-sm" ng-class="validationClass(${id}Form.${field.id}Field);">
                  <#include "fields/"+field.type.templatePath+".ftl">
                  <#if !field.readOnly>
                  <span ng-show="${id}Form.${field.id}Field.$error.required" class="help-block has-warning">Field is required</span>
@@ -62,9 +62,15 @@
                                   <tbody>
                                       <tr ng-repeat="${key}Item in model.${key}">
                                          <ng-form name="${key}Form">
-                                            <td><button class="btn btn-danger" ng-click="removeCollectionItem('${key}',$index);">Delete</button></td>
+                                            <td>
+                                              <div class="has-feedback form-group-sm">
+                                                <button class="btn btn-danger" ng-click="removeCollectionItem('${key}',$index);">Delete</button></td>
+                                              </div>
                                             <#list collectionForm.fields as field>
-                                            <td><#include "fields/"+field.type.templatePath+"_type.ftl"></td>
+                                            <td>
+                                               <div class="has-feedback form-group-sm">
+                                                <#include "fields/"+field.type.templatePath+"_type.ftl"></td>
+                                               </div>
                                             </#list>
                                          </ng-form>
                                       </tr>

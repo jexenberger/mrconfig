@@ -10,5 +10,5 @@
                    name="${field.uuid}Name"
                    type="${field.type.id}"
                    ng-model="model.${fieldId}"
-                   class="form-control"
+                   class="form-control input-sm"
                    <#include '../constraints.ftl'/> />

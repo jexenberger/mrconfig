@@ -6,8 +6,8 @@
      <#assign fieldId = field.id>
 </#if>
            <input id="${fieldId}"
+                  class="form-control input-sm"
                   name="${field.uuid}Name"
                   type="${field.htmlType()}"
                   ng-model="model.${fieldId}"
-                  class="form-control"
                   readonly="true"/>

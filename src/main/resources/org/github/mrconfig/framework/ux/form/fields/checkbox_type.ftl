@@ -5,8 +5,11 @@
 <#else>
      <#assign fieldId = field.id>
 </#if>
-                    <input id="${field.uuid}"
+                    <input class="input-sm"
+                           id="${field.uuid}"
                            name="${field.uuid}Name"
                            type="checkbox"
                            ng-model="model.${fieldId}"
-                           <#include '../constraints.ftl'>/> ${field.label}
+                           <#include '../constraints.ftl'>>
+                           ${field.label}</input>
+

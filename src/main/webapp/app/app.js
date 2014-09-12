@@ -15,6 +15,15 @@ var application = angular.module('application', [
     'ui.bootstrap'
 ]);
 
+application
+    .constant('AUTH_EVENTS', {
+        loginSuccess: 'auth-login-success',
+        loginFailed: 'auth-login-failed',
+        logoutSuccess: 'auth-logout-success',
+        notAuthenticated: 'auth-not-authenticated',
+        notAuthorized: 'auth-not-authorized'
+    })
+
 var services = angular.module('services',[]);
 var controllers = angular.module('controllers', []);
 
@@ -103,7 +112,7 @@ services.factory('base64', function() {
     };
 });
 
-application.factory('securityContext', ['$http','base64', '$rootScope', function($http, base64, $rootScope) {
+application.factory('securityContext', ['$http','base64', '$rootScope', 'AUTH_EVENTS', function($http, base64, $rootScope, AUTH_EVENTS) {
 
    var roles = [];
    var authorization = null;
@@ -114,6 +123,7 @@ application.factory('securityContext', ['$http','base64', '$rootScope', function
         authorization = base64.encode(userName + ':' + password);
         $http.get("/roles").success(function(data) {
             roles = data.roles;
+            $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
         });
    }
 
@@ -184,22 +194,25 @@ application.config(['$httpProvider', function($httpProvider) {
     $httpProvider.interceptors.push('basicAuthInterceptor');
 }]);
 
-controllers.controller('rs_menu_Controller',['$scope','$rootScope','$http', '$location',  function($scope, $rootScope, $http,$location) {
+controllers.controller('rs_menu_Controller',['$scope','$rootScope','$http', '$location', 'AUTH_EVENTS', function($scope, $rootScope, $http,$location, AUTH_EVENTS) {
 
-    if($rootScope.menu == null) {
 
+    loadMenu = function() {
         $http.get("/menus").success(function(data) {
             var groups = [];
             for (var group in data.menuGroups) {
-              var menuItem = {};
-              menuItem.name = group
-              menuItem.items = data.menuGroups[group];
-              groups.push(menuItem);
+                 var menuItem = {};
+                 menuItem.name = group
+                 menuItem.items = data.menuGroups[group];
+                 groups.push(menuItem);
             }
             $rootScope.menu = groups;
         });
     }
 
+    $rootScope.$on(AUTH_EVENTS.loginSuccess,function(event) {
+        loadMenu();
+    });
 
 }]);
 
