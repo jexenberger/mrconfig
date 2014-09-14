@@ -37,33 +37,16 @@ public class Server extends Environment<Server> {
     @XmlElement(namespace = "http://www.github.org/mrconfig")
     Date dateCommissioned = null;
 
-    String helloWorld = null;
-
-    String jerrysProperty = null;
 
 
-    public String getHelloWorld() {
-        return helloWorld;
-    }
-
-    public void setHelloWorld(String helloWorld) {
-        this.helloWorld = helloWorld;
-    }
-
-    public String getJerrysProperty() {
-        return jerrysProperty;
-    }
-
-    public void setJerrysProperty(String jerrysProperty) {
-        this.jerrysProperty = jerrysProperty;
-    }
 
     public Server() {
         super();
     }
 
-    public Server(String id,String name, Environment parent, String fullyQualifiedDomainName, String ipAddress, String os, String userName, String password) {
+    public Server(String id,String name, Environment parent, String fullyQualifiedDomainName, String ipAddress, String os, String userName, String password, AdminGroup group) {
         super(id,name, parent);
+        setOwner(group);
         this.dnsName = fullyQualifiedDomainName;
         this.ipAddress = ipAddress;
         this.operatingSystem = os;

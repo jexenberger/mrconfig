@@ -1,11 +1,5 @@
-<#if field.parent?? && field.indexed>
-     <#assign fieldId = field.parent + "[$index]." + field.id>
-<#elseif field.parent?? && !field.indexed>
-     <#assign fieldId = field.parent + field.id>
-<#else>
-     <#assign fieldId = field.id>
-</#if>
-              <select id="${field.uuid}"
+<#include "index_builder.ftl">
+              <select id="${field.uuid}Field"
                       name="${field.uuid}Name"
                       ng-model="model.${fieldId}"
                       placeholder="Enter ${field.label}"

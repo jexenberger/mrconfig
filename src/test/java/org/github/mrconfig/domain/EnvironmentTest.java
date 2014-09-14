@@ -22,8 +22,12 @@ public class EnvironmentTest extends BaseDomainJPATest {
 
     @Test
     public void testGetValues() throws Exception {
+        User adminUser = new User("admin", "admin").save();
+        User julian = new User("julian", "password").save();
+        AdminGroup mainAdminGroup = new AdminGroup("all", "Main admin group", adminUser, julian).save();
 
-        Server server = new Server("test","test",null,"test","qweqwe","linux","test","test").save();
+
+        Server server = new Server("test","test",null,"test","qweqwe","linux","test","test", mainAdminGroup).save();
         InputStream resourceAsStream = getClass().getResourceAsStream("/test.properties");
         importProperties(server, resourceAsStream);
 
@@ -37,8 +41,13 @@ public class EnvironmentTest extends BaseDomainJPATest {
 
     @Test
     public void testGetValuesWithParentHierachy() throws Exception {
-        EnvironmentGroup group = new EnvironmentGroup("parent","parent",null,null).save();
-        Server server = new Server(UUID.randomUUID().toString(),"test",group,"test","qweqwe","linux","test","test").save();
+
+        User adminUser = new User("admin", "admin").save();
+        User julian = new User("julian", "password").save();
+        AdminGroup mainAdminGroup = new AdminGroup("all", "Main admin group", adminUser, julian).save();
+
+        EnvironmentGroup group = new EnvironmentGroup("parent","parent",null,mainAdminGroup).save();
+        Server server = new Server(UUID.randomUUID().toString(),"test",group,"test","qweqwe","linux","test","test", mainAdminGroup).save();
 
         Properties groupP = new Properties();
         groupP.load(getClass().getResourceAsStream("/parent.properties"));

@@ -20,7 +20,7 @@ import static java.util.Arrays.asList;
  */
 @javax.persistence.Entity
 @XmlRootElement(namespace = "http://www.github.org/mrconfig")
-@XmlAccessorType(XmlAccessType.FIELD)
+@XmlAccessorType(XmlAccessType.PROPERTY)
 public class AdminGroup extends BaseEntity<AdminGroup> implements Named {
 
     @XmlElement(namespace = "http://www.github.org/mrconfig")

@@ -8,7 +8,9 @@ import org.github.mrconfig.framework.macro.FormRegistry;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.SecurityContext;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -23,7 +25,7 @@ import static java.util.stream.Collectors.toList;
 public class MenuResource {
 
     @GET
-    public Menu getMenu() {
+    public Menu getMenu(@Context SecurityContext context) {
         Collection<UXModule> forms = ResourceRegistry.list()
                 .stream()
                 .filter((resource)-> resource.getUxModule() != null)
@@ -31,8 +33,11 @@ public class MenuResource {
                 .collect(toList());
         Menu response = new Menu();
         for (UXModule form : forms) {
-
-            initGroup(response,form.getGroup());
+            String listRole = form.getResource().getListRole();
+            if (listRole != null && context.isUserInRole(listRole)) {
+                continue;
+            }
+            initGroup(response, form.getGroup());
             response.getMenuGroups().get(form.getGroup()).add(new MenuItem(form.getName(), form.getKey(), form.getLink()));
         }
 

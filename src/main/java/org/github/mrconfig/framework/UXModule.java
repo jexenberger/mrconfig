@@ -147,6 +147,9 @@ public class UXModule {
         return resource.getPath()+"/"+defaultView;
     }
 
+    public Resource getResource() {
+        return resource;
+    }
 
     public void render(String method, OutputStream output) {
         //the hard way

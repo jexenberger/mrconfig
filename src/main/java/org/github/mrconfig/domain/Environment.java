@@ -33,6 +33,7 @@ public class Environment<T extends Environment> extends KeyEntity<T> implements 
     String name;
 
     @ManyToOne(targetEntity = AdminGroup.class, fetch = FetchType.LAZY)
+    @NotNull
     AdminGroup owner;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(referencedColumnName = "id")

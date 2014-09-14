@@ -7,6 +7,15 @@ var myApplication = angular.module('myApplication', [
     'ui.bootstrap'
 ]);
 */
+
+getIdFromHref = function(input) {
+  if (input == null) {
+      return null;
+  }
+  var parts = input.split("/");
+  return parts[parts.length-1];
+}
+
 var application = angular.module('application', [
     'ngRoute',
     'ngResource',
@@ -161,6 +170,8 @@ application.factory('securityContext', ['$http','base64', '$rootScope', 'AUTH_EV
    return context;
 }]);
 
+
+
 isLink = function(val) {
  if (val == null) {
     return false;
@@ -169,6 +180,25 @@ isLink = function(val) {
     return true;
  }
 
+}
+
+lookupById = function($http, url, onSuccess, onError) {
+
+    return $http.get(url)
+        .success(function(data) {
+            alert('got data');
+            if (onSuccess != null) {
+                onSuccess(data);
+            }
+            return data;
+        })
+        .error(function(error, status) {
+            alert(status);
+            if (onError != null) {
+                onError(error, status);
+            }
+            return null;
+        });
 }
 
 
@@ -268,6 +298,71 @@ var LoginController = function ($scope, $modalInstance, securityContext) {
     $modalInstance.dismiss('cancel');
   };
 };
+
+
+controllers.controller('reLookupController',[ '$scope','$modalInstance','resource','filter','filterField', function($scope, $modalInstance, resource, filter, filterField) {
+
+
+   $scope.filterField = filterField;
+
+   $scope.lookup = function(value) {
+       var config = {};
+       var parameters = {};
+       parameters[filter] = value + "*";
+       var header = {}
+       header["Accept"] = "application/json";
+       config["params"] = parameters;
+       config["headers"] = header;
+       $scope.results = $http.get(resource, config).then(function(res){
+           var results = []
+           angular.forEach(res.data.result, function(item){
+               results.push(item);
+           });
+           return results;
+       });
+   };
+
+  $scope.ok = function (result) {
+    $modalInstance.close(result);
+  };
+
+  $scope.cancel = function () {
+    $modalInstance.dismiss('cancel');
+  };
+}]);
+
+
+application.filter('hrefId', function() {
+   return function(input) {
+        return getIdFromHref(input);
+   };
+});
+
+
+application.directive('lookupValid', ['$http', function ($http){
+   return {
+      require: 'ngModel',
+      link: function(scope, elem, attr, ngModel) {
+          //For DOM -> model validation
+          ngModel.$parsers.unshift(function(value) {
+             var valid = false;
+             var resourcePath = attr.lookupValid + '/' + value;
+             var result = lookupById($http, resourcePath);
+             valid = (result != null);
+             ngModel.$setValidity('lookupValid', valid);
+             return valid ? result : undefined;
+          });
+
+          //For model -> DOM validation
+          ngModel.$formatters.unshift(function(value) {
+             if (value == null) {
+                ngModel.$setValidity('lookupValid', true);
+             }
+             return value.id;
+          });
+      }
+   };
+}]);
 
 
 

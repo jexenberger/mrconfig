@@ -43,7 +43,7 @@ public class FormField {
 
     public FormField(String id) {
         this.id = id;
-        this.uuid = id+(UUID.randomUUID().toString().replace('-','_'));
+
 
     }
 
@@ -200,13 +200,17 @@ public class FormField {
         }
 
 
-
+        System.out.println(name);
         return new FormField(name,label,groupName,component,lookupPath,lookupFilter,readOnly,constraints.toArray(new UXConstraint[] {}));
 
 
     }
 
     public String getUuid() {
+        if (uuid == null) {
+
+            uuid = ((parent != null) ? parent : "") + "_"+ (isIndexed() ? "_idx_" : "") + "_" + id;
+        }
         return uuid;
     }
 }

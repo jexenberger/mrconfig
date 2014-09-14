@@ -20,8 +20,13 @@ public class TemplateTest extends BaseDomainJPATest{
     @Test
     public void testGenerate() throws Exception {
 
-        EnvironmentGroup group = new EnvironmentGroup(UUID.randomUUID().toString(),"parent",null,null).save();
-        Server server = new Server("test","test",group,"test","qweqwe","linux","test","test").save();
+
+        User adminUser = new User("admin", "admin").save();
+        User julian = new User("julian", "password").save();
+        AdminGroup mainAdminGroup = new AdminGroup("all", "Main admin group", adminUser, julian).save();
+
+        EnvironmentGroup group = new EnvironmentGroup(UUID.randomUUID().toString(),"parent",null,mainAdminGroup).save();
+        Server server = new Server("test","test",group,"test","qweqwe","linux","test","test", mainAdminGroup).save();
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/org/github/mrconfig/test.ftl")));
 

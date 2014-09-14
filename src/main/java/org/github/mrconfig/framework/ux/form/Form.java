@@ -144,7 +144,9 @@ public class Form {
 
     public Map<String, Collection<FormField>> getByGroups() {
 
-        Map<String, Collection<FormField>> result = new HashMap<>();
+        Map<String, Collection<FormField>> result = new LinkedHashMap<>();
+        //add default first so that it always pops up first in the linked hash map
+        result.put("default", new ArrayList<>());
         for (FormField formField : getFields()) {
             if (!result.containsKey(formField.getGroup())) {
                 result.put(formField.getGroup(), new ArrayList<>());

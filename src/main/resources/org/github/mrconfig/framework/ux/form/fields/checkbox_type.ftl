@@ -1,15 +1,9 @@
-<#if field.parent?? && field.indexed>
-     <#assign fieldId = field.parent + "[$index]." + field.id>
-<#elseif field.parent?? && !field.indexed>
-     <#assign fieldId = field.parent + field.id>
-<#else>
-     <#assign fieldId = field.id>
-</#if>
+<#include "index_builder.ftl">
                     <input class="input-sm"
-                           id="${field.uuid}"
+                           id="${field.uuid}Field"
                            name="${field.uuid}Name"
                            type="checkbox"
                            ng-model="model.${fieldId}"
                            <#include '../constraints.ftl'>>
-                           ${field.label}</input>
+                           <h5>${field.label}</h5></input>
 

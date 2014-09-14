@@ -72,9 +72,9 @@ public class RoleMapping extends BaseEntity<RoleMapping>{
     @Override
     public int hashCode() {
         int result = super.hashCode();
-        result = 31 * result + role.hashCode();
-        result = 31 * result + effectiveFrom.hashCode();
-        result = 31 * result + effectiveTo.hashCode();
+        result = 31 * result + (role != null ? role.hashCode() : 0);
+        result = 31 * result + (effectiveFrom != null ? effectiveFrom.hashCode() : 0);
+        result = 31 * result + (effectiveTo != null ? effectiveTo.hashCode() : 0);
         return result;
     }
 }

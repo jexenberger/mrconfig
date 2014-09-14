@@ -65,9 +65,9 @@ public class BeanFormBuilder {
                 String group = (fieldClazz.isAnnotationPresent(FieldHints.class)) ? fieldClazz.getAnnotation(FieldHints.class).group() : fieldClazz.getSimpleName();
                 List<FormField> fields = formBuilder(new Resource("/dummy", group, fieldClazz, null, null, null)).create().getForm().getFields();
                 fields.forEach((field) -> field.setGroup(group));
+                fields.forEach((field) -> field.setParent(declaredField.getName()));
                 builder.addFields(fields);
-            }
-            if (Enum.class.isAssignableFrom(fieldClazz)) {
+            } else if (Enum.class.isAssignableFrom(fieldClazz)) {
                 Object values = ReflectionUtil.invoke(resolveMethod(fieldClazz, "values"), null);
                 int length = Array.getLength(values);
                 FormField field = FormField.fromField(declaredField, resourceClass, null);

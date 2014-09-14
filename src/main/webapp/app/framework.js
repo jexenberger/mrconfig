@@ -19,7 +19,7 @@ createService = function(services, serviceName, resourcePath ) {
 
 createGenericController = function(module, controllerName, serviceName, resourceName, formName) {
 
-    module.controller(controllerName,['$scope', '$routeParams','$window', '$http', '$location', serviceName, function($scope, $routeParams, $window, $http, $location, service) {
+    module.controller(controllerName,['$scope', '$routeParams','$window', '$http', '$location', '$modal', serviceName, function($scope, $routeParams, $window, $http, $location, $modal, service) {
       $scope.state = {};
       $scope.resourceName = resourceName;
       $scope.master = {};
@@ -195,6 +195,11 @@ createGenericController = function(module, controllerName, serviceName, resource
             });
     
       }
+
+      $scope.lookupResource = function(resource, id) {
+
+
+      }
     
       $scope.lookup = function(resource,filter,value) {
             var config = {};
@@ -278,6 +283,34 @@ createGenericController = function(module, controllerName, serviceName, resource
                $scope.alerts.push({ type: 'success', msg: 'recorded removed' });
                $scope.doSearch($scope.model, $scope.searchModel, 1);
         });
+
+      }
+
+      $scope.openLookup = function(resource, filter, filterField) {
+
+             var modalInstance = $modal.open({
+               templateUrl: 'lookupModal.html',
+               controller: LookupController,
+               size: size,
+               resolve: {
+                 resource: function () {
+                   return resource;
+                 },
+                 filter: function () {
+                   return filter;
+                 },
+                 filterField: function () {
+                   return filterField;
+                 }
+               }
+      });
+
+      modalInstance.result.then(function (userName) {
+         $scope.userNameDisplay = userName;
+      },
+      function () {
+         $log.info('Modal dismissed at: ' + new Date());
+      });
 
       }
 
