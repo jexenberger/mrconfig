@@ -1,5 +1,13 @@
 package org.github.mrconfig;
 
+import com.wordnik.swagger.config.ConfigFactory;
+import com.wordnik.swagger.config.Scanner;
+import com.wordnik.swagger.config.ScannerFactory;
+import com.wordnik.swagger.config.SwaggerConfig;
+import com.wordnik.swagger.jaxrs.config.DefaultJaxrsScanner;
+import com.wordnik.swagger.jaxrs.config.ReflectiveJaxrsScanner;
+import com.wordnik.swagger.jaxrs.reader.DefaultJaxrsApiReader;
+import com.wordnik.swagger.reader.ClassReaders;
 import org.github.mrconfig.domain.*;
 import org.github.mrconfig.framework.Module;
 import org.github.mrconfig.framework.Resource;
@@ -18,11 +26,13 @@ import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.server.ServerProperties;
+import scala.collection.immutable.List;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -54,6 +64,24 @@ public class MrConfigApplication extends ResourceConfig {
                     public void init() {
 
 
+                        ReflectiveJaxrsScanner scanner = new ReflectiveJaxrsScanner();
+                        scanner.setResourcePackage("org.github.mrconfig.resources"); //your "resources" package
+                        ClassReaders.setReader(new DefaultJaxrsApiReader());
+
+                        // Set the swagger config options
+                        SwaggerConfig config = ConfigFactory.config();
+                        config.setApiVersion("1.0.3");
+                        config.setBasePath("http://localhost:6001"); //your "
+
+                        ClassReaders.setReader(new DefaultJaxrsApiReader());
+
+
+                        addResourceClass(com.wordnik.swagger.jaxrs.listing.ApiListingResource.class);
+                        addResourceClass(com.wordnik.swagger.jaxrs.listing.ApiDeclarationProvider.class);
+                        addResourceClass(com.wordnik.swagger.jaxrs.listing.ApiListingResourceJSON.class);
+                        addResourceClass(com.wordnik.swagger.jaxrs.listing.ResourceListingProvider.class);
+
+
                         this.addModule(new JPAModule("org.github.mrconfig.domain"));
                         this.addModule(new DefaultUXModule());
 
@@ -81,11 +109,16 @@ public class MrConfigApplication extends ResourceConfig {
                         addResourceClass(SessionInViewInterceptor.class);
                         addResourceClass(RolesResources.class);
                         //addResourceClass(BasicAuthFilter.class);
+
+                        Scanner
+
+
                     }
                 };
 
 
                 ResourceConfig rc = new MrConfigApplication(myModule.allResources());
+
 
 
                 Map<String, Object> properties = new HashMap<>();
