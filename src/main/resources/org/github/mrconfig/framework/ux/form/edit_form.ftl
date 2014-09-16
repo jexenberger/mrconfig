@@ -1,24 +1,30 @@
 
 <#assign capture=true>
-<div class="panel-heading clearfix" ng-controller="${id}Controller">
-     <h2 class="panel-title pull-left" style="padding-top: 7.5px;">${name}</h2>
-     <div class="btn-group pull-right btn-group-sm">
-                             <button type="button"
-                                     class="glyphicon glyphicon-cog btn btn-danger dropdown-toggle pull-right"
-                                     data-toggle="dropdown">
-                                 Actions <span class="caret"></span>
-                             </button>
-                             <ul class="dropdown-menu" role="menu">
-                                 <li ng-repeat="link in model.links">
-                                   <a ng-href="javascript:applyAction(link.href, link.rel)">{{link.title}}</a>
-                                 </li>
-                             </ul>
-                         </div>
-</div>
-    <div class="panel-body">
-                <div>
+<div  ng-controller="${id}Controller">
+   <div class="row">
+     <div class="container col-md-10 col-md-offset-1">
+     <div class="container-fluid">
+        <legend><h4>${name}<small ng-if="isNew"> - create</small><small ng-if="!isNew"> - create</small></h4></legend>
+     </div>
+     <div class="container-fluid">
+         <div class="btn-group pull-right btn-group-sm">
+                                 <button type="button"
+                                         class="glyphicon glyphicon-cog btn btn-danger dropdown-toggle pull-right"
+                                         data-toggle="dropdown">
+                                     Actions <span class="caret"></span>
+                                 </button>
+                                 <ul class="dropdown-menu" role="menu">
+                                     <li ng-repeat="link in model.links">
+                                       <a ng-href="javascript:applyAction(link.href, link.rel)">{{link.title}}</a>
+                                     </li>
+                                 </ul>
+         </div>
+     </div>
+     <br/>
+     <div class="container-fluid">
+         <div>
                 <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
-                </div>
+         </div>
         <form name="${id}Form" novalidate class="form-horizontal" role="form">
           <#list byGroups?keys as group>
             <#assign fields=byGroups[group]>
@@ -50,8 +56,8 @@
            <#list collectionForms?keys as key>
                <#assign collectionForm=collectionForms[key]>
 
-                             <legend>${collectionForm.name}</legend>
-                              <table class="table table-striped">
+                             <legend><h5>${collectionForm.name}</h5></legend>
+                              <table class="table table-hover">
                                   <thead>
                                       <tr>
                                         <th>Delete</th>
@@ -65,7 +71,9 @@
                                          <ng-form name="${key}Form">
                                             <td>
                                               <div class="has-feedback form-group-sm">
-                                                <button class="btn btn-danger" ng-click="removeCollectionItem('${key}',$index);">Delete</button></td>
+                                                <div class="btn-group btn-group-sm">
+                                                    <button class="btn btn-danger" ng-click="removeCollectionItem('${key}',$index);">Delete</button></td>
+                                                </div>
                                               </div>
                                             <#list collectionForm.fields as field>
                                             <td>
@@ -78,8 +86,8 @@
                                   </tbody>
                               </table>
 
-           <div class="btn-group">
-                  <label class="btn btn-primary"  ng-click="addToCollection('${key}');">Add</label>
+           <div class="btn-group btn-group-sm">
+                  <label class="btn btn-primary glyphicon glyphicon-new"  ng-click="addToCollection('${key}');">&nbsp;Add</label>
            </div>
            </#list>
 
@@ -90,7 +98,8 @@
         <div class="btn-group btn-group-sm">
                 <button type="button" class="btn btn-success glyphicon glyphicon-ok " ng-disabled="${id}Form.$invalid" ng-click="update(model);">&nbsp;Save</button>
                 <button type="button" class="btn btn-primary glyphicon glyphicon-log-in" ng-click="reset();">&nbsp;Reset</button>
-                <button type="button" class="btn btn-warning glyphicon glyphicon-off" ng-click="gotoList();">&nbsp;Done</button>
+                <button type="button" class="btn btn-primary glyphicon glyphicon-off" ng-click="gotoList();">&nbsp;Done</button>
         </div>
+     </div>
   </div>
 </div>

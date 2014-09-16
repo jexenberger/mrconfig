@@ -61,6 +61,9 @@ public interface WritableResource<T, K extends Serializable> extends BaseResourc
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     default Response save(@Context SecurityContext context, T group, @Context UriInfo uri) {
 
+
+
+
         Resource resource = ResourceRegistry.get(getPath());
         if (notAuthorized(context, resource.getUpdateRole())) {
             return Response.status(Response.Status.UNAUTHORIZED).build();
@@ -70,11 +73,15 @@ public interface WritableResource<T, K extends Serializable> extends BaseResourc
 
         Box<T> save = getUpdateable().save(group);
         if (save.isSuccess()) {
-            return Response.ok(group).build();
+            return Response.ok(group).links(getUpdateable().toLink(group)).build();
         } else {
             return Response.status(Response.Status.BAD_REQUEST).entity(new Errors(save.mapError(Error::new))).build();
         }
 
+    }
+
+    default boolean isAllowParameterOverride() {
+        return true;
     }
 
     default void applySaveState(T group, UriInfo uri) {}

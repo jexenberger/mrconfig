@@ -290,8 +290,8 @@ createGenericController = function(module, controllerName, serviceName, resource
 
              var modalInstance = $modal.open({
                templateUrl: 'lookupModal.html',
-               controller: LookupController,
-               size: size,
+               controller: 'reLookupController',
+               size: 'lg',
                resolve: {
                  resource: function () {
                    return resource;

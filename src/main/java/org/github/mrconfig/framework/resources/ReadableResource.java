@@ -47,7 +47,7 @@ public interface ReadableResource<T, K extends Serializable> extends BaseResourc
         }
         populateGetLinks(entity);
 
-        return Response.ok(entity).build();
+        return Response.ok(entity).links(getLookup().toLink(entity)).build();
     }
 
     default void populateGetLinks(T entity) {

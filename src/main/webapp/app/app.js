@@ -186,14 +186,14 @@ lookupById = function($http, url, onSuccess, onError) {
 
     return $http.get(url)
         .success(function(data) {
-            alert('got data');
+            alert(JSON.stringify(data));
             if (onSuccess != null) {
                 onSuccess(data);
             }
             return data;
         })
         .error(function(error, status) {
-            alert(status);
+            alert(url+'->'+status);
             if (onError != null) {
                 onError(error, status);
             }
@@ -247,7 +247,7 @@ controllers.controller('rs_menu_Controller',['$scope','$rootScope','$http', '$lo
 }]);
 
 
-controllers.controller('rs_modal_controller',['$scope','$rootScope','$http', '$location', '$modal', '$log','securityContext' ,function($scope, $rootScope, $http, $location, $modal, $log, securityContext) {
+controllers.controller('reLoginModalController',['$scope','$rootScope','$http', '$location', '$modal', '$log','securityContext' ,function($scope, $rootScope, $http, $location, $modal, $log, securityContext) {
 
 
 
@@ -255,7 +255,7 @@ controllers.controller('rs_modal_controller',['$scope','$rootScope','$http', '$l
 
        var modalInstance = $modal.open({
          templateUrl: 'loginScreen.html',
-         controller: LoginController,
+         controller: 'reLoginController',
          size: size,
          resolve: {
            securityContext: function () {
@@ -285,7 +285,7 @@ controllers.controller('rs_modal_controller',['$scope','$rootScope','$http', '$l
 }]);
 
 
-var LoginController = function ($scope, $modalInstance, securityContext) {
+controllers.controller('reLoginController',  [ '$scope','$modalInstance','securityContext',function ($scope, $modalInstance, securityContext) {
 
   $scope.securityContext = securityContext;
 
@@ -297,10 +297,10 @@ var LoginController = function ($scope, $modalInstance, securityContext) {
   $scope.cancel = function () {
     $modalInstance.dismiss('cancel');
   };
-};
+}]);
 
 
-controllers.controller('reLookupController',[ '$scope','$modalInstance','resource','filter','filterField', function($scope, $modalInstance, resource, filter, filterField) {
+controllers.controller('reLookupController',[ '$scope','$http','$modalInstance','resource','filter','filterField', function($scope, $http, $modalInstance, resource, filter, filterField) {
 
 
    $scope.filterField = filterField;
@@ -308,17 +308,20 @@ controllers.controller('reLookupController',[ '$scope','$modalInstance','resourc
    $scope.lookup = function(value) {
        var config = {};
        var parameters = {};
-       parameters[filter] = value + "*";
+       if (value != null) {
+          parameters[filter] = value + "*";
+       }
        var header = {}
        header["Accept"] = "application/json";
        config["params"] = parameters;
        config["headers"] = header;
-       $scope.results = $http.get(resource, config).then(function(res){
+       $http.get(resource, config).then(function(res){
            var results = []
            angular.forEach(res.data.result, function(item){
+               alert(item.title);
                results.push(item);
            });
-           return results;
+            $scope.results =  results;
        });
    };
 
@@ -345,16 +348,27 @@ application.directive('lookupValid', ['$http', function ($http){
       link: function(scope, elem, attr, ngModel) {
           //For DOM -> model validation
           ngModel.$parsers.unshift(function(value) {
+             if (value == null) {
+                return null;
+             }
              var valid = false;
              var resourcePath = attr.lookupValid + '/' + value;
              var result = lookupById($http, resourcePath);
+             alert(result);
              valid = (result != null);
              ngModel.$setValidity('lookupValid', valid);
+             var link = {
+
+             }
              return valid ? result : undefined;
           });
 
           //For model -> DOM validation
           ngModel.$formatters.unshift(function(value) {
+             if (value == null) {
+                return null;
+             }
+             JSON.stringify(value);
              if (value == null) {
                 ngModel.$setValidity('lookupValid', true);
              }

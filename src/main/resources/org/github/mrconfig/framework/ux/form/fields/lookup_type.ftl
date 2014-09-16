@@ -5,12 +5,11 @@
                            name="${field.uuid}Name"
                            ng-model="model.${fieldId}"
                            placeholder="Click to lookup value for ${field.label}"
-                           ng-blur
-                           <#include '../constraints.ftl'>
-                           >
+                           lookup-valid="${field.lookup}"
+                           <#include '../constraints.ftl'>>
                             <span class="input-group-btn btn-group-sm">
                                <button type="button" class="btn btn-default btn-group-sm" ng-click="openLookup('${field.lookup}','${field.lookupFilter}','${field.label}')"><i class="glyphicon glyphicon-search" ></i></button>
                             </span>
-                            <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
+                            <button ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
                     </input>
 
