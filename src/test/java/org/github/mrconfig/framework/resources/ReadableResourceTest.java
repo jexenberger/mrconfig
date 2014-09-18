@@ -9,6 +9,7 @@ import org.github.mrconfig.framework.util.Pair;
 import org.junit.Before;
 import org.junit.Test;
 
+import javax.ws.rs.Path;
 import javax.ws.rs.core.MultivaluedHashMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
@@ -26,6 +27,7 @@ import static org.junit.Assert.*;
 /**
  * Created by w1428134 on 2014/08/04.
  */
+@Path("/test")
 public class ReadableResourceTest implements ReadableResource<MyEntity,Long> {
 
     private CRUDService<MyEntity,Long> service;
@@ -53,8 +55,9 @@ public class ReadableResourceTest implements ReadableResource<MyEntity,Long> {
     public void testGet() throws Exception {
         Response response = this.get(createMock(SecurityContext.class), "1");
         assertNotNull(response);
+        assertEquals(200, response.getStatus());
         assertNotNull(response.getEntity());
-        assertEquals(200,response.getStatus());
+        assertNotNull(response.getHeaderString("Link"));
         assertSame(instance, response.getEntity());
     }
 
@@ -67,8 +70,8 @@ public class ReadableResourceTest implements ReadableResource<MyEntity,Long> {
 
         Response response = this.get(createMock(SecurityContext.class), uriInfo);
         assertNotNull(response);
-        assertNotNull(response.getEntity());
         assertEquals(200, response.getStatus());
+        assertNotNull(response.getEntity());
 
         Results<MyEntity> results = (Results<MyEntity>) response.getEntity();
         assertNotNull(results.getResult());
@@ -130,5 +133,13 @@ public class ReadableResourceTest implements ReadableResource<MyEntity,Long> {
         return service;
     }
 
+    @Override
+    public boolean isUserAllowedToList(SecurityContext context) {
+        return true;
+    }
 
+    @Override
+    public boolean isUserAllowedToLookup(SecurityContext context) {
+        return true;
+    }
 }

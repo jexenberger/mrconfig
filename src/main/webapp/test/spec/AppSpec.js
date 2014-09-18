@@ -29,7 +29,7 @@ describe("App", function() {
 
               $httpBackend  = $injector.get('$httpBackend');
               $httpBackend.when('GET', '/test/123').respond(
-                { 'id': 123, 'name': "Test 123" }
+                { href: '123', title: "Test 123" },{Link:'</test/123>; type="null"; rel="1"; title="all"'}
               );
 
         });
@@ -58,10 +58,46 @@ describe("App", function() {
     });
 
     it("lookupValue:Directive set/get", function() {
+        $httpBackend.expectGET('/test/123');
         var form = scope.form;
         form.test.$setViewValue("123");
         scope.$digest();
+        $httpBackend.flush();
+        alert(JSON.stringify(scope.test));
         expect(form.test.$valid).toBe(true);
+        //expect(scope.test.href).toBe('/test/123');
+        //expect(scope.test.title).toBe('Test 123');
+
     });
+
+    it("parseKeyValue ", function() {
+
+        var simple = "key=value";
+        var result = parseKeyValue(simple);
+        expect(result.key).toBe('key');
+        expect(result.value).toBe('value');
+
+        var leading = "key='value'";
+        result = parseKeyValue(leading, true);
+        expect(result.key).toBe('key');
+        expect(result.value).toBe('value');
+
+        var leadingSpace = " key='value' ";
+        result = parseKeyValue(leadingSpace, true);
+        expect(result.key).toBe('key');
+        expect(result.value).toBe('value');
+
+    });
+
+
+    it("parseHeaderLink", function() {
+        var linkString = '<test/1>; type="null"; rel="1"; title="all" ';
+        var link = parseHeaderLink(linkString);
+        expect(link.href).toBe('test/1');
+        expect(link.type).toBe(null);
+        expect(link.rel).toBe('1');
+        expect(link.title).toBe('all');
+    });
+
 
 });

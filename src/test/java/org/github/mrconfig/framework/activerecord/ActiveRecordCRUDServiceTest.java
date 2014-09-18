@@ -100,6 +100,7 @@ public class ActiveRecordCRUDServiceTest extends BaseJPA {
     private MyEntity getMyEntity() {
         MyEntity environment = new MyEntity();
         environment.setName("Name");
+        environment.setRandomColumn("random");
         return environment;
     }
 }

@@ -23,6 +23,7 @@ public class HibernateProviderTest extends BaseJPA{
         for (int i = 0; i < 100; i++) {
             MyEntity environment = new MyEntity();
             environment.setName("Name ->" + i);
+            environment.setRandomColumn("Na" + i);
             provider.save(environment, null);
         }
 

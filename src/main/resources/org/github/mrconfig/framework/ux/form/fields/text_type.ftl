@@ -5,4 +5,8 @@
                    type="${field.type.id}"
                    ng-model="model.${fieldId}"
                    class="form-control input-sm"
-                   <#include '../constraints.ftl'/> />
+                   <#if field.defaultValue??>
+                   ng-init="model.${fieldId} = model.${fieldId} || '${field.defaultValue}'"
+                   </#if>
+                   <#include '../constraints.ftl'/>/>
+              <#include '../glyph_control.ftl'/>

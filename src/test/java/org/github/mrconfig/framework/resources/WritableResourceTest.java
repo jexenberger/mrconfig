@@ -2,23 +2,27 @@ package org.github.mrconfig.framework.resources;
 
 import org.github.mrconfig.framework.service.CRUDService;
 import org.github.mrconfig.framework.service.Creatable;
+import org.github.mrconfig.framework.service.Link;
 import org.github.mrconfig.framework.service.Updateable;
 import org.github.mrconfig.framework.testdomain.MyEntity;
 import org.junit.Before;
 import org.junit.Test;
 
+import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 
 import static org.easymock.EasyMock.*;
 import static org.github.mrconfig.framework.util.Box.success;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 /**
  * Created by w1428134 on 2014/08/04.
  */
+@Path("/test")
 public class WritableResourceTest implements WritableResource<MyEntity,Long>{
 
     private CRUDService service;
@@ -31,6 +35,7 @@ public class WritableResourceTest implements WritableResource<MyEntity,Long>{
 
         expect(service.create(anyObject(MyEntity.class))).andReturn(success(1L)).anyTimes();
         expect(service.save(anyObject(MyEntity.class))).andReturn(success(instance)).anyTimes();
+        expect(service.toLink(anyObject(MyEntity.class))).andReturn(new Link()).anyTimes();
 
         replay(service);
 
@@ -39,6 +44,7 @@ public class WritableResourceTest implements WritableResource<MyEntity,Long>{
     @Test
     public void testCreate() throws Exception {
         Response response = this.create(createMock(SecurityContext.class), instance, createMock(UriInfo.class));
+        assertEquals(201, response.getStatus());
         assertNotNull(response.getHeaderString("Location"));
         assertNotNull(response.getEntity());
         verify(service);
@@ -47,7 +53,8 @@ public class WritableResourceTest implements WritableResource<MyEntity,Long>{
     @Test
     public void testSave() throws Exception {
         Response response = this.save(createMock(SecurityContext.class), instance, createMock(UriInfo.class));
-        assertNotNull(response.getEntity());
+        assertEquals(200, response.getStatus());
+        assertNotNull("the response should have contained an entity", response.getEntity());
         verify(service);
     }
 
@@ -55,6 +62,16 @@ public class WritableResourceTest implements WritableResource<MyEntity,Long>{
     public Creatable<MyEntity, Long> getCreatable() {
 
         return service;
+    }
+
+    @Override
+    public boolean isUserAllowedToSave(SecurityContext context) {
+        return true;
+    }
+
+    @Override
+    public boolean isUserAllowedToCreate(SecurityContext context) {
+        return true;
     }
 
     @Override

@@ -1,10 +1,9 @@
 
 <#assign capture=true>
 <div  ng-controller="${id}Controller">
-   <div class="row">
-     <div class="container col-md-10 col-md-offset-1">
+     <div class="container-fluid col-xs-12 col-sm-12 col-md-12">
      <div class="container-fluid">
-        <legend><h4>${name}<small ng-if="isNew"> - create</small><small ng-if="!isNew"> - create</small></h4></legend>
+        <legend><h4>${name}<small ng-if="isNew"> - create</small><small ng-if="!isNew"> - edit</small></h4></legend>
      </div>
      <div class="container-fluid">
          <div class="btn-group pull-right btn-group-sm">
@@ -25,29 +24,38 @@
          <div>
                 <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
          </div>
-        <form name="${id}Form" novalidate class="form-horizontal" role="form">
+        <form name="${id}Form" novalidate role="form">
           <#list byGroups?keys as group>
             <#assign fields=byGroups[group]>
             <fieldset>
             <#if group != 'default'>
-            <legend>${group}</legend>
+            <legend><h5>${group}</h5></legend>
             </#if>
+            <#assign counter=0>
+            <#assign didRun=false>
             <#list fields as field>
-                <div class="form-group has-feedback form-group-sm" ng-class="validationClass(${id}Form.${field.uuid}Name);">
+                <#assign counter=counter+1>
+                <#assign didRun=true>
+                <#if counter==1>
+                <div class="row">
+                </#if>
+                <div class="col-xs-6 col-sm-6 col-md-6" ng-class="validationClass(${id}Form.${field.uuid}Name);">
                  <#include "fields/"+field.type.templatePath+".ftl">
-                 <#if !field.readOnly>
-                 <span ng-show="${id}Form.${field.uuid}Name.$error.required" class="help-block has-warning">Field is required</span>
-                 <span ng-show="${id}Form.${field.uuid}Name.$error.max" class="help-block has-warning">Field is greater than allowed value</span>
-                 <span ng-show="${id}Form.${field.uuid}Name.$error.min" class="help-block has-warning">Field is less than allowed value</span>
-                 <span ng-show="${id}Form.${field.uuid}Name.$error.minlength" class="help-block has-warning">Field is less than allowed length</span>
-                 <span ng-show="${id}Form.${field.uuid}Name.$error.maxlength" class="help-block has-warning">Field is greater than allowed length</span>
-                 <span ng-show="${id}Form.${field.uuid}Name.$error.number" class="help-block has-warning">Field should be numeric</span>
-                 <span ng-show="${id}Form.${field.uuid}Name.$error.pattern" class="help-block has-warning">Field contains invalid characters</span>
-                 <span ng-show="${id}Form.${field.uuid}Name.$error.lookupValid" class="help-block has-warning">Select value from drop down</span>
-                 </#if>
                 </div>
+                <#if field.readOnly>
+                <#assign counter=2>
+                </#if>
+                <#if counter==2>
+                </div>
+                <#assign counter=0>
+                </#if>
+
             </#list>
+            <#if counter<2 && didRun>
+                </div>
+            </#if>
             </fieldset>
+            <br/>
            </#list>
 
 
@@ -95,6 +103,7 @@
            </#if>
         </form>
         <br/>
+        <hr/>
         <div class="btn-group btn-group-sm">
                 <button type="button" class="btn btn-success glyphicon glyphicon-ok " ng-disabled="${id}Form.$invalid" ng-click="update(model);">&nbsp;Save</button>
                 <button type="button" class="btn btn-primary glyphicon glyphicon-log-in" ng-click="reset();">&nbsp;Reset</button>

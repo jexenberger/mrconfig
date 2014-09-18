@@ -2,8 +2,7 @@ package org.github.mrconfig.framework.resources;
 
 import org.github.mrconfig.framework.Resource;
 import org.github.mrconfig.framework.ResourceRegistry;
-import org.github.mrconfig.framework.activerecord.ActiveRecord;
-import org.github.mrconfig.domain.EnvironmentGroup;
+import org.github.mrconfig.framework.security.Security;
 import org.github.mrconfig.framework.service.Deletable;
 import org.github.mrconfig.framework.util.Box;
 import org.github.mrconfig.framework.util.GenericsUtil;
@@ -16,10 +15,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import java.io.Serializable;
-import java.util.Optional;
 
-import static org.github.mrconfig.framework.activerecord.ActiveRecord.doWork;
-import static org.github.mrconfig.framework.activerecord.ActiveRecord.findById;
 import static org.github.mrconfig.framework.resources.Errors.errors;
 
 /**
@@ -33,10 +29,7 @@ public interface DeletableResource<T, K extends Serializable> extends BaseResour
     @Path("{id}")
     default Response delete(@Context SecurityContext context, @PathParam("id") String id) {
 
-        Resource resource = ResourceRegistry.get(getPath());
-        if (notAuthorized(context, resource.getDeleteRole())) {
-            return Response.status(Response.Status.UNAUTHORIZED).build();
-        }
+        if (isUserAllowedToDelete(context)) return Response.status(Response.Status.UNAUTHORIZED).build();
 
 
         if (id == null) {
@@ -58,6 +51,14 @@ public interface DeletableResource<T, K extends Serializable> extends BaseResour
         } else {
             return Response.status(Response.Status.BAD_REQUEST).entity(new Errors(delete.mapError(Error::new))).build();
         }
+    }
+
+    default boolean isUserAllowedToDelete(SecurityContext context) {
+        Resource resource = ResourceRegistry.get(getPath());
+        if (Security.authorized(context, resource.isRequiresAuthentication(), resource.getDeleteRole())) {
+            return true;
+        }
+        return false;
     }
 
     default Class<K> getResourceIdType() {

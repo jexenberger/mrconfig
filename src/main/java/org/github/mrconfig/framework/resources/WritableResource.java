@@ -2,6 +2,7 @@ package org.github.mrconfig.framework.resources;
 
 import org.github.mrconfig.framework.Resource;
 import org.github.mrconfig.framework.ResourceRegistry;
+import org.github.mrconfig.framework.security.Security;
 import org.github.mrconfig.framework.service.Creatable;
 import org.github.mrconfig.framework.service.Updateable;
 import org.github.mrconfig.framework.util.Box;
@@ -24,8 +25,7 @@ public interface WritableResource<T, K extends Serializable> extends BaseResourc
     default Response create(@Context SecurityContext context, T instance, @Context UriInfo uri) {
 
 
-        Resource resource = ResourceRegistry.get(getPath());
-        if (notAuthorized(context, resource.getCreateRole())) {
+        if (!isUserAllowedToCreate(context)) {
             return Response.status(Response.Status.UNAUTHORIZED).build();
         }
 
@@ -62,12 +62,7 @@ public interface WritableResource<T, K extends Serializable> extends BaseResourc
     default Response save(@Context SecurityContext context, T group, @Context UriInfo uri) {
 
 
-
-
-        Resource resource = ResourceRegistry.get(getPath());
-        if (notAuthorized(context, resource.getUpdateRole())) {
-            return Response.status(Response.Status.UNAUTHORIZED).build();
-        }
+        if (!isUserAllowedToSave(context)) return Response.status(Response.Status.UNAUTHORIZED).build();
 
         applySaveState(group, uri);
 
@@ -78,6 +73,16 @@ public interface WritableResource<T, K extends Serializable> extends BaseResourc
             return Response.status(Response.Status.BAD_REQUEST).entity(new Errors(save.mapError(Error::new))).build();
         }
 
+    }
+
+    default boolean isUserAllowedToSave(SecurityContext context) {
+        Resource resource = ResourceRegistry.get(getPath());
+        return Security.authorized(context, resource.isRequiresAuthentication(), resource.getUpdateRole());
+    }
+
+    default boolean isUserAllowedToCreate(SecurityContext context) {
+        Resource resource = ResourceRegistry.get(getPath());
+        return Security.authorized(context, resource.isRequiresAuthentication(), resource.getCreateRole());
     }
 
     default boolean isAllowParameterOverride() {

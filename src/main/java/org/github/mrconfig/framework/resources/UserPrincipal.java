@@ -1,5 +1,7 @@
 package org.github.mrconfig.framework.resources;
 
+import org.github.mrconfig.framework.security.Security;
+
 import javax.ws.rs.core.SecurityContext;
 import java.security.Principal;
 import java.util.Collection;
@@ -13,10 +15,18 @@ public class UserPrincipal implements Principal, SecurityContext {
 
     String userId;
     Collection<String> roles;
+    String password;
 
-    public UserPrincipal(String userId, String... roles) {
+    public UserPrincipal(String userId, String password, String... roles) {
         this.userId = userId;
         this.roles = asList(roles);
+        if (password != null) {
+            this.password = Security.hashAsHex(password, Security.getDefaultHashingAlgorithm());
+        }
+    }
+
+    public static UserPrincipal user(String userId, String password, String ... roles) {
+        return new UserPrincipal(userId, password, roles);
     }
 
     @Override
@@ -37,6 +47,10 @@ public class UserPrincipal implements Principal, SecurityContext {
     @Override
     public boolean isSecure() {
         return false;
+    }
+
+    public String getPassword() {
+        return password;
     }
 
     @Override

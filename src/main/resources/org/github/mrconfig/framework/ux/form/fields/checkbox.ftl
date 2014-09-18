@@ -1,12 +1,8 @@
-          <div class="col-sm-offset-2 col-sm-7">
-                <div class="checkbox">
+          <div class="form-group has-feedback form-group-sm">
+                <div class="checkbox col-sm-offset-3">
                   <label>
                     <#include 'checkbox_type.ftl'>
                   </label>
-                  <#if field.readOnly>
-                    <span ng-show="${id}Form.${field.uuid}.$valid" class="glyphicon glyphicon-ok form-control-feedback"></span>
-                    <span ng-show="${id}Form.${field.uuid}.$invalid" class="glyphicon glyphicon-remove form-control-feedback"></span>
-                  </#if>
-
                 </div>
+                <#include '../validation_messages.ftl'/>
           </div>

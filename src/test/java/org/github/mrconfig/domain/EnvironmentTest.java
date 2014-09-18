@@ -42,8 +42,8 @@ public class EnvironmentTest extends BaseDomainJPATest {
     @Test
     public void testGetValuesWithParentHierachy() throws Exception {
 
-        User adminUser = new User("admin", "admin").save();
-        User julian = new User("julian", "password").save();
+        User adminUser = new User(UUID.randomUUID().toString(), "admin").save();
+        User julian = new User(UUID.randomUUID().toString(), "password").save();
         AdminGroup mainAdminGroup = new AdminGroup("all", "Main admin group", adminUser, julian).save();
 
         EnvironmentGroup group = new EnvironmentGroup("parent","parent",null,mainAdminGroup).save();

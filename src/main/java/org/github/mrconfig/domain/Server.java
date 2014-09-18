@@ -1,5 +1,7 @@
 package org.github.mrconfig.domain;
 
+import org.github.mrconfig.framework.util.FieldHints;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -26,6 +28,7 @@ public class Server extends Environment<Server> {
     @NotNull
     String ipAddress;
     @XmlElement(namespace = "http://www.github.org/mrconfig")
+    @FieldHints(defaultValue = "Linux")
     String operatingSystem;
     @XmlElement(namespace = "http://www.github.org/mrconfig")
     String userName;

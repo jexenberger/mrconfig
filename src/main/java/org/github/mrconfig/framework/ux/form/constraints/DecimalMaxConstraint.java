@@ -7,6 +7,7 @@ import org.github.mrconfig.framework.ux.form.Name;
 import org.github.mrconfig.framework.ux.form.UXConstraint;
 
 import javax.validation.Constraint;
+import java.math.BigDecimal;
 import java.util.Collection;
 
 import static java.util.Arrays.asList;
@@ -17,10 +18,10 @@ import static org.github.mrconfig.framework.util.Pair.cons;
  */
 public class DecimalMaxConstraint extends IDConstraint{
 
-    float max;
+    String max;
 
 
-    public DecimalMaxConstraint( @Name("max") float max) {
+    public DecimalMaxConstraint( @Name("max") String max) {
         this.max = max;
     }
 
@@ -36,7 +37,7 @@ public class DecimalMaxConstraint extends IDConstraint{
 
     @Override
     public Collection<Pair<String,String>> getAttributes() {
-        return asList(cons("max",Float.toString(max)));
+        return asList(cons("max",max));
     }
 
 

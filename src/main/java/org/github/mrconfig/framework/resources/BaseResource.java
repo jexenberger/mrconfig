@@ -7,17 +7,14 @@ import javax.ws.rs.core.SecurityContext;
  * Created by julian3 on 2014/08/24.
  */
 public interface BaseResource {
-    default boolean notAuthorized(SecurityContext context, String role) {
-        if (role != null) {
-            if (!context.isUserInRole(role)) {
-                return true;
-            }
-        }
-        return false;
-    }
+
 
     default String getPath() {
+        if (!getClass().isAnnotationPresent(Path.class))  {
+            throw new IllegalStateException(getClass().getName()+" needs to be annotated with "+Path.class.getName());
+        }
         Path path = getClass().getAnnotation(Path.class);
         return path.value();
     }
+
 }

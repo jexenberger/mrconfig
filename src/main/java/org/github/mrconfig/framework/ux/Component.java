@@ -1,11 +1,19 @@
 package org.github.mrconfig.framework.ux;
 
 import org.github.mrconfig.framework.activerecord.ActiveRecord;
+import org.github.mrconfig.framework.util.Inflector;
+import org.github.mrconfig.framework.util.ReflectionUtil;
+import org.github.mrconfig.framework.ux.form.FormField;
 
 import javax.ws.rs.core.Link;
+import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.*;
+import java.util.function.Consumer;
+
+import static org.github.mrconfig.framework.util.Pair.cons;
+import static org.github.mrconfig.framework.util.ReflectionUtil.resolveMethod;
 
 /**
  * Created by julian3 on 2014/08/11.
@@ -33,14 +41,18 @@ public class Component {
     String templatePath;
     String type;
     Class<?>[] defaultDataTypes;
+    String defaultHelp;
+    Consumer<FormField> fieldMapper;
 
-    public Component(String id, String name, String description, String templatePath, String type, Class<?>... types) {
+    public Component(String id, String name, String description, String templatePath, String type, String defaultHelp, Consumer<FormField> fieldMapper,  Class<?>... types) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.templatePath = templatePath;
         this.type = type;
         this.defaultDataTypes = types;
+        this.defaultHelp = defaultHelp;
+        this.fieldMapper = fieldMapper;
     }
 
     public Component(String id, String templatePath) {
@@ -126,31 +138,39 @@ public class Component {
 
 
     public static Component checkBox() {
-        return new Component("checkbox", "Checkbox", "Checkbox component", "checkbox","checkbox", boolean.class, Boolean.class);
+        return new Component("checkbox", "Checkbox", "Checkbox component", "checkbox","checkbox","&nbsp;", null, boolean.class, Boolean.class);
     }
 
     public static Component date() {
-        return new Component("date", "Date", "Date component", "date","text", Date.class, java.sql.Date.class);
+        return new Component("date", "Date", "Date component", "date","text", "Enter date or select from Calendar",null, Date.class, java.sql.Date.class);
     }
 
     public static Component hidden() {
-        return new Component("hidden", "Hidden", "Hidden Field component", "hidden", "hidden");
+        return new Component("hidden", "Hidden", "Hidden Field component", "hidden", "hidden","&nbsp;", null);
     }
 
     public static Component lookup() {
-        return new Component("lookup", "Lookup", "Lookup Field component", "lookup","text", Link.class, ActiveRecord.class);
+        return new Component("lookup", "Lookup", "Lookup Field component", "lookup","text", "Enter id or search",null, Link.class, ActiveRecord.class);
     }
 
     public static Component readOnly() {
-        return new Component("readonly", "Read Only", "ReadOnly Field component", "hidden", "readonly");
+        return new Component("readonly", "Read Only", "ReadOnly Field component", "hidden", "readonly","&nbsp;", null);
     }
 
     public static Component select() {
-        return new Component("select", "Read Only", "ReadOnly Field component", "select", "select",Enum.class);
+        return new Component("select", "Read Only", "ReadOnly Field component", "select", "select","&nbsp;",(formField)-> {
+            Object values = ReflectionUtil.invoke(resolveMethod(formField.getJavaType(), "values"), null);
+            int length = Array.getLength(values);
+            for (int i = 0; i < length; i++) {
+                Enum<?> enumValue = (Enum<?>) Array.get(values,i);
+                String label = Inflector.getInstance().phrase(enumValue.name());
+                formField.getDefaultValueList().add(cons(enumValue.name(),label));
+            }
+        }, Enum.class);
     }
 
     public static Component number() {
-        return new Component("number", "Number", "Number Field component", "text", "number",
+        return new Component("number", "Number", "Number Field component", "text", "number","&nbsp;", null,
                 Integer.class, int.class,
                 Double.class, double.class,
                 Float.class, float.class,
@@ -162,7 +182,7 @@ public class Component {
     }
 
     public static Component text() {
-        return new Component("text", "Read Only", "ReadOnly Field component", "text","text",
+        return new Component("text", "Read Only", "ReadOnly Field component", "text","text", "&nbsp;",null,
                 String.class,
                 Character.class, char.class);
     }
@@ -178,6 +198,16 @@ public class Component {
                     .findFirst();
         }
         return Optional.ofNullable(component);
+    }
+
+    public String getDefaultHelp() {
+        return defaultHelp;
+    }
+
+    public void mapFormField(FormField formField) {
+        if (fieldMapper != null) {
+            fieldMapper.accept(formField);
+        }
     }
 
     public String getType() {

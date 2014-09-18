@@ -1,11 +1,8 @@
-          <label for="${field.uuid}" class="col-sm-2 control-label">${field.label}</label>
-          <div class="col-sm-5">
-            <div class="input-group input-group-sm">
-            <#include 'lookup_type.ftl'>
-            <#if !field.readOnly>
-              <span ng-show="${id}Form.${field.uuid}.$valid" class="glyphicon glyphicon-ok form-control-feedback"></span>
-              <span ng-show="${id}Form.${field.uuid}.$invalid" class="glyphicon glyphicon-remove form-control-feedback"></span>
-            </#if>
+          <div class="form-group has-feedback form-group-sm">
+            <label for="${field.uuid}Field">${field.label}</label>
+            <div class="input-group">
+                <#include 'lookup_type.ftl'>
             </div>
+            <span ng-show="model.${fieldId}.title != null" class="help-block has-success" ng-init="${field.uuid}OverrideHelp = true"><h6>{{(model.${fieldId}.title != null) ? model.${fieldId}.title : '${field.helpText}'}}</h6></span>
+            <#include '../validation_messages.ftl'/>
           </div>
-          <span ng-show="model.${fieldId} != null" class="help-block">ID:&nbsp;<b>{{model.${fieldId}.href | hrefId}}</b></span>

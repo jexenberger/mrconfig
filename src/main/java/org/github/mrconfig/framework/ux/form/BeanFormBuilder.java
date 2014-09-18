@@ -57,27 +57,17 @@ public class BeanFormBuilder {
                 continue;
             }
             if (
-                !fieldClazz.isEnum() &&
                 !fieldClazz.isPrimitive() &&
                 !fieldClazz.getPackage().getName().startsWith("java") &&
-                !ActiveRecord.class.isAssignableFrom(fieldClazz
-            )) {
-                String group = (fieldClazz.isAnnotationPresent(FieldHints.class)) ? fieldClazz.getAnnotation(FieldHints.class).group() : fieldClazz.getSimpleName();
+                !ActiveRecord.class.isAssignableFrom(fieldClazz) &&
+                !Enum.class.isAssignableFrom(fieldClazz)
+            ) {
+                String group = getGroup(declaredField);
                 List<FormField> fields = formBuilder(new Resource("/dummy", group, fieldClazz, null, null, null)).create().getForm().getFields();
                 fields.forEach((field) -> field.setGroup(group));
                 fields.forEach((field) -> field.setParent(declaredField.getName()));
                 builder.addFields(fields);
-            } else if (Enum.class.isAssignableFrom(fieldClazz)) {
-                Object values = ReflectionUtil.invoke(resolveMethod(fieldClazz, "values"), null);
-                int length = Array.getLength(values);
-                FormField field = FormField.fromField(declaredField, resourceClass, null);
-                for (int i = 0; i < length; i++) {
-                    Enum<?> enumValue = (Enum<?>) Array.get(values,i);
-                    String label = Inflector.getInstance().phrase(enumValue.name());
-                    field.getDefaultValueList().add(cons(enumValue.name(),label));
-                }
-                builder.addField(field);
-            } else {
+            }  else {
                 FormField field = FormField.fromField(declaredField, resourceClass, null);
                 if (field.getId().equals("id")) {
                     field.setKey(true);
@@ -97,45 +87,21 @@ public class BeanFormBuilder {
             helper.accept(builder);
         });
 
-        Table table = resourceClass.getAnnotation(Table.class);
-        if (table != null) {
-            Index[] indexes = table.indexes();
-            Map<String, Field> fields = declaredFields.stream().collect(Collectors.toMap((field) -> {
-                String name = field.getName();
-                Column annotation = field.getAnnotation(Column.class);
-                if (annotation != null && annotation.name() != null && !annotation.name().equals("")) {
-                    name = annotation.name();
-                }
-                JoinColumn join = field.getAnnotation(JoinColumn.class);
-                if (join != null && join.name() != null && !join.name().equals("")) {
-                    name = join.name();
-                }
-                return name;
-            }, (val) -> val));
-            for (Index index : indexes) {
-                String columns = index.columnList();
-                String[] colArray = columns.split(",");
-                colArray = Arrays.stream(colArray).map(String::trim).collect(Collectors.toList()).toArray(new String[]{});
-                for (String column : colArray) {
-                    Field field = fields.get(column);
-                    builder.withField(field.getName(), builder::addSearchField);
-                }
-            }
 
-            declaredFields.forEach((field) -> {
-                Column column = field.getAnnotation(Column.class);
-                if (column != null && column.unique()) {
-                    builder.withField(field.getName(), builder::addSearchField);
-                }
-                if (field.isAnnotationPresent(JoinColumn.class)) {
-                    builder.withField(field.getName(), builder::addSearchField);
-                }
-            });
-        }
-
-        builder.sortAsc();
 
         return builder;
+    }
+
+    public static String getGroup(Field field) {
+        Class<?> fieldClazz = field.getType();
+        if (!field.isAnnotationPresent(FieldHints.class)) {
+            return fieldClazz.getSimpleName();
+        }
+        FieldHints hints = field.getAnnotation(FieldHints.class);
+        if (hints.group().equals("")) {
+            return fieldClazz.getSimpleName();
+        }
+        return hints.group();
     }
 
     public BeanFormBuilder addHelper(Consumer<FormBuilder> helper) {

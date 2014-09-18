@@ -2,16 +2,15 @@ package org.github.mrconfig.framework;
 
 import org.github.mrconfig.framework.activerecord.ActiveRecord;
 import org.github.mrconfig.framework.activerecord.ActiveRecordCRUDService;
+import org.github.mrconfig.framework.security.Security;
 import org.github.mrconfig.framework.service.*;
 import org.github.mrconfig.framework.util.GenericsUtil;
 import org.github.mrconfig.framework.util.Inflector;
-import org.github.mrconfig.framework.ux.form.BeanFormBuilder;
 import org.github.mrconfig.framework.ux.form.Form;
 
 import javax.ws.rs.Path;
 import java.io.OutputStream;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 /**
  * Created by julian3 on 2014/08/10.
@@ -33,8 +32,21 @@ public class Resource {
     String lookupRole;
     String updateRole;
     String deleteRole;
+    boolean requiresAuthentication = true;
+
+    Resource() {
+        this.requiresAuthentication = Security.isStrictMode();
+        if (Security.isUseDefaultRoles()) {
+            this.lookupRole = Security.getLookupRole();
+            this.listRole = Security.getListRole();
+            this.createRole = Security.getCreateRole();
+            this.updateRole = Security.getUpdateRole();
+            this.deleteRole = Security.getDeleteRole();
+        }
+    }
 
     public Resource(String path, String group, Class<?> resourceClass, Class<?> resourceController, Creatable<?, ?> creatable, Listable<?> listable, Updateable<?,?> updateable, Deletable<?,?> deletable, UniqueLookup<?, ?> uniqueLookup) {
+        this();
         this.path = path;
         this.group = group;
         this.resourceClass = resourceClass;
@@ -47,6 +59,7 @@ public class Resource {
     }
 
     public Resource(String path, String group, Class<?> resourceClass, Class<?> resourceController, CRUDService<?, ?> service, UXModule uxModule) {
+        this();
         this.path = path;
         this.group = group;
         this.resourceClass = resourceClass;
@@ -200,9 +213,23 @@ public class Resource {
         return this;
     }
 
+    public Resource setCreateRole(String createRole) {
+        this.createRole = createRole;
+        return this;
+    }
+
     public Resource setDeleteRole(String deleteRole) {
         this.deleteRole = deleteRole;
         return this;
+    }
+
+    public Resource setAuthenticated(boolean authenticated) {
+        this.requiresAuthentication = authenticated;
+        return this;
+    }
+
+    public boolean isRequiresAuthentication() {
+        return requiresAuthentication;
     }
 
     public String getCreateRole() {
@@ -212,6 +239,8 @@ public class Resource {
     public String getListRole() {
         return listRole;
     }
+
+
 
     public String getLookupRole() {
         return lookupRole;

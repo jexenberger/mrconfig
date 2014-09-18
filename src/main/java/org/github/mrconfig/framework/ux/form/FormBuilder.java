@@ -42,6 +42,9 @@ public class FormBuilder {
     public FormBuilder addField(FormField formField) {
         requireNonNull(formField, "formField cannot be null");
         form.addField(formField);
+        if (formField.isSearchable()) {
+            addSearchField(formField);
+        }
         return this;
     }
 
@@ -107,6 +110,9 @@ public class FormBuilder {
             }
             if (fieldB.isKey()) {
                 return 1;
+            }
+            if (fieldA.getOrder() != fieldB.getOrder()) {
+                return Integer.compare(fieldA.getOrder(), fieldB.getOrder());
             }
             return fieldA.getId().compareTo(fieldB.getId());
         });

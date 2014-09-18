@@ -1,6 +1,7 @@
 package org.github.mrconfig.framework.testdomain;
 
 import org.github.mrconfig.framework.activerecord.ActiveRecord;
+import org.github.mrconfig.framework.util.FieldHints;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
@@ -11,9 +12,12 @@ import java.util.Date;
 /**
  * Created by w1428134 on 2014/08/04.
  */
-@Entity
+@Entity()
 @NamedQueries({
         @NamedQuery(name = "MyEntity.findNameLike", query = "SELECT e FROM MyEntity e where e.name like :name"),
+})
+@Table(indexes = {
+        @Index(columnList = "value, enumType")
 })
 public class MyEntity implements ActiveRecord<MyEntity, Long>{
 
@@ -34,10 +38,20 @@ public class MyEntity implements ActiveRecord<MyEntity, Long>{
 
     int value;
 
+    @Column(name="enumType")
     TestEnum enumType;
 
     @ManyToOne
     MyEntity parent;
+
+    @Column(unique=true,nullable = false,length = 10, precision = 10, scale = 2)
+    String randomColumn;
+
+    @FieldHints(group="group",readOnly = true, id="qwerty123",defaultValue = "lalala",tabIndex = 10, order=100, searchable = true)
+    String fieldHints;
+
+    @FieldHints()
+    String simpleHints;
 
 
     public MyEntity() {
@@ -102,9 +116,6 @@ public class MyEntity implements ActiveRecord<MyEntity, Long>{
         this.parent = parent;
     }
 
-    public void setReadOnly(String readOnly) {
-        this.readOnly = readOnly;
-    }
 
     public int getValue() {
         return value;
@@ -112,6 +123,30 @@ public class MyEntity implements ActiveRecord<MyEntity, Long>{
 
     public void setValue(int value) {
         this.value = value;
+    }
+
+    public String getRandomColumn() {
+        return randomColumn;
+    }
+
+    public void setRandomColumn(String randomColumn) {
+        this.randomColumn = randomColumn;
+    }
+
+    public String getFieldHints() {
+        return fieldHints;
+    }
+
+    public void setFieldHints(String fieldHints) {
+        this.fieldHints = fieldHints;
+    }
+
+    public String getSimpleHints() {
+        return simpleHints;
+    }
+
+    public void setSimpleHints(String simpleHints) {
+        this.simpleHints = simpleHints;
     }
 
     @Override

@@ -2,6 +2,7 @@ package org.github.mrconfig.framework.resources;
 
 import org.github.mrconfig.framework.Resource;
 import org.github.mrconfig.framework.ResourceRegistry;
+import org.github.mrconfig.framework.security.Security;
 import org.github.mrconfig.framework.service.Link;
 import org.github.mrconfig.framework.service.Listable;
 import org.github.mrconfig.framework.service.UniqueLookup;
@@ -31,10 +32,7 @@ public interface ReadableResource<T, K extends Serializable> extends BaseResourc
     @Path("{id}")
     default Response get(@Context SecurityContext context, @PathParam("id") String id) {
 
-        Resource resource = ResourceRegistry.get(getPath());
-        if (notAuthorized(context, resource.getLookupRole())) {
-            return Response.status(Response.Status.UNAUTHORIZED).build();
-        }
+        if (!isUserAllowedToLookup(context)) return Response.status(Response.Status.UNAUTHORIZED).build();
 
         Optional<T> byId = getLookup().resolve(id, getResourceIdType());
         if (!byId.isPresent()) {
@@ -50,18 +48,18 @@ public interface ReadableResource<T, K extends Serializable> extends BaseResourc
         return Response.ok(entity).links(getLookup().toLink(entity)).build();
     }
 
+    default boolean isUserAllowedToLookup(SecurityContext context) {
+        Resource resource = ResourceRegistry.get(getPath());
+        if (Security.authorized(context, resource.isRequiresAuthentication(), resource.getLookupRole())) {
+            return true;
+        }
+        return false;
+    }
+
     default void populateGetLinks(T entity) {
 
     }
 
-    default boolean notAuthorized(SecurityContext context,  String role) {
-        if (role != null) {
-            if (!context.isUserInRole(role)) {
-                return true;
-            }
-        }
-        return false;
-    }
 
     default Class<K> getResourceIdType() {
         return (Class<K>) GenericsUtil.getClass(this.getClass(), 1);
@@ -96,10 +94,7 @@ public interface ReadableResource<T, K extends Serializable> extends BaseResourc
     @GET
     default Response get(@Context SecurityContext context, @Context UriInfo ui) {
 
-        Resource resource = ResourceRegistry.get(getPath());
-        if (notAuthorized(context, resource.getListRole())) {
-            return Response.status(Response.Status.UNAUTHORIZED).build();
-        }
+        if (!isUserAllowedToList(context)) return Response.status(Response.Status.UNAUTHORIZED).build();
 
         MultivaluedMap<String, String> queryParameters = ui.getQueryParameters();
         Collection<Pair<String, Object>> parameters = new ArrayList<>();
@@ -160,6 +155,11 @@ public interface ReadableResource<T, K extends Serializable> extends BaseResourc
         }
         return Response.ok(new GenericEntity<>(response, response.getClass())).build();
 
+    }
+
+    default boolean isUserAllowedToList(SecurityContext context) {
+        Resource resource = ResourceRegistry.get(getPath());
+        return Security.authorized(context, resource.isRequiresAuthentication(), resource.getListRole());
     }
 
     default void addFilterParameters(Collection<Pair<String, Object>> parameters) {

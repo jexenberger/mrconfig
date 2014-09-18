@@ -142,9 +142,16 @@ public class UXModule {
         return resource.getDisplayName();
     }
 
-    public String getLink() {
-        String defaultView = "list";
+    public String getLink(String defaultView) {
         return resource.getPath()+"/"+defaultView;
+    }
+
+    public String getListLink() {
+        return getLink("list");
+    }
+
+    public String getNewLink() {
+        return getLink("new");
     }
 
     public Resource getResource() {

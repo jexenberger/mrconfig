@@ -32,6 +32,10 @@ application
         notAuthenticated: 'auth-not-authenticated',
         notAuthorized: 'auth-not-authorized'
     })
+    .constant('LOAD_EVENTS', {
+        started: 'started-loading',
+        finished: 'finished-loading'
+    });
 
 var services = angular.module('services',[]);
 var controllers = angular.module('controllers', []);
@@ -128,7 +132,6 @@ application.factory('securityContext', ['$http','base64', '$rootScope', 'AUTH_EV
    var userName = null;
 
    login = function(userName, password) {
-        alert(JSON.stringify(base64));
         authorization = base64.encode(userName + ':' + password);
         $http.get("/roles").success(function(data) {
             roles = data.roles;
@@ -170,7 +173,51 @@ application.factory('securityContext', ['$http','base64', '$rootScope', 'AUTH_EV
    return context;
 }]);
 
+stripLeadingAndTrailingChars = function(aString) {
+   if (aString == null) {
+       return null;
+   }
+   aString = aString.trim();
+   aString = aString.substring(1);
+   aString = aString.substring(0,aString.length-1);
+   return aString;
+}
 
+parseKeyValue = function(aString, trimLeadingTrailing) {
+    var keyValue = aString.split('=');
+    var key = keyValue[0].trim();
+    var value = (trimLeadingTrailing != null && trimLeadingTrailing) ? stripLeadingAndTrailingChars(keyValue[1]) : keyValue[1].trim();
+    return {
+        key:key,
+        value:value
+    }
+}
+
+parseHeaderLink = function(linkString) {
+
+    //<href>; type="null"; rel="1"; title="all"
+    var result = {};
+    var parts = linkString.split(';');
+    var href = stripLeadingAndTrailingChars(parts[0]);
+    var type = parseKeyValue(parts[1], true).value;
+    if (type == 'null') {
+        type = null;
+    }
+    var rel = parseKeyValue(parts[2].trim(), true).value;
+    if (rel == 'null') {
+        rel = null;
+    }
+    var title = parseKeyValue(parts[3].trim(), true).value;
+    if (title == 'null') {
+        title = null;
+    }
+    result['href'] = href;
+    result['type'] = type;
+    result['rel'] = rel;
+    result['title'] = title;
+    return result;
+
+}
 
 isLink = function(val) {
  if (val == null) {
@@ -182,27 +229,28 @@ isLink = function(val) {
 
 }
 
-lookupById = function($http, url, onSuccess, onError) {
+lookupById = function($http, url, $q, onSuccess, onError) {
 
-    return $http.get(url)
-        .success(function(data) {
-            alert(JSON.stringify(data));
+   return $http.get(url,  {
+        headers : {Accept:'application/json'}
+    })
+    .success(function(data, status, headers, config) {
             if (onSuccess != null) {
-                onSuccess(data);
+                onSuccess(data, headers);
             }
-            return data;
         })
         .error(function(error, status) {
-            alert(url+'->'+status);
             if (onError != null) {
                 onError(error, status);
             }
             return null;
-        });
+    });
+
+
 }
 
 
-application.factory('basicAuthInterceptor', ['$log', '$rootScope', function($log, $rootScope) {
+application.factory('basicAuthInterceptor', ['$log', '$rootScope', 'LOAD_EVENTS', '$q',function($log, $rootScope, LOAD_EVENTS, $q) {
 
     var myInterceptor = {
         // optional method
@@ -212,12 +260,34 @@ application.factory('basicAuthInterceptor', ['$log', '$rootScope', function($log
                     config.headers.Authorization = 'Basic '+$rootScope.securityContext.authToken();
                 }
                 $log.debug(JSON.stringify(config));
+                if (config.headers.Accept) {
+                    $rootScope.$broadcast(LOAD_EVENTS.started);
+                }
                 return config;
+              }
+              ,
+              'response': function(response) {
+                $rootScope.$broadcast(LOAD_EVENTS.finished);
+                return response;
+              }
+              ,
+              'responseError' : function(response) {
+                $rootScope.$broadcast(LOAD_EVENTS.finished);
+                return $q.reject(response);
               },
+              'requestError' : function(response) {
+                $rootScope.$broadcast(LOAD_EVENTS.finished);
+                return $q.reject(response);
+              }
+
     };
 
     return myInterceptor;
 }]);
+
+
+
+
 
 application.config(['$httpProvider', function($httpProvider) {
 
@@ -300,6 +370,21 @@ controllers.controller('reLoginController',  [ '$scope','$modalInstance','securi
 }]);
 
 
+controllers.controller('reLoadingController',  [ '$scope','$rootScope','LOAD_EVENTS',function ($scope, $rootScope, LOAD_EVENTS) {
+
+  $scope.show = false;
+
+  $rootScope.$on(LOAD_EVENTS.started,function(event) {
+       $scope.show = true;
+  });
+
+  $rootScope.$on(LOAD_EVENTS.finished,function(event) {
+       $scope.show = false;
+  });
+
+}]);
+
+
 controllers.controller('reLookupController',[ '$scope','$http','$modalInstance','resource','filter','filterField', function($scope, $http, $modalInstance, resource, filter, filterField) {
 
 
@@ -318,7 +403,6 @@ controllers.controller('reLookupController',[ '$scope','$http','$modalInstance',
        $http.get(resource, config).then(function(res){
            var results = []
            angular.forEach(res.data.result, function(item){
-               alert(item.title);
                results.push(item);
            });
             $scope.results =  results;
@@ -341,26 +425,61 @@ application.filter('hrefId', function() {
    };
 });
 
+var app = angular.module('forms', []);
 
-application.directive('lookupValid', ['$http', function ($http){
+app.directive('defaultValue', ['$scope', '$element', '$attrs', '$parse', function($scope, $element, $attrs, $parse) {
+  return {
+    link: function() {
+        alert('firing default value');
+        var getter, setter, val;
+        val = $attrs.defaultValue;
+        getter = $parse($attrs.ngModel);
+        setter = getter.assign;
+        alert('assigning '+ngModel+" : "+val);
+        setter($scope, val);
+      }
+
+  };
+}]);
+
+
+application.directive('lookupValid', ['$http', '$q','$parse', function ($http, $q, $parse){
    return {
       require: 'ngModel',
       link: function(scope, elem, attr, ngModel) {
-          //For DOM -> model validation
+
+          scope.$watch(attr.ngModel, function(newValue) {
+                if (newValue == null) {
+                    return;
+                }
+                if (newValue.title != null) {
+                    return;
+                }
+                var resourcePath = newValue.href;
+                lookupById($http, resourcePath, $q,
+                function(data, headers) {
+                    result = parseHeaderLink(headers('Link'));
+                    newValue.title = result.title;
+                    ngModel.$setValidity('lookupValid', true);
+
+                },
+                function(error,status) {
+                    if (status == 404) {
+                        ngModel.$setValidity('lookupValid', false);
+                    }
+                });
+          });
+
           ngModel.$parsers.unshift(function(value) {
              if (value == null) {
                 return null;
              }
+             if (value.trim() == "") {
+                return null;
+             }
              var valid = false;
              var resourcePath = attr.lookupValid + '/' + value;
-             var result = lookupById($http, resourcePath);
-             alert(result);
-             valid = (result != null);
-             ngModel.$setValidity('lookupValid', valid);
-             var link = {
-
-             }
-             return valid ? result : undefined;
+             return {href:resourcePath};
           });
 
           //For model -> DOM validation
@@ -368,11 +487,9 @@ application.directive('lookupValid', ['$http', function ($http){
              if (value == null) {
                 return null;
              }
-             JSON.stringify(value);
-             if (value == null) {
-                ngModel.$setValidity('lookupValid', true);
-             }
-             return value.id;
+             ngModel.$setValidity('lookupValid', true);
+             //ngModel.$setViewValue(getIdFromHref(value.href));
+             return getIdFromHref(value.href);
           });
       }
    };

@@ -28,14 +28,17 @@ public class JPAQueryHelperTest extends BaseJPA {
         super.before();
         parent = new MyEntity();
         parent.setName("parent");
+        parent.setRandomColumn("parent");
         parent.save();
         MyEntity myEntity = new MyEntity();
         myEntity.setName("test");
+        myEntity.setRandomColumn("test");
         myEntity.setParent(parent);
         myEntity.save();
         MyEntity myEntity2 = new MyEntity();
         myEntity2.setName("test2");
         myEntity2.setValue(3);
+        myEntity2.setRandomColumn("rand");
         myEntity2.setEnumType(TestEnum.one);
         aDate = new Date();
         myEntity2.setaDate(aDate);

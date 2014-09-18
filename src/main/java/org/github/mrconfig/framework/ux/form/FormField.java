@@ -10,10 +10,7 @@ import org.github.mrconfig.framework.ux.Component;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 import static java.util.Arrays.asList;
 import static org.github.mrconfig.framework.util.ReflectionUtil.hasSetterMethod;
@@ -33,18 +30,23 @@ public class FormField {
     String lookup;
     String lookupFilter;
     boolean readOnly;
-    Collection<UXConstraint> constraints;
+    Set<UXConstraint> constraints;
     String group;
-    Collection<Pair<String,String>> defaultValueList;
+    Set<Pair<String,String>> defaultValueList;
     boolean key;
     boolean indexed;
     String uuid;
+    String helpText = "&nbsp;";
+    String defaultValue = null;
+    int tabIndex = -1;
+    int order = -1;
+    Class<?> javaType;
+    boolean searchable;
+
 
 
     public FormField(String id) {
         this.id = id;
-
-
     }
 
     void setId(String id) {
@@ -59,7 +61,38 @@ public class FormField {
         this.lookupFilter = lookupFilter;
         this.readOnly = readOnly;
         this.group = group;
-        this.constraints = asList(constraints);
+        this.constraints = new LinkedHashSet<>(asList(constraints));
+    }
+
+
+
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
+
+    public String getDefaultValue() {
+        return defaultValue;
+    }
+
+    public void setDefaultValue(String defaultValue) {
+        this.defaultValue = defaultValue;
+    }
+
+    public int getTabIndex() {
+        return tabIndex;
+    }
+
+    public void setTabIndex(int tabIndex) {
+        this.tabIndex = tabIndex;
+    }
+
+    public int getOrder() {
+        return order;
+    }
+
+    public void setOrder(int order) {
+        this.order = order;
     }
 
     public String getId() {
@@ -105,6 +138,9 @@ public class FormField {
 
     public void setType(Component type) {
         this.type = type;
+        if (type != null) {
+            type.mapFormField(this);
+        }
     }
 
     public void setLookup(String lookup) {
@@ -124,7 +160,7 @@ public class FormField {
     }
 
 
-    public Collection<UXConstraint> getConstraints() {
+    public Set<UXConstraint> getConstraints() {
         return constraints;
     }
 
@@ -136,18 +172,18 @@ public class FormField {
         this.group = group;
     }
 
-    public void setConstraints(Collection<UXConstraint> constraints) {
+    public void setConstraints(Set<UXConstraint> constraints) {
         this.constraints = constraints;
     }
 
-    public Collection<Pair<String, String>> getDefaultValueList() {
+    public Set<Pair<String, String>> getDefaultValueList() {
         if (defaultValueList == null) {
-            defaultValueList = new ArrayList<>();
+            defaultValueList = new LinkedHashSet<>();
         }
         return defaultValueList;
     }
 
-    public void setDefaultValueList(Collection<Pair<String, String>> defaultValueList) {
+    public void setDefaultValueList(Set<Pair<String, String>> defaultValueList) {
         this.defaultValueList = defaultValueList;
     }
 
@@ -167,15 +203,26 @@ public class FormField {
         this.indexed = indexed;
     }
 
+    public Class<?> getJavaType() {
+        return javaType;
+    }
+
+    public void setJavaType(Class<?> javaType) {
+        this.javaType = javaType;
+    }
+
+    public boolean isSearchable() {
+        return searchable;
+    }
+
+    public void setSearchable(boolean searchable) {
+        this.searchable = searchable;
+    }
+
     public static FormField fromField(Field field, Class<?> owner, Component component) {
-
-
-        FieldHints fieldHints = field.getAnnotation(FieldHints.class);
-
-        String name = (fieldHints != null) ? fieldHints.id() : field.getName();
+        String name = field.getName();
         String label = Inflector.getInstance().phrase(name);
         Optional<Component> componentByType = Component.getComponentByType(field.getType(),true);
-
         component = (component == null) ? componentByType.orElse(text()) : component;
         String lookupPath = null;
         String lookupFilter = null;
@@ -188,11 +235,11 @@ public class FormField {
             lookupFilter = ResourceResolver.getLookupField(field.getType());
         }
 
-        boolean readOnly = (fieldHints != null) ? fieldHints.readOnly() : !hasSetterMethod(field, owner);
+        boolean readOnly =  !hasSetterMethod(field, owner);
         Collection<UXConstraint> constraints = new ArrayList<>();
 
         String groupName = "default";
-        groupName = (fieldHints != null) ? fieldHints.group() : groupName;
+
 
         Annotation[] annotations = field.getAnnotations();
         for (Annotation annotation : annotations) {
@@ -200,16 +247,36 @@ public class FormField {
         }
 
 
-        System.out.println(name);
-        return new FormField(name,label,groupName,component,lookupPath,lookupFilter,readOnly,constraints.toArray(new UXConstraint[] {}));
+        FormField formField = new FormField(name);
 
+        formField.setLabel(label);
+        formField.setGroup(groupName);
+        formField.setLookup(lookupPath);
+        formField.setLookupFilter(lookupFilter);
+        formField.setReadOnly(readOnly);
+        formField.setConstraints(new HashSet<>(constraints));
+        formField.setHelpText(component.getDefaultHelp());
+        formField.setJavaType(field.getType());
+        formField.setSearchable(false);
+        formField.setType(component);
 
+        FieldHelpers.apply(formField, field, owner, component);
+
+        return formField;
+    }
+
+    public void setHelpText(String helpText) {
+        this.helpText = helpText;
+    }
+
+    public String getHelpText() {
+        return helpText;
     }
 
     public String getUuid() {
         if (uuid == null) {
 
-            uuid = ((parent != null) ? parent : "") + "_"+ (isIndexed() ? "_idx_" : "") + "_" + id;
+            uuid = ((parent != null) ? parent + "_" : "") +  (isIndexed() ? "_idx_" : "")  + id;
         }
         return uuid;
     }

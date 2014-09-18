@@ -34,6 +34,7 @@ public class JPAProviderTest extends BaseJPA{
         for (int i = 0; i < 100; i++) {
             MyEntity environment = new MyEntity();
             environment.setName("Name ->" + i);
+            environment.setRandomColumn("ra" + i);
             //provider.save(environment, null);
             environment.save();
         }
@@ -47,6 +48,7 @@ public class JPAProviderTest extends BaseJPA{
         provider.transact(() -> {
             MyEntity environment = new MyEntity();
             environment.setName("Test");
+            environment.setRandomColumn("Test");
             provider.getEntityManager().persist(environment);
             provider.getEntityManager().flush();
             provider.getEntityManager().clear();
@@ -61,10 +63,11 @@ public class JPAProviderTest extends BaseJPA{
     public void testFindById() throws Exception {
 
 
-        int i = 10000000;
+        int i = 10000;
         //for (int i=0;i<100;i++) {
         MyEntity environment = new MyEntity();
         environment.setName("Name ->" + i);
+        environment.setRandomColumn("" + i);
         provider.save(environment, null);
         //}
         provider.getEntityManager().clear();

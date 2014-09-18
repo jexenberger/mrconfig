@@ -142,9 +142,9 @@ public class Form {
         this.group = group;
     }
 
-    public Map<String, Collection<FormField>> getByGroups() {
+    public Map<String, List<FormField>> getByGroups() {
 
-        Map<String, Collection<FormField>> result = new LinkedHashMap<>();
+        Map<String, List<FormField>> result = new LinkedHashMap<>();
         //add default first so that it always pops up first in the linked hash map
         result.put("default", new ArrayList<>());
         for (FormField formField : getFields()) {
@@ -152,6 +152,24 @@ public class Form {
                 result.put(formField.getGroup(), new ArrayList<>());
             }
             result.get(formField.getGroup()).add(formField);
+        }
+        //sort fields
+        for (List<FormField> formFields : result.values()) {
+            Collections.sort(formFields, (fieldA, fieldB)-> {
+                if (fieldA.isKey() && fieldB.isKey()) {
+                    return 0;
+                }
+                if (fieldA.isKey()) {
+                    return -1;
+                }
+                if (fieldB.isKey()) {
+                    return 1;
+                }
+                if (fieldA.getOrder() != fieldB.getOrder()) {
+                    return Integer.compare(fieldA.getOrder(), fieldB.getOrder());
+                }
+                return fieldA.getId().compareTo(fieldB.getId());
+            });
         }
         return result;
 

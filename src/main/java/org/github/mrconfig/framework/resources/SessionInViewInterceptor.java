@@ -2,6 +2,7 @@ package org.github.mrconfig.framework.resources;
 
 import org.github.mrconfig.framework.activerecord.ProviderFactory;
 
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.container.ContainerResponseContext;
@@ -43,6 +44,10 @@ public class SessionInViewInterceptor implements ContainerRequestFilter, Contain
 
     @Override
     public Response toResponse(Exception e) {
+        if (e instanceof WebApplicationException) {
+            return ((WebApplicationException) e).getResponse();
+        }
+
         ProviderFactory.getProvider().commitOrRollback(false);
         return Response.serverError().entity(errors(Error.generalFailure(e))).build();
     }

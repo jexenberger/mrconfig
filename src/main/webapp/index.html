@@ -77,12 +77,14 @@
                     <tr>
                             <th>ID</th>
                             <th>Result</th>
+                            <th>#</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr ng-repeat="result in results">
-                            <td><a ng-click="ok(result)">{{result.href | hrefId}}</a></td>
+                            <td>{{result.href | hrefId}}</td>
                             <td>{{result.title}}</td>
+                            <td><button class="btn btn-success" ng-click="ok(result)">Select</button></td>
                     </tr>
                 </tbody>
             </table>
@@ -154,6 +156,9 @@
                             <li><a ng-click="open()"><i class="glyphicon glyphicon-off"></i>&nbsp;Logout</a></li>
                             <li><a ng-click="open()"><i class="glyphicon glyphicon-flag"></i>&nbsp;Language</a></li>
                         </ul>
+                    </li>
+                    <li>
+                        <a href="#" ng-controller="reLoadingController"><img ng-show="show" src="images/ajax-loader.gif"></a>
                     </li>
                 </ul>
             </div><!-- /.navbar-collapse -->

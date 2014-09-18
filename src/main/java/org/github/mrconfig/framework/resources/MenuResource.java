@@ -34,11 +34,10 @@ public class MenuResource {
         Menu response = new Menu();
         for (UXModule form : forms) {
             String listRole = form.getResource().getListRole();
-            if (listRole != null && context.isUserInRole(listRole)) {
-                continue;
-            }
             initGroup(response, form.getGroup());
-            response.getMenuGroups().get(form.getGroup()).add(new MenuItem(form.getName(), form.getKey(), form.getLink()));
+            if (listRole != null && context.isUserInRole(listRole)) {
+                response.getMenuGroups().get(form.getGroup()).add(new MenuItem(form.getName(), form.getKey(), form.getListLink()));
+            }
         }
 
         return response;

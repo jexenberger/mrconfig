@@ -19,7 +19,7 @@ createService = function(services, serviceName, resourcePath ) {
 
 createGenericController = function(module, controllerName, serviceName, resourceName, formName) {
 
-    module.controller(controllerName,['$scope', '$routeParams','$window', '$http', '$location', '$modal', serviceName, function($scope, $routeParams, $window, $http, $location, $modal, service) {
+    module.controller(controllerName,['$scope', '$routeParams','$window', '$http', '$location', '$modal', '$parse', serviceName, function($scope, $routeParams, $window, $http, $location, $modal, $parse, service) {
       $scope.state = {};
       $scope.resourceName = resourceName;
       $scope.master = {};
@@ -39,19 +39,23 @@ createGenericController = function(module, controllerName, serviceName, resource
 
       $scope.processError = function(error, ref) {
           var message = '';
-          if (error.status == 500) {
-             message = 'An error has occured during this operation';
-          }
-          if (error.status == 401) {
-            message = 'You are not Authorized to view this record';
-          }
-          if (error.status == 400) {
-            message = 'There was a problem with the data that was submitted for this record';
+
+          switch (error.status) {
+            case 500: message = 'An error has occured during this operation';
+                      break;
+            case 401: message = 'You are not Authorized to view this record';
+                      break;
+            case 405: message = 'You cannot perform the operation you requested for this record';
+                      break;
+            case 400: message = 'There was a problem with the data that was submitted for this record';
+                      break;
+            case 404: message = 'The record requested no longer exists';
+                      break;
           }
           $scope.alerts.push({ type: 'danger', msg: message});
           if (error.data.errors != null) {
             for (i=0;i < error.data.errors.length;i++) {
-                $scope.alerts.push({ type: 'danger', msg: error.errors[i].description});
+                $scope.alerts.push({ type: 'danger', msg: error.data.errors[i].description});
             }
           } else {
              $scope.flash('danger',JSON.stringify(error));
@@ -196,11 +200,7 @@ createGenericController = function(module, controllerName, serviceName, resource
     
       }
 
-      $scope.lookupResource = function(resource, id) {
 
-
-      }
-    
       $scope.lookup = function(resource,filter,value) {
             var config = {};
             var parameters = {};
@@ -286,7 +286,7 @@ createGenericController = function(module, controllerName, serviceName, resource
 
       }
 
-      $scope.openLookup = function(resource, filter, filterField) {
+      $scope.openLookup = function(resource, filter, filterField, modelFieldName, helpDisabledFlag) {
 
              var modalInstance = $modal.open({
                templateUrl: 'lookupModal.html',
@@ -303,19 +303,21 @@ createGenericController = function(module, controllerName, serviceName, resource
                    return filterField;
                  }
                }
-      });
+             });
+              modalInstance.result.then(function (result) {
+                 var model = $parse(modelFieldName);
+                 model.assign($scope, result);
+                 $scope.apply();
+              },
+              function () {
+                 $log.info('Modal dismissed at: ' + new Date());
+              });
 
-      modalInstance.result.then(function (userName) {
-         $scope.userNameDisplay = userName;
-      },
-      function () {
-         $log.info('Modal dismissed at: ' + new Date());
-      });
 
       }
 
 
-    
+
       $scope.reset();
     
     }]);
