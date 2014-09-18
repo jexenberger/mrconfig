@@ -17,7 +17,7 @@ import java.util.function.Function;
 public class Security {
 
 
-    private static boolean disableSecurity = false;
+    private static boolean disableSecurity = true;
     private static boolean strictMode = true;
     private static boolean useDefaultRoles = false;
     private static String lookupRole = "lookup";
@@ -28,7 +28,7 @@ public class Security {
     private static String defaultHashingAlgorithm = "SHA-256";
 
     public static void reset() {
-        disableSecurity = false;
+        disableSecurity = true;
         strictMode = true;
         useDefaultRoles = false;
         lookupRole = "lookup";
@@ -38,6 +38,8 @@ public class Security {
         deleteRole = "delete";
         defaultHashingAlgorithm = "SHA-256";
     }
+
+
 
     private static Function<String, Optional<UserPrincipal>> userRegistry = (userId)-> Optional.empty();
 

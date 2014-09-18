@@ -127,6 +127,7 @@ public class Form {
             field.setParent(modelProperty);
             field.setIndexed(true);
         });
+        Collections.sort(collectionForm.getFields(), sortComparator());
         this.collectionForms.put(modelProperty, collectionForm);
     }
 
@@ -155,23 +156,27 @@ public class Form {
         }
         //sort fields
         for (List<FormField> formFields : result.values()) {
-            Collections.sort(formFields, (fieldA, fieldB)-> {
-                if (fieldA.isKey() && fieldB.isKey()) {
-                    return 0;
-                }
-                if (fieldA.isKey()) {
-                    return -1;
-                }
-                if (fieldB.isKey()) {
-                    return 1;
-                }
-                if (fieldA.getOrder() != fieldB.getOrder()) {
-                    return Integer.compare(fieldA.getOrder(), fieldB.getOrder());
-                }
-                return fieldA.getId().compareTo(fieldB.getId());
-            });
+            Collections.sort(formFields, sortComparator());
         }
         return result;
 
+    }
+
+    public Comparator<FormField> sortComparator() {
+        return (fieldA, fieldB)-> {
+            if (fieldA.isKey() && fieldB.isKey()) {
+                return 0;
+            }
+            if (fieldA.isKey()) {
+                return -1;
+            }
+            if (fieldB.isKey()) {
+                return 1;
+            }
+            if (fieldA.getOrder() != fieldB.getOrder()) {
+                return Integer.compare(fieldA.getOrder(), fieldB.getOrder());
+            }
+            return fieldA.getId().compareTo(fieldB.getId());
+        };
     }
 }

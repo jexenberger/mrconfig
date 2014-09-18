@@ -1,6 +1,5 @@
 <#include "index_builder.ftl">
             <input id="${field.uuid}Field"
-                   placeholder="Enter ${field.label}"
                    name="${field.uuid}Name"
                    type="${field.type.id}"
                    ng-model="model.${fieldId}"
@@ -8,5 +7,6 @@
                    <#if field.defaultValue??>
                    ng-init="model.${fieldId} = model.${fieldId} || '${field.defaultValue}'"
                    </#if>
+                   <#include '../placeholders_tabs.ftl'/>
                    <#include '../constraints.ftl'/>/>
               <#include '../glyph_control.ftl'/>

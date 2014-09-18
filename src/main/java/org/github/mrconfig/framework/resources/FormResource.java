@@ -4,10 +4,7 @@ import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import org.github.mrconfig.framework.Resource;
 import org.github.mrconfig.framework.ResourceRegistry;
-import org.github.mrconfig.framework.UXModule;
-import org.github.mrconfig.framework.macro.FormRegistry;
 import org.github.mrconfig.framework.macro.angular.TemplateEngine;
-import org.github.mrconfig.framework.ux.form.Form;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;

@@ -2,8 +2,7 @@ package org.github.mrconfig.framework.ux.form;
 
 import org.github.mrconfig.framework.ResourceRegistry;
 import org.github.mrconfig.framework.Resource;
-import org.github.mrconfig.framework.macro.ResourceResolver;
-import org.github.mrconfig.framework.util.FieldHints;
+import org.github.mrconfig.framework.util.ResourceResolver;
 import org.github.mrconfig.framework.util.Inflector;
 import org.github.mrconfig.framework.util.Pair;
 import org.github.mrconfig.framework.ux.Component;

@@ -1,4 +1,4 @@
-package org.github.mrconfig.framework.macro;
+package org.github.mrconfig.framework.util;
 
 import org.github.mrconfig.framework.service.Keyed;
 import org.github.mrconfig.framework.service.Named;

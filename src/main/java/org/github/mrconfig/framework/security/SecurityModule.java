@@ -67,6 +67,7 @@ public class SecurityModule extends Module{
 
     @Override
     public void init() {
+        Security.setDisableSecurity(false);
         if (authenticationFilter != null) {
             addResourceClass(authenticationFilter);
         }

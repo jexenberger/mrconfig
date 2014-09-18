@@ -2,8 +2,6 @@ package org.github.mrconfig.framework.resources;
 
 import org.github.mrconfig.framework.ResourceRegistry;
 import org.github.mrconfig.framework.UXModule;
-import org.github.mrconfig.framework.ux.form.Form;
-import org.github.mrconfig.framework.macro.FormRegistry;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -33,14 +31,27 @@ public class MenuResource {
                 .collect(toList());
         Menu response = new Menu();
         for (UXModule form : forms) {
-            String listRole = form.getResource().getListRole();
             initGroup(response, form.getGroup());
-            if (listRole != null && context.isUserInRole(listRole)) {
-                response.getMenuGroups().get(form.getGroup()).add(new MenuItem(form.getName(), form.getKey(), form.getListLink()));
+            boolean allow = allowAccess(context, form.getResource().getListRole());
+            if (allow) {
+                response.getMenuGroups().get(form.getGroup()).add(new MenuItem(form.getName()+" Search", form.getKey()+".search", form.getListLink()));
             }
+            allow = allowAccess(context, form.getResource().getCreateRole());
+            if (allow) {
+                response.getMenuGroups().get(form.getGroup()).add(new MenuItem(form.getName()+" New", form.getKey()+".new", form.getNewLink()));
+            }
+
         }
 
         return response;
+    }
+
+    public boolean allowAccess(SecurityContext context, String role) {
+        boolean allow = role == null;
+        if (role != null && context.isUserInRole(role)) {
+            allow = true;
+        }
+        return allow;
     }
 
     private void initGroup(Menu response, String group) {

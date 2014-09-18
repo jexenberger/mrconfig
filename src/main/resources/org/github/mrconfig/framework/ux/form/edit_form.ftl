@@ -1,7 +1,7 @@
 
 <#assign capture=true>
 <div  ng-controller="${id}Controller">
-     <div class="container-fluid col-xs-12 col-sm-12 col-md-12">
+  <div class="container-fluid col-xs-12 col-sm-12 col-md-12">
      <div class="container-fluid">
         <legend><h4>${name}<small ng-if="isNew"> - create</small><small ng-if="!isNew"> - edit</small></h4></legend>
      </div>
@@ -63,31 +63,32 @@
            <fieldset>
            <#list collectionForms?keys as key>
                <#assign collectionForm=collectionForms[key]>
-
-                             <legend><h5>${collectionForm.name}</h5></legend>
+                             <#assign fieldSize = 12 / (collectionForm.fields?size + 1)?int>
+                             <legend><h5><b>${collectionForm.name}</b></h5></legend>
                               <table class="table table-hover">
                                   <thead>
                                       <tr>
-                                        <th>Delete</th>
+                                        <th class="col-md-1">Delete</th>
                                       <#list collectionForm.fields as field>
-                                        <th>${field.label}</th>
+                                        <th class="col-md-${fieldSize}">${field.label}</th>
                                       </#list>
                                       </tr>
                                   </thead>
                                   <tbody>
                                       <tr ng-repeat="${key}Item in model.${key}">
                                          <ng-form name="${key}Form">
-                                            <td>
+                                            <td class="col-md-1">
                                               <div class="has-feedback form-group-sm">
                                                 <div class="btn-group btn-group-sm">
-                                                    <button class="btn btn-danger" ng-click="removeCollectionItem('${key}',$index);">Delete</button></td>
+                                                    <button class="btn btn-danger glyphicon glyphicon-remove" ng-click="removeCollectionItem('${key}',$index);">&nbsp;Delete</button></td>
                                                 </div>
                                               </div>
                                             <#list collectionForm.fields as field>
-                                            <td>
+                                            <td class="col-md-${fieldSize}">
                                                <div class="has-feedback form-group-sm">
-                                                <#include "fields/"+field.type.templatePath+"_type.ftl"></td>
+                                                <#include "fields/"+field.type.templatePath+"_type.ftl">
                                                </div>
+                                            </td>
                                             </#list>
                                          </ng-form>
                                       </tr>
@@ -95,7 +96,7 @@
                               </table>
 
            <div class="btn-group btn-group-sm">
-                  <label class="btn btn-primary glyphicon glyphicon-new"  ng-click="addToCollection('${key}');">&nbsp;Add</label>
+                  <label class="btn btn-primary glyphicon glyphicon-plus"  ng-click="addToCollection('${key}');">&nbsp;Add</label>
            </div>
            </#list>
 

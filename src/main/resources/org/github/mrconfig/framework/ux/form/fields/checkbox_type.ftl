@@ -4,6 +4,9 @@
                            name="${field.uuid}Name"
                            type="checkbox"
                            ng-model="model.${fieldId}"
+                           <#if (field.tabIndex > -1)>
+                           tabindex="${field.tabIndex}"
+                           </#if>
                            <#include '../constraints.ftl'>>
                            <h5>${field.label}</h5></input>
 
