@@ -1,7 +1,7 @@
 package org.github.mrconfig.resources;
 
 import org.github.mrconfig.domain.DataCentre;
-import org.github.mrconfig.framework.resources.BaseCRUDResource;
+import org.github.levelthree.resources.BaseCRUDResource;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Path;

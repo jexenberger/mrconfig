@@ -1,10 +1,10 @@
 package org.github.mrconfig.resources;
 
 import org.github.mrconfig.domain.Environment;
-import org.github.mrconfig.framework.activerecord.ActiveRecordCRUDService;
-import org.github.mrconfig.framework.resources.ReadableResource;
-import org.github.mrconfig.framework.service.Listable;
-import org.github.mrconfig.framework.service.UniqueLookup;
+import org.github.levelthree.activerecord.ActiveRecordCRUDService;
+import org.github.levelthree.resources.ReadableResource;
+import org.github.levelthree.service.Listable;
+import org.github.levelthree.service.UniqueLookup;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Path;

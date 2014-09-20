@@ -1,8 +1,8 @@
 package org.github.mrconfig.service;
 
 import org.github.mrconfig.domain.KeyEntity;
-import org.github.mrconfig.framework.activerecord.ProviderFactory;
-import org.github.mrconfig.framework.activerecord.jpa.JPAProvider;
+import org.github.levelthree.activerecord.ProviderFactory;
+import org.github.levelthree.activerecord.jpa.JPAProvider;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;

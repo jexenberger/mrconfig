@@ -1,11 +1,7 @@
 package org.github.mrconfig.resources;
 
 import org.github.mrconfig.domain.ManeeshDemo;
-import org.github.mrconfig.framework.resources.*;
-import org.github.mrconfig.framework.service.Creatable;
-import org.github.mrconfig.framework.service.Listable;
-import org.github.mrconfig.framework.service.UniqueLookup;
-import org.github.mrconfig.framework.service.Updateable;
+import org.github.levelthree.resources.*;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Path;

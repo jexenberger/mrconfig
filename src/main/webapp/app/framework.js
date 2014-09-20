@@ -19,6 +19,7 @@ createService = function(services, serviceName, resourcePath ) {
 
 createGenericController = function(module, controllerName, serviceName, resourceName, formName) {
 
+
     module.controller(controllerName,['$scope', '$routeParams','$window', '$http', '$location', '$modal', '$parse', serviceName, function($scope, $routeParams, $window, $http, $location, $modal, $parse, service) {
       $scope.state = {};
       $scope.resourceName = resourceName;
@@ -36,6 +37,8 @@ createGenericController = function(module, controllerName, serviceName, resource
             $scope.processError(error,$routeParams.p_id);
         });
       }
+
+      $scope.getIdFromHref = getIdFromHref;
 
       $scope.processError = function(error, ref) {
           var message = '';
@@ -244,6 +247,14 @@ createGenericController = function(module, controllerName, serviceName, resource
         $scope.goto(resourceName+'/new.html');
       };
 
+      $scope.gotoView = function(id) {
+        $scope.goto(resourceName+'/view/'+id);
+      };
+
+      $scope.gotoEdit = function(id) {
+        $scope.goto(resourceName+'/view/'+id);
+      };
+
       $scope.fieldValid = function(field) {
         console.log(field.$valid);
         return  field.$valid;
@@ -285,6 +296,7 @@ createGenericController = function(module, controllerName, serviceName, resource
         });
 
       }
+
 
       $scope.openLookup = function(resource, filter, filterField, modelFieldName, helpDisabledFlag) {
 

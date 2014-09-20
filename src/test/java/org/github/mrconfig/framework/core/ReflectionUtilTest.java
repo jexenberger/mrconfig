@@ -1,7 +1,7 @@
 package org.github.mrconfig.framework.core;
 
 import org.github.mrconfig.domain.KeyEntity;
-import org.github.mrconfig.framework.util.ReflectionUtil;
+import org.github.levelthree.util.ReflectionUtil;
 import org.junit.Test;
 
 import java.lang.reflect.Field;

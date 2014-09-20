@@ -1,6 +1,6 @@
 package org.github.mrconfig.domain;
 
-import org.github.mrconfig.framework.service.Named;
+import org.github.levelthree.service.Named;
 
 import javax.persistence.Index;
 import javax.persistence.Table;

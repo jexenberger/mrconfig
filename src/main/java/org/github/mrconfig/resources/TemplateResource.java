@@ -1,10 +1,10 @@
 package org.github.mrconfig.resources;
 
 import org.github.mrconfig.domain.Template;
-import org.github.mrconfig.framework.resources.DeletableResource;
-import org.github.mrconfig.framework.resources.ReadableResource;
-import org.github.mrconfig.framework.resources.WritableResource;
-import org.github.mrconfig.framework.service.*;
+import org.github.levelthree.resources.DeletableResource;
+import org.github.levelthree.resources.ReadableResource;
+import org.github.levelthree.resources.WritableResource;
+import org.github.levelthree.service.*;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Path;

@@ -1,9 +1,10 @@
 package org.github.mrconfig.framework;
 
-import org.github.mrconfig.framework.security.Security;
-import org.github.mrconfig.framework.service.CRUDService;
-import org.github.mrconfig.framework.service.Identified;
-import org.github.mrconfig.framework.ux.MyEntityController;
+import org.github.levelthree.Resource;
+import org.github.levelthree.security.Security;
+import org.github.levelthree.service.CRUDService;
+import org.github.levelthree.service.Identified;
+import org.github.levelthree.ux.MyEntityController;
 import org.junit.Test;
 
 import java.util.Optional;

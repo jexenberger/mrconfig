@@ -1,10 +1,7 @@
 package org.github.mrconfig.resources;
 
 import org.github.mrconfig.domain.Property;
-import org.github.mrconfig.framework.resources.BaseCRUDResource;
-import org.github.mrconfig.framework.resources.DeletableResource;
-import org.github.mrconfig.framework.resources.ReadableResource;
-import org.github.mrconfig.framework.resources.WritableResource;
+import org.github.levelthree.resources.BaseCRUDResource;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Path;

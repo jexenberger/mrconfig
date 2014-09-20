@@ -1,7 +1,7 @@
 package org.github.mrconfig.resources;
 
-import org.github.mrconfig.framework.activerecord.Provider;
-import org.github.mrconfig.framework.activerecord.ProviderFactory;
+import org.github.levelthree.activerecord.Provider;
+import org.github.levelthree.activerecord.ProviderFactory;
 import org.github.mrconfig.domain.Environment;
 import org.junit.Test;
 

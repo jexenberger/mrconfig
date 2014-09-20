@@ -1,6 +1,6 @@
 package org.github.mrconfig.resources;
 
-import org.github.mrconfig.framework.util.Pair;
+import org.github.levelthree.util.Pair;
 import org.github.mrconfig.domain.Environment;
 import org.github.mrconfig.domain.Property;
 import org.github.mrconfig.domain.PropertyValue;
@@ -15,10 +15,10 @@ import java.util.Collection;
 import java.util.Optional;
 import java.util.Properties;
 
-import static org.github.mrconfig.framework.activerecord.ActiveRecord.doWork;
-import static org.github.mrconfig.framework.activerecord.ActiveRecord.findById;
-import static org.github.mrconfig.framework.activerecord.ActiveRecord.findWhere;
-import static org.github.mrconfig.framework.activerecord.Parameter.p;
+import static org.github.levelthree.activerecord.ActiveRecord.doWork;
+import static org.github.levelthree.activerecord.ActiveRecord.findById;
+import static org.github.levelthree.activerecord.ActiveRecord.findWhere;
+import static org.github.levelthree.activerecord.Parameter.p;
 import static org.github.mrconfig.domain.Property.fromKeyValue;
 
 /**

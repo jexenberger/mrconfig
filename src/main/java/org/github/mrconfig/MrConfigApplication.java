@@ -2,17 +2,18 @@ package org.github.mrconfig;
 
 
 import org.github.mrconfig.domain.*;
-import org.github.mrconfig.framework.Module;
-import org.github.mrconfig.framework.Resource;
-import org.github.mrconfig.framework.activerecord.ProviderFactory;
-import org.github.mrconfig.framework.activerecord.jpa.JPAModule;
-import org.github.mrconfig.framework.resources.JaxbProvider;
-import org.github.mrconfig.framework.resources.RolesResources;
-import org.github.mrconfig.framework.resources.SessionInViewInterceptor;
-import org.github.mrconfig.framework.ux.form.BeanFormBuilder;
-import org.github.mrconfig.framework.ux.form.DefaultUXModule;
-import org.github.mrconfig.framework.ux.form.Form;
-import org.github.mrconfig.framework.ux.form.FormBuilder;
+import org.github.levelthree.Module;
+import org.github.levelthree.Resource;
+import org.github.levelthree.activerecord.ProviderFactory;
+import org.github.levelthree.activerecord.jpa.JPAModule;
+import org.github.levelthree.resources.JaxbProvider;
+import org.github.levelthree.resources.RolesResources;
+import org.github.levelthree.resources.SessionInViewInterceptor;
+import org.github.levelthree.resources.StaticResource;
+import org.github.levelthree.ux.form.BeanFormBuilder;
+import org.github.levelthree.ux.form.DefaultUXModule;
+import org.github.levelthree.ux.form.Form;
+import org.github.levelthree.ux.form.FormBuilder;
 import org.github.mrconfig.resources.*;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
@@ -24,14 +25,13 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import static java.util.stream.Collectors.joining;
 import static org.github.mrconfig.domain.Property.importProperties;
-import static org.github.mrconfig.framework.ux.ClasspathSource.classpath;
-import static org.github.mrconfig.framework.ux.StaticView.staticView;
+import static org.github.levelthree.ux.ClasspathSource.classpath;
+import static org.github.levelthree.ux.StaticView.staticView;
 
 /**
  * Created by w1428134 on 2014/07/16.
@@ -54,6 +54,8 @@ public class MrConfigApplication extends ResourceConfig {
 
                     @Override
                     public void init() {
+
+                        StaticResource.setDebugPath("/src/main/webapp");
 
 
                         /*
@@ -89,7 +91,7 @@ public class MrConfigApplication extends ResourceConfig {
                             return roleForm;
                         }));
                         Resource scaffold = Resource.scaffold(PropertyValueResource.class, BeanFormBuilder::form);
-                        scaffold.getUxModule()
+                        scaffold.getUx()
                                 .addView("controller", staticView(classpath("myController.js")));
                         register(scaffold);
 

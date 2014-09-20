@@ -2,11 +2,8 @@ package org.github.mrconfig.resources;
 
 import org.github.mrconfig.domain.User;
 import org.github.mrconfig.domain.UserState;
-import org.github.mrconfig.framework.resources.BaseCRUDResource;
-import org.github.mrconfig.framework.resources.DeletableResource;
-import org.github.mrconfig.framework.resources.ReadableResource;
-import org.github.mrconfig.framework.resources.WritableResource;
-import org.github.mrconfig.framework.service.Link;
+import org.github.levelthree.resources.BaseCRUDResource;
+import org.github.levelthree.service.Link;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Path;

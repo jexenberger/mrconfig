@@ -8,12 +8,10 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.StreamingOutput;
 
-import java.io.IOException;
-import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.util.Optional;
 
-import static org.github.mrconfig.framework.activerecord.ActiveRecord.findById;
+import static org.github.levelthree.activerecord.ActiveRecord.findById;
 
 
 /**

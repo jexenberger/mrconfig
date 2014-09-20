@@ -1,6 +1,6 @@
 package org.github.mrconfig.domain;
 
-import org.github.mrconfig.framework.activerecord.ActiveRecord;
+import org.github.levelthree.activerecord.ActiveRecord;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.*;

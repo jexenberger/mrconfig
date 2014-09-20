@@ -1,7 +1,7 @@
 package org.github.mrconfig.domain;
 
-import org.github.mrconfig.framework.activerecord.ActiveRecord;
-import org.github.mrconfig.framework.service.Named;
+import org.github.levelthree.activerecord.ActiveRecord;
+import org.github.levelthree.service.Named;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -10,7 +10,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.*;
 
 import static java.util.stream.Collectors.toList;
-import static org.github.mrconfig.framework.activerecord.Parameter.p;
+import static org.github.levelthree.activerecord.Parameter.p;
 
 /**
  * Created by w1428134 on 2014/07/07.

@@ -1,6 +1,6 @@
 package org.github.mrconfig.domain;
 
-import org.github.mrconfig.framework.util.FieldHints;
+import org.github.levelthree.util.FieldHints;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;

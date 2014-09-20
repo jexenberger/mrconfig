@@ -1,6 +1,6 @@
 package org.github.mrconfig.domain;
 
-import org.github.mrconfig.framework.service.Link;
+import org.github.levelthree.service.Link;
 
 import javax.persistence.*;
 import javax.security.auth.Subject;

@@ -1,9 +1,7 @@
 package org.github.mrconfig.resources;
 
 import org.github.mrconfig.domain.EnvironmentGroup;
-import org.github.mrconfig.framework.resources.BaseCRUDResource;
-import org.github.mrconfig.framework.resources.DeletableResource;
-import org.github.mrconfig.framework.resources.WritableResource;
+import org.github.levelthree.resources.BaseCRUDResource;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;

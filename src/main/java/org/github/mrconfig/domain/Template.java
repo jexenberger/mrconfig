@@ -1,12 +1,11 @@
 package org.github.mrconfig.domain;
 
-import org.github.mrconfig.framework.activerecord.ActiveRecord;
-import org.github.mrconfig.framework.templating.FreemarkerEngine;
+import org.github.levelthree.activerecord.ActiveRecord;
+import org.github.levelthree.templating.FreemarkerEngine;
 
 import javax.persistence.*;
 import javax.persistence.FetchType;
 import javax.persistence.Lob;
-import javax.xml.bind.annotation.XmlElement;
 import java.io.Writer;
 import java.util.Date;
 

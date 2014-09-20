@@ -1,7 +1,7 @@
 package org.github.mrconfig.domain;
 
-import org.github.mrconfig.framework.activerecord.ActiveRecord;
-import org.github.mrconfig.framework.util.Pair;
+import org.github.levelthree.activerecord.ActiveRecord;
+import org.github.levelthree.util.Pair;
 
 import javax.persistence.Enumerated;
 import javax.persistence.Index;
@@ -17,8 +17,8 @@ import java.util.Collection;
 import java.util.Optional;
 import java.util.Properties;
 
-import static org.github.mrconfig.framework.util.Pair.cons;
-import static org.github.mrconfig.framework.activerecord.Parameter.p;
+import static org.github.levelthree.util.Pair.cons;
+import static org.github.levelthree.activerecord.Parameter.p;
 
 /**
  * Created by w1428134 on 2014/07/07.

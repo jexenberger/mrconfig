@@ -1,11 +1,9 @@
 package org.github.mrconfig.framework.testdomain;
 
-import org.github.mrconfig.framework.activerecord.ActiveRecord;
-import org.github.mrconfig.framework.util.FieldHints;
+import org.github.levelthree.activerecord.ActiveRecord;
+import org.github.levelthree.util.FieldHints;
 
 import javax.persistence.*;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Date;
 

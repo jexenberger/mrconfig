@@ -1,12 +1,12 @@
 package org.github.mrconfig.domain;
 
-import org.github.mrconfig.framework.util.Pair;
+import org.github.levelthree.util.Pair;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.github.mrconfig.framework.util.Pair.cons;
+import static org.github.levelthree.util.Pair.cons;
 
 /**
  * Created by julian3 on 2014/07/19.

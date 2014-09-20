@@ -1,16 +1,10 @@
 package org.github.mrconfig.domain;
 
-import org.github.mrconfig.framework.activerecord.ActiveRecord;
-import org.github.mrconfig.framework.service.Keyed;
+import org.github.levelthree.activerecord.ActiveRecord;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import java.util.Collection;
-import java.util.Optional;
-
-import static org.github.mrconfig.framework.activerecord.Parameter.p;
 
 /**
  * Created by w1428134 on 2014/07/07.
