@@ -17,26 +17,13 @@ createService = function(services, serviceName, resourcePath ) {
 
 }
 
-createGenericController = function(module, controllerName, serviceName, resourceName, formName) {
 
 
-    module.controller(controllerName,['$scope', '$routeParams','$window', '$http', '$location', '$modal', '$parse', serviceName, function($scope, $routeParams, $window, $http, $location, $modal, $parse, service) {
-      $scope.state = {};
-      $scope.resourceName = resourceName;
-      $scope.master = {};
-      $scope.isNew = ($routeParams.p_id == null);
-      $scope.currentPage = 1;
-      $scope.totalResults = 0;
+LtBaseController = function($scope, $routeParams, $window, $http, $location, $injector, $parse, service) {
+
+      var _this = this;
+
       $scope.alerts = [];
-
-      $scope.load = function() {
-        service.get({p_id:$routeParams.p_id}, function(result) {
-            $scope.master = result;
-            $scope.model = angular.copy($scope.master);
-        }, function(error) {
-            $scope.processError(error,$routeParams.p_id);
-        });
-      }
 
       $scope.getIdFromHref = getIdFromHref;
 
@@ -55,23 +42,17 @@ createGenericController = function(module, controllerName, serviceName, resource
             case 404: message = 'The record requested no longer exists';
                       break;
           }
-          $scope.alerts.push({ type: 'danger', msg: message});
+          $scope.flashError(message);
           if (error.data.errors != null) {
             for (i=0;i < error.data.errors.length;i++) {
-                $scope.alerts.push({ type: 'danger', msg: error.data.errors[i].description});
+                $scope.flashError( error.data.errors[i].description);
             }
           } else {
-             $scope.flash('danger',JSON.stringify(error));
+             $scope.flashError(JSON.stringify(error));
           }
 
       }
 
-
-    
-      if (!$scope.isNew) {
-        $scope.load();
-      }
-    
       $scope.open = function(scopeName, $event, $index) {
           $event.preventDefault();
           $event.stopPropagation();
@@ -117,6 +98,180 @@ createGenericController = function(module, controllerName, serviceName, resource
         $scope.alerts.push({ type: type, msg: message});
       }
 
+      $scope.flashError = function(message) {
+        $scope.flash('danger', message);
+      }
+
+      $scope.flashInfo = function(message) {
+        $scope.flash('success', message);
+      }
+
+      $scope.flashWarning = function(message) {
+        $scope.flash('warning', message);
+      }
+
+
+      $scope.lookup = function(resource,filter,value) {
+            var config = {};
+            var parameters = {};
+            parameters[filter] = value + "*";
+            var header = {}
+            header["Accept"] = "application/json";
+            config["params"] = parameters;
+            config["headers"] = header;
+            return $http.get(resource, config).then(function(res){
+                var results = []
+                angular.forEach(res.data.result, function(item){
+                    results.push(item);
+                });
+                return results;
+            });
+      };
+    
+    
+      $scope.closeAlert = function(index) {
+        $scope.alerts.splice(index, 1);
+      };
+
+      $scope.goto = function(path) {
+        $location.path(path);
+      }
+    
+      $scope.gotoList = function() {
+        $scope.goto(resourceName+'/list.html');
+      };
+    
+      $scope.gotoNew = function() {
+        $scope.goto(resourceName+'/new.html');
+      };
+
+      $scope.gotoView = function(id) {
+        $scope.goto(resourceName+'/view/'+id);
+      };
+
+      $scope.gotoEdit = function(id) {
+        $scope.goto(resourceName+'/view/'+id);
+      };
+
+      $scope.fieldValid = function(field) {
+        return  field.$valid;
+      };
+    
+      $scope.fieldInvalid = function(field) {
+        return field;
+      };
+
+      $scope.fieldPristine = function(field) {
+        return field.$pristine
+      };
+
+      $scope.validationClass = function(field) {
+        if (field == null) {
+          return null;
+        }
+        if (field.$pristine) {
+           return null;
+        }
+        if (field.$valid) {
+           return 'has-success';
+        }
+        if (field.$invalid) {
+           return 'has-error';
+        }
+      }
+
+
+
+      $scope.reset();
+    
+    }]);
+
+
+LtListController = function($scope, $routeParams, $window, $http, $location, $injector, $parse, service) {
+
+
+       angular.extend(this, new LtBaseController($scope, $routeParams, $window, $http, $location, $injector, $parse, service));
+
+       $scope.currentPage = 1;
+       $scope.totalResults = 0;
+
+
+       $scope.doPage = function(model, searchModel, page) {
+          $scope.doSearch(model, searchModel, page);
+       }
+
+       $scope.doSearch = function(model, searchModel, page) {
+             for (key in searchModel) {
+                 model[key] =  searchModel[key].rel;
+             }
+             for (key in model) {
+                 if (model[key] == null) {
+                     continue;
+                 }
+                 if (isLink(model[key])) {
+                    model[key] = model[key].href.split("/")[1];
+                 }
+                 if (model[key] != null && model[key].toString().trim() == '') {
+                     model[key] = null;
+                 }
+             }
+             model["details"] = true;
+             model['page'] = page;
+             service.query(model, function(success) {
+                $scope.searchPage = success;
+                $scope.totalResults = $scope.searchPage.totalResults;
+
+             });
+
+       }
+
+
+       $scope.doDelete = function(id) {
+            $scope.alerts = [];
+            var result = confirm('Are you sure you want to delete this record');
+            if (!result) {
+                return;
+            }
+            service.remove({p_id:id}, function(success) {
+                   $scope.flash('success', 'record removed' );
+                   $scope.doSearch($scope.model, $scope.searchModel, 1);
+            });
+      }
+
+
+}]);
+
+LtEditController = function($scope, $routeParams, $window, $http, $location, $injector, $parse, service) {
+
+      angular.extend(this, new LtBaseController($scope, $routeParams, $window, $http, $location, $injector, $parse, service));
+
+
+      $scope.state = {};
+      $scope.resourceName = resourceName;
+      $scope.master = {};
+      $scope.isNew = ($routeParams.p_id == null);
+
+      $scope.load = function() {
+        service.get({p_id:$routeParams.p_id}, function(result) {
+            $scope.master = result;
+            $scope.model = angular.copy($scope.master);
+        }, function(error) {
+            $scope.processError(error,$routeParams.p_id);
+        });
+      }
+
+      if (!$scope.isNew) {
+           $scope.load();
+      }
+
+      $scope.reset = function() {
+        $scope.model = angular.copy($scope.master);
+      };
+
+      $scope.isUnchanged = function(model) {
+        return angular.equals(model, $scope.master);
+      };
+
       $scope.addToCollection = function(modelFieldName) {
          if ($scope.model[modelFieldName] == null) {
             $scope.model[modelFieldName] = [];
@@ -146,8 +301,6 @@ createGenericController = function(module, controllerName, serviceName, resource
       }
 
 
-
-    
       $scope.update = function(model) {
         $scope.alerts = [];
         if ($scope[formName].$invalid) {
@@ -173,133 +326,16 @@ createGenericController = function(module, controllerName, serviceName, resource
            });
         }
       };
-    
-      $scope.doPage = function(model, searchModel, page) {
-         $scope.doSearch(model, searchModel, page);
-      }
 
-      $scope.doSearch = function(model, searchModel, page) {
-            for (key in searchModel) {
-                model[key] =  searchModel[key].rel;
-            }
-            for (key in model) {
-                if (model[key] == null) {
-                    continue;
-                }
-                if (isLink(model[key])) {
-                   model[key] = model[key].href.split("/")[1];
-                }
-                if (model[key] != null && model[key].toString().trim() == '') {
-                    model[key] = null;
-                }
-            }
-            model["details"] = true;
-            model['page'] = page;
-            service.query(model, function(success) {
-               $scope.searchPage = success;
-               $scope.totalResults = $scope.searchPage.totalResults;
+}];
 
-            });
-    
-      }
+LtModalController =  function($scope, $routeParams, $window, $http, $location, $injector, $parse, service) {
 
-
-      $scope.lookup = function(resource,filter,value) {
-            var config = {};
-            var parameters = {};
-            parameters[filter] = value + "*";
-            var header = {}
-            header["Accept"] = "application/json";
-            config["params"] = parameters;
-            config["headers"] = header;
-            return $http.get(resource, config).then(function(res){
-                var results = []
-                angular.forEach(res.data.result, function(item){
-                    results.push(item);
-                });
-                return results;
-            });
-      };
-    
-    
-      $scope.reset = function() {
-        $scope.model = angular.copy($scope.master);
-      };
-    
-      $scope.isUnchanged = function(model) {
-        return angular.equals(model, $scope.master);
-      };
-    
-    
-      $scope.closeAlert = function(index) {
-        $scope.alerts.splice(index, 1);
-      };
-
-      $scope.goto = function(path) {
-        $location.path(path);
-      }
-    
-      $scope.gotoList = function() {
-        $scope.goto(resourceName+'/list.html');
-      };
-    
-      $scope.gotoNew = function() {
-        $scope.goto(resourceName+'/new.html');
-      };
-
-      $scope.gotoView = function(id) {
-        $scope.goto(resourceName+'/view/'+id);
-      };
-
-      $scope.gotoEdit = function(id) {
-        $scope.goto(resourceName+'/view/'+id);
-      };
-
-      $scope.fieldValid = function(field) {
-        console.log(field.$valid);
-        return  field.$valid;
-      };
-    
-      $scope.fieldInvalid = function(field) {
-        console.log(JSON.stringify(field));
-        return field;
-      };
-
-      $scope.fieldPristine = function(field) {
-        return field.$pristine
-      };
-
-      $scope.validationClass = function(field) {
-        if (field == null) {
-          return null;
-        }
-        if (field.$pristine) {
-           return null;
-        }
-        if (field.$valid) {
-           return 'has-success';
-        }
-        if (field.$invalid) {
-           return 'has-error';
-        }
-      }
-
-      $scope.doDelete = function(id) {
-        $scope.alerts = [];
-        var result = confirm('Are you sure you want to delete this record');
-        if (!result) {
-            return;
-        }
-        service.remove({p_id:id}, function(success) {
-               $scope.alerts.push({ type: 'success', msg: 'recorded removed' });
-               $scope.doSearch($scope.model, $scope.searchModel, 1);
-        });
-
-      }
-
+      angular.extend(this, new BaseController($scope, $routeParams, $window, $http, $location, $injector, $parse, service));
 
       $scope.openLookup = function(resource, filter, filterField, modelFieldName, helpDisabledFlag) {
 
+             var $modal = injector.get('$modal');
              var modalInstance = $modal.open({
                templateUrl: 'lookupModal.html',
                controller: 'reLookupController',
@@ -330,8 +366,4 @@ createGenericController = function(module, controllerName, serviceName, resource
 
 
 
-      $scope.reset();
-    
-    }]);
-
-}
+}]);

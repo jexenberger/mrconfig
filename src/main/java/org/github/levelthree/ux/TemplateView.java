@@ -22,4 +22,8 @@ public class TemplateView implements View{
     public static View templateView(String name) {
         return new TemplateView(name);
     }
+
+    public String getSource() {
+        return source;
+    }
 }

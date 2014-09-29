@@ -2,7 +2,7 @@ package org.github.levelthree.resources;
 
 import org.github.levelthree.Resource;
 import org.github.levelthree.ResourceRegistry;
-import org.github.levelthree.UX;
+import org.github.levelthree.ResourceUX;
 import org.github.levelthree.security.Security;
 import org.github.levelthree.service.CRUDService;
 import org.github.levelthree.ux.MyEntityController;
@@ -56,13 +56,22 @@ public class MenuResourceTest {
 
         Security.setUseDefaultRoles(true);
         Resource resource = Resource.resource(MyEntityController.class, createMock(CRUDService.class));
-        resource.ux(UX.defaultView(resource, null));
+        ResourceUX resourceUX = createMock(ResourceUX.class);
+        resource.ux(resourceUX);
+
+        expect(resourceUX.getGroup()).andReturn("group").anyTimes();
+        expect(resourceUX.getResource()).andReturn(resource).anyTimes();
+        expect(resourceUX.getName()).andReturn("name").anyTimes();
+        expect(resourceUX.getKey()).andReturn("key").anyTimes();
+        expect(resourceUX.getListLink()).andReturn("listLink").anyTimes();
+        expect(resourceUX.getCreateLink()).andReturn("listLink").anyTimes();
         ResourceRegistry.register(resource);
 
         SecurityContext securityContext = createMock(SecurityContext.class);
         expect(securityContext.isUserInRole(eq("list"))).andReturn(true).anyTimes();
         expect(securityContext.isUserInRole(eq("create"))).andReturn(true).anyTimes();
-        replay(securityContext);
+
+        replay(resourceUX, securityContext);
 
         Menu menu = new MenuResource().getMenu(securityContext);
 

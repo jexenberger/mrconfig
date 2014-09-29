@@ -1,4 +1,4 @@
-package org.github.mrconfig.framework;
+package org.github.levelthree;
 
 import org.github.levelthree.Resource;
 import org.github.levelthree.security.Security;

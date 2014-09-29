@@ -19,6 +19,9 @@ public class StaticView  implements View{
         source.render(target);
     }
 
+    public Source getSource() {
+        return source;
+    }
 
     public static View staticView(Source source) {
         return new StaticView(source);

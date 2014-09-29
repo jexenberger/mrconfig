@@ -31,6 +31,16 @@ public class Templating {
         return TEMPLATING;
     }
 
+    public static void reset() {
+        TEMPLATING = null;
+        if (fileDirs != null) {
+            fileDirs.clear();
+        }
+        if (packagePaths != null) {
+            packagePaths.clear();
+        }
+    }
+
     public static void setTemplating(Templating templating) {
         TEMPLATING = templating;
     }

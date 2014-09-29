@@ -55,7 +55,7 @@ public class MrConfigApplication extends ResourceConfig {
                     @Override
                     public void init() {
 
-                        StaticResource.setDebugPath("/src/main/webapp");
+                        StaticResource.setRelativeDebugPath("/src/main/webapp");
 
 
                         /*
@@ -91,8 +91,8 @@ public class MrConfigApplication extends ResourceConfig {
                             return roleForm;
                         }));
                         Resource scaffold = Resource.scaffold(PropertyValueResource.class, BeanFormBuilder::form);
-                        scaffold.getUx()
-                                .addView("controller", staticView(classpath("myController.js")));
+                        //scaffold.getResourceUx()
+                        //        .addView("controller", staticView(classpath("myController.js")));
                         register(scaffold);
 
                         addResourceClass(PropertiesImportResource.class);

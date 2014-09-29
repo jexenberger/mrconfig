@@ -1,4 +1,4 @@
-describe("App", function() {
+describe("core", function() {
 
     var menuController;
     var base64;
@@ -21,6 +21,7 @@ describe("App", function() {
                 id : 543,
                 hello : 'world'
               }
+
               var html = "<form name='form'><input type='text' name='test' ng-model='test' lookup-valid='/test'/></form>";
               element = angular.element(html);
               compiled = $compile(element);

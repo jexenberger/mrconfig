@@ -18,7 +18,7 @@ import java.util.function.Function;
 public class Resource {
 
     String path;
-    String group;
+    String group = "main";
     Class<?> resourceClass;
     Class<?> resourceController;
     Creatable<?, ?> creatable;
@@ -26,7 +26,7 @@ public class Resource {
     Updateable<?,?> updateable;
     Deletable<?,?> deletable;
     UniqueLookup<?, ?> uniqueLookup;
-    UX ux;
+    ResourceUX resourceUx;
     String createRole;
     String listRole;
     String lookupRole;
@@ -58,7 +58,7 @@ public class Resource {
         this.uniqueLookup = uniqueLookup;
     }
 
-    public Resource(String path, String group, Class<?> resourceClass, Class<?> resourceController, CRUDService<?, ?> service, UX ux) {
+    public Resource(String path, String group, Class<?> resourceClass, Class<?> resourceController, CRUDService<?, ?> service, ResourceUX resourceUx) {
         this();
         this.path = path;
         this.group = group;
@@ -69,7 +69,7 @@ public class Resource {
         this.updateable = service;
         this.deletable = service;
         this.uniqueLookup = service;
-        this.ux = ux;
+        this.resourceUx = resourceUx;
     }
 
     public static Resource resource(Class<?> resourceController, String group, CRUDService<?,?> service) {
@@ -97,11 +97,10 @@ public class Resource {
         Resource resource = resource(resourceController, null, null);
         ActiveRecordCRUDService service = new ActiveRecordCRUDService((Class<ActiveRecord>) resource.getResourceClass());
         resource.setCreatable(service);
-        resource.setGroup(resource.getResourceClass().getPackage().getName());
         resource.setDeletable(service);
         resource.setUniqueLookup(service);
         resource.setUpdateable(service);
-        resource.ux(UX.defaultView(resource, formSupplier));
+        //resource.ux(ResourceUX.defaultView(resource, formSupplier));
         return resource;
     }
 
@@ -142,12 +141,12 @@ public class Resource {
         return uniqueLookup;
     }
 
-    public UX getUx() {
-        return ux;
+    public ResourceUX getResourceUx() {
+        return resourceUx;
     }
 
-    public void setUx(UX ux) {
-        this.ux = ux;
+    public void setResourceUx(ResourceUX resourceUx) {
+        this.resourceUx = resourceUx;
     }
 
     public void setGroup(String group) {
@@ -174,8 +173,10 @@ public class Resource {
         this.uniqueLookup = uniqueLookup;
     }
 
-    public Resource ux(UX ux) {
-        this.ux = ux;
+    public Resource ux(ResourceUX resourceUx) {
+        this.resourceUx = resourceUx;
+        resourceUx.setResource(this);
+        resourceUx.create();
         return this;
     }
 
@@ -188,14 +189,14 @@ public class Resource {
     }
 
     public boolean hasUX() {
-        return this.ux != null;
+        return this.resourceUx != null;
     }
 
     public void renderUX(String method, OutputStream outputStream) {
        if (!hasUX()) {
            throw new IllegalStateException("trying to render resource '"+getPath()+"' but has no UX Module");
        }
-       getUx().render(method, outputStream);
+       getResourceUx().render(method, outputStream);
     }
 
     public Resource setListRole(String listRole) {
@@ -253,6 +254,8 @@ public class Resource {
     public String getDeleteRole() {
         return deleteRole;
     }
+
+
 
     public String buildIDForResource(Object v) {
         if (v instanceof Identified) {

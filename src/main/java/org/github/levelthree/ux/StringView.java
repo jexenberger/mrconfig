@@ -16,6 +16,10 @@ public class StringView implements View{
         this.content = content;
     }
 
+    public static StringView stringView(String content) {
+        return new StringView(content);
+    }
+
     @Override
     public void render(Object model, OutputStream target) {
         try {
@@ -23,5 +27,9 @@ public class StringView implements View{
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public String getContent() {
+        return content;
     }
 }

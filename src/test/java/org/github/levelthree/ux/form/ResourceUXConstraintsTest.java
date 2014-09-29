@@ -17,7 +17,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * Created by julian3 on 2014/08/15.
  */
-public class UXConstraintsTest {
+public class ResourceUXConstraintsTest {
 
 
     @Size(min=1,max=2)

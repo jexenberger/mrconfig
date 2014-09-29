@@ -1,21 +1,3 @@
-
-
-/*
-var myApplication = angular.module('myApplication', [
-    'ngRoute',
-    'myApplicationControllers',
-    'ui.bootstrap'
-]);
-*/
-
-getIdFromHref = function(input) {
-  if (input == null) {
-      return null;
-  }
-  var parts = input.split("/");
-  return parts[parts.length-1];
-}
-
 var application = angular.module('application', [
     'ngRoute',
     'ngResource',
@@ -124,6 +106,17 @@ services.factory('base64', function() {
         }
     };
 });
+
+
+
+getIdFromHref = function(input) {
+  if (input == null) {
+      return null;
+  }
+  var parts = input.split("/");
+  return parts[parts.length-1];
+}
+
 
 application.factory('securityContext', ['$http','base64', '$rootScope', 'AUTH_EVENTS', function($http, base64, $rootScope, AUTH_EVENTS) {
 
@@ -250,7 +243,7 @@ lookupById = function($http, url, $q, onSuccess, onError) {
 }
 
 
-application.factory('basicAuthInterceptor', ['$log', '$rootScope', 'LOAD_EVENTS', '$q',function($log, $rootScope, LOAD_EVENTS, $q) {
+application.factory('LtBasicAuthInterceptor', ['$log', '$rootScope', 'LOAD_EVENTS', '$q',function($log, $rootScope, LOAD_EVENTS, $q) {
 
     var myInterceptor = {
         // optional method
@@ -291,7 +284,7 @@ application.factory('basicAuthInterceptor', ['$log', '$rootScope', 'LOAD_EVENTS'
 
 application.config(['$httpProvider', function($httpProvider) {
 
-    $httpProvider.interceptors.push('basicAuthInterceptor');
+    $httpProvider.interceptors.push('LtBasicAuthInterceptor');
 }]);
 
 controllers.controller('rs_menu_Controller',['$scope','$rootScope','$http', '$location', 'AUTH_EVENTS', function($scope, $rootScope, $http,$location, AUTH_EVENTS) {
@@ -425,9 +418,7 @@ application.filter('hrefId', function() {
    };
 });
 
-var app = angular.module('forms', []);
-
-app.directive('defaultValue', ['$scope', '$element', '$attrs', '$parse', function($scope, $element, $attrs, $parse) {
+application.directive('defaultValue', ['$scope', '$element', '$attrs', '$parse', function($scope, $element, $attrs, $parse) {
   return {
     link: function() {
         alert('firing default value');
@@ -488,7 +479,6 @@ application.directive('lookupValid', ['$http', '$q','$parse', function ($http, $
                 return null;
              }
              ngModel.$setValidity('lookupValid', true);
-             //ngModel.$setViewValue(getIdFromHref(value.href));
              return getIdFromHref(value.href);
           });
       }

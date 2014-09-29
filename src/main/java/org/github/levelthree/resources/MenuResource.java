@@ -1,7 +1,7 @@
 package org.github.levelthree.resources;
 
 import org.github.levelthree.ResourceRegistry;
-import org.github.levelthree.UX;
+import org.github.levelthree.ResourceUX;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -24,13 +24,13 @@ public class MenuResource {
 
     @GET
     public Menu getMenu(@Context SecurityContext context) {
-        Collection<UX> forms = ResourceRegistry.list()
+        Collection<ResourceUX> forms = ResourceRegistry.list()
                 .stream()
-                .filter((resource)-> resource.getUx() != null)
-                .map((resource)-> resource.getUx())
+                .filter((resource)-> resource.getResourceUx() != null)
+                .map((resource)-> resource.getResourceUx())
                 .collect(toList());
         Menu response = new Menu();
-        for (UX form : forms) {
+        for (ResourceUX form : forms) {
             initGroup(response, form.getGroup());
             boolean allow = allowAccess(context, form.getResource().getListRole());
             if (allow) {
@@ -38,7 +38,7 @@ public class MenuResource {
             }
             allow = allowAccess(context, form.getResource().getCreateRole());
             if (allow) {
-                response.getMenuGroups().get(form.getGroup()).add(new MenuItem(form.getName()+" New", form.getKey()+".new", form.getNewLink()));
+                response.getMenuGroups().get(form.getGroup()).add(new MenuItem(form.getName()+" New", form.getKey()+".new", form.getCreateLink()));
             }
 
         }

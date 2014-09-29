@@ -33,9 +33,10 @@ public class ResourceRegistry {
         return getByResourceClass(type) != null;
     }
 
-    public static void register(Resource resource) {
+    public static String register(Resource resource) {
         requireNonNull(resource, "resource cannot be null");
         RESOURCES.put(resource.getPath(), resource);
+        return resource.getPath();
     }
 
     public static Collection<Resource> list() {

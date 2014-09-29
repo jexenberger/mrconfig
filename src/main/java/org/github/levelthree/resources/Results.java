@@ -9,9 +9,9 @@ import java.util.Collection;
 /**
  * Created by julian3 on 2014/07/18.
  */
-@XmlRootElement(namespace = "http://www.github.org/mrconfig")
+@XmlRootElement(namespace = "http://www.github.org/levelthree")
 @XmlAccessorType(XmlAccessType.PROPERTY)
-public class Results<T> {
+public class Results<T> implements ListableResource<T> {
 
     long totalResults = 0;
     long totalPages = 0;
@@ -32,15 +32,13 @@ public class Results<T> {
     public Results() {
     }
 
-    @XmlAttribute(namespace = "http://www.github.org/mrconfig")
+    @Override
+    @XmlAttribute(namespace = "http://www.github.org/levelthree")
     public long getTotalResults() {
         return totalResults;
     }
 
-    public void setTotalResults(long totalResults) {
-        this.totalResults = totalResults;
-    }
-
+    @Override
     @XmlElementWrapper(name = "links", nillable = true)
     @XmlElement(namespace = "http://www.w3.org/2005/Atom", nillable = true)
     public Collection<Link> getLink() {
@@ -50,10 +48,7 @@ public class Results<T> {
         return link;
     }
 
-    public void setLink(Collection<Link> link) {
-        this.link = link;
-    }
-
+    @Override
     @XmlElementWrapper(name = "results", nillable = true)
     @XmlElement(namespace = "http://www.w3.org/2005/Atom", nillable = true)
     public Collection<Link> getResult() {
@@ -63,12 +58,9 @@ public class Results<T> {
         return result;
     }
 
-    public void setResult(Collection<Link> result) {
-        this.result = result;
-    }
-
-    @XmlElementWrapper( name = "resources" ,namespace = "http://www.github.org/mrconfig", nillable = true)
-    @XmlElement(namespace = "http://www.github.org/mrconfig", nillable = true)
+    @Override
+    @XmlElementWrapper( name = "resources" ,namespace = "http://www.github.org/levelthree", nillable = true)
+    @XmlElement(namespace = "http://www.github.org/levelthree", nillable = true)
     public Collection<T> getResource() {
         if (resource == null) {
             resource = new ArrayList<>();
@@ -76,25 +68,40 @@ public class Results<T> {
         return resource;
     }
 
-    public void setResource(Collection<T> resource) {
-        this.resource = resource;
-    }
-
-    @XmlAttribute(namespace = "http://www.github.org/mrconfig")
+    @Override
+    @XmlAttribute(namespace = "http://www.github.org/levelthree")
     public long getTotalPages() {
         return totalPages;
+    }
+
+    @Override
+    @XmlAttribute(namespace = "http://www.github.org/levelthree")
+    public long getCurrentPage() {
+        return currentPage;
+    }
+
+
+    public void setTotalResults(long totalResults) {
+        this.totalResults = totalResults;
     }
 
     public void setTotalPages(long totalPages) {
         this.totalPages = totalPages;
     }
 
-    @XmlAttribute(namespace = "http://www.github.org/mrconfig")
-    public long getCurrentPage() {
-        return currentPage;
-    }
-
     public void setCurrentPage(long currentPage) {
         this.currentPage = currentPage;
+    }
+
+    public void setLink(Collection<Link> link) {
+        this.link = link;
+    }
+
+    public void setResult(Collection<Link> result) {
+        this.result = result;
+    }
+
+    public void setResource(Collection<T> resource) {
+        this.resource = resource;
     }
 }

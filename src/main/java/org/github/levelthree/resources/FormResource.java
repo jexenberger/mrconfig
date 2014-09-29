@@ -34,12 +34,12 @@ public class FormResource {
             entity = "/"+entity;
         }
         Resource resource = ResourceRegistry.get(entity);
-        if (resource == null || resource.getUx() == null) {
+        if (resource == null || resource.getResourceUx() == null) {
             return Response.status(Response.Status.NOT_FOUND).entity(entity+" not found").build();
         }
 
         StreamingOutput stream = (output)-> {
-            resource.getUx().render(type,output);
+            resource.getResourceUx().render(type,output);
         };
         return Response.ok(stream).build();
     }
@@ -51,7 +51,7 @@ public class FormResource {
     public Response getControllerCode(@PathParam("type") String type) {
         StreamingOutput stream = (output)-> {
 
-            List<Resource> resources = ResourceRegistry.list().stream().filter((resource) -> resource.getUx() != null).collect(toList());
+            List<Resource> resources = ResourceRegistry.list().stream().filter((resource) -> resource.getResourceUx() != null).collect(toList());
 
             Template template = TemplateEngine.getConfiguration().getTemplate(type+".ftl");
             Map<String, List<Resource>> modules = new HashMap<>();

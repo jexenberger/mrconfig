@@ -82,11 +82,11 @@ public interface ReadableResource<T, K extends Serializable> extends BaseResourc
         if (resource == null) {
             return Response.status(Response.Status.NOT_FOUND).entity(errors(notFound())).build();
         }
-        if (resource.getUx() == null) {
+        if (resource.getResourceUx() == null) {
             return Response.status(Response.Status.NOT_FOUND).entity(errors(notFound())).build();
         }
         StreamingOutput stream = (output) -> {
-            resource.getUx().render(id, output);
+            resource.getResourceUx().render(id, output);
         };
         return Response.ok().entity(stream).build();
     }
@@ -115,7 +115,7 @@ public interface ReadableResource<T, K extends Serializable> extends BaseResourc
         }
         Collection<T> results;
 
-        Results<T> response = newResultsClass();
+        ListableResource<T> response = newResultsClass();
         response.setTotalResults(totalResults);
         if (totalResults == 0) {
             response.setTotalPages(0);
@@ -166,7 +166,7 @@ public interface ReadableResource<T, K extends Serializable> extends BaseResourc
         //do nothing, can be overriden
     }
 
-    default Results<T> newResultsClass() {
+    default ListableResource<T> newResultsClass() {
         return new Results<>();
     }
 

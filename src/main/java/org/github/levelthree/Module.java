@@ -2,10 +2,7 @@ package org.github.levelthree;
 
 import org.github.levelthree.util.Inflector;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 import static java.util.stream.Collectors.toList;
 
@@ -15,12 +12,17 @@ import static java.util.stream.Collectors.toList;
 public abstract class Module {
 
     String name;
+    Map<String, Resource> resources;
+
 
     public Module() {
+        name = getClass().getSimpleName();
+        ModuleRegistry.add(this);
     }
 
     public Module(String name) {
         this.name = name;
+        ModuleRegistry.add(this);
     }
 
     private Collection<Class<?>> additionalResourceClasses;
@@ -57,7 +59,7 @@ public abstract class Module {
     public Module register(Resource resource) {
         Objects.requireNonNull(resource, "resource must be supplied");
         resource.setGroup(getName());
-        ResourceRegistry.register(resource);
+        getResources().put(ResourceRegistry.register(resource), resource);
         return this;
     }
 
@@ -69,8 +71,11 @@ public abstract class Module {
         return this;
     }
 
-
     public String getName() {
+        return name;
+    }
+
+    public String getDisplayName() {
         if (name != null) {
             return name;
         }
@@ -79,6 +84,17 @@ public abstract class Module {
             name = name.substring(0,name.length()-"module".length());
         }
         return Inflector.getInstance().phrase(name);
+    }
+
+    public Map<String, Resource> getResources() {
+        if (resources == null) {
+            resources = new LinkedHashMap<>();
+        }
+        return resources;
+    }
+
+    public Optional<Resource> getResource(String name) {
+        return Optional.ofNullable(getResources().get(name));
     }
 
     public abstract void init();

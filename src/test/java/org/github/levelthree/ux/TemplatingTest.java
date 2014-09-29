@@ -20,8 +20,9 @@ public class TemplatingTest {
 
     @BeforeClass
     public static void beforeClass() {
-        Templating.registerClass(IntegrationTest.class);
 
+        Templating.reset();
+        Templating.registerClass(IntegrationTest.class);
         Templating.registerClass(Main.class);
     }
 
@@ -33,7 +34,7 @@ public class TemplatingTest {
         Map<String, Object> model = new HashMap<>();
         model.put("nested_template","nested.ftl");
 
-        Templating.getTemplating().write("test.ftl",model, target);
+        Templating.getTemplating().write("/test.ftl",model, target);
         assertEquals("test",target.toString());
         target = new ByteArrayOutputStream();
         Templating.getTemplating().write("other.ftl",model, target);

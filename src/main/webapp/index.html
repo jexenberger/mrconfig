@@ -2,6 +2,10 @@
 <!DOCTYPE html>
 <html ng-app="application" lang="en">
 <head>
+
+    <script src="js/jquery-2.1.0.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+
     <!-- SCROLLS -->
     <!-- load bootstrap and fontawesome via CDN -->
     <link rel="stylesheet" href="css/bootstrap.css"/>
@@ -13,11 +17,12 @@
     <script src="js/angular.js"></script>
     <script src="js/angular-resource.js"></script>
     <script src="js/angular-route.js"></script>
-    <script src="app/app.js"></script>
-    <script src="app/framework.js"></script>
-    <script src="../views/navigation.js"></script>
-    <script src="../views/controllers.js"></script>
     <script src="js/ui-bootstrap-tpls-0.11.0.js"></script>
+
+    <script src="js/levelthree-core.js"></script>
+    <script src="js/levelthree-forms.js"></script>
+    <script src="views/navigation.js"></script>
+    <script src="views/controllers.js"></script>
     <style>
         .nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
     </style>
@@ -109,7 +114,7 @@
             <span class="glyphicon glyphicon-align-justify"></span>
         </button>
         <nav id="topNav" class="navbar-collapse collapse" role="navigation">
-            <ul class="navbar-nav nav pull-right" ng-controller="reLoginModalController">
+            <ul class="navbar-nav nav pull-right" ng-controllerView="reLoginModalController">
                 <li><a ng-click="open()">{{userNameDisplay}}</a></li>
             </ul>
 
@@ -172,7 +177,7 @@
         <!--
         <div class="col-md-2">
 
-            <div class="panel-group" id="accordion" ng-controller="rs_menu_Controller">
+            <div class="panel-group" id="accordion" ng-controllerView="rs_menu_Controller">
                 <div class="panel panel-default " ng-repeat="group in $root.menu">
                     <div class="panel-heading">
                         <h4 class="panel-title nav">
@@ -210,7 +215,5 @@
     Copyright (2014)
 </footer>
 <!-- Include jQuery and bootstrap JS plugins -->
-<script src="js/jquery-2.1.0.js"></script>
-<script src="js/bootstrap.min.js"></script>
 </body>
 </html>

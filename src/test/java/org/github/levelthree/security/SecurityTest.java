@@ -1,6 +1,7 @@
 package org.github.levelthree.security;
 
 import org.github.levelthree.resources.UserPrincipal;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -25,7 +26,14 @@ public class SecurityTest {
     public void setUp() throws Exception {
         securityContext = createMock(SecurityContext.class);
         Security.reset();
+        Security.setDisableSecurity(false);
 
+    }
+
+    @After
+    public void tearDown() throws Exception {
+
+        Security.setDisableSecurity(true);
     }
 
     @Test
