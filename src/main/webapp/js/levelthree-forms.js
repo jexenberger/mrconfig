@@ -1,21 +1,6 @@
 
 
-createService = function(services, serviceName, resourcePath ) {
 
-    services.factory(serviceName,['$resource', function($resource) {
-
-        return $resource(resourcePath+ '/:p_id', {} ,
-        {
-          'get':    {method:'GET', headers:{Accept:'application/json'}},
-          'create':   {method:'POST', headers:{Accept:'application/json'}},
-          'save':   {method:'PUT', headers:{Accept:'application/json'}},
-          'query':  {method:'GET', isArray:false, headers:{Accept:'application/json'}},
-          'remove': {method:'DELETE', headers:{Accept:'application/json'}}
-        });
-        
-    }]);
-
-}
 
 
 

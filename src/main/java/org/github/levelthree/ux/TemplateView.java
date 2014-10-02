@@ -26,4 +26,21 @@ public class TemplateView implements View{
     public String getSource() {
         return source;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TemplateView)) return false;
+
+        TemplateView that = (TemplateView) o;
+
+        if (!source.equals(that.source)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return source.hashCode();
+    }
 }

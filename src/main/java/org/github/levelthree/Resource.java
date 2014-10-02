@@ -33,6 +33,7 @@ public class Resource {
     String updateRole;
     String deleteRole;
     boolean requiresAuthentication = true;
+    String resourceServiceName;
 
     Resource() {
         this.requiresAuthentication = Security.isStrictMode();
@@ -71,6 +72,8 @@ public class Resource {
         this.uniqueLookup = service;
         this.resourceUx = resourceUx;
     }
+
+
 
     public static Resource resource(Class<?> resourceController, String group, CRUDService<?,?> service) {
         Path pathAnnotation = resourceController.getAnnotation(Path.class);
@@ -173,6 +176,10 @@ public class Resource {
         this.uniqueLookup = uniqueLookup;
     }
 
+    public String getResourceServiceName() {
+        return  (resourceServiceName != null) ? resourceServiceName : getName()+"Service";
+    }
+
     public Resource ux(ResourceUX resourceUx) {
         this.resourceUx = resourceUx;
         resourceUx.setResource(this);
@@ -268,4 +275,6 @@ public class Resource {
 
         return v.toString();
     }
+
+
 }

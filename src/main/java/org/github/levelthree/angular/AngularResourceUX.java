@@ -4,6 +4,7 @@ import org.github.levelthree.ResourceUX;
 import org.github.levelthree.ux.View;
 
 import java.io.ByteArrayOutputStream;
+import java.util.Objects;
 import java.util.Optional;
 
 import static org.github.levelthree.util.StringUtil.capitalize;
@@ -76,17 +77,17 @@ public class AngularResourceUX extends ResourceUX {
     @Override
     public void init() {
         if (defaultComponents) {
-            createComponent = Optional.ofNullable(createComponent).orElse(createAngularComponent(CREATE_VIEW_MAPPING, templateView("edit_form.ftl"), templateView("simple_resolve.ftl"), null, "edit.html"));
-            editComponent = Optional.ofNullable(editComponent).orElse(createAngularComponent(EDIT_VIEW_MAPPING, templateView("edit_form.ftl"), templateView("edit_resolve.ftl"), ":p_id", "edit.html"));
-            listComponent = Optional.ofNullable(listComponent).orElse(createAngularComponent(LIST_VIEW_MAPPING, templateView("list_form.ftl"), templateView("simple_resolve.ftl"), null, "list.html"));
-            viewComponent = Optional.ofNullable(viewComponent).orElse(createAngularComponent(VIEW_VIEW_MAPPING, templateView("edit_form.ftl"), templateView("edit_resolve.ftl"), ":p_id", "edit.html"));
+            createComponent = Optional.ofNullable(createComponent).orElse(createAngularComponent(CREATE_VIEW_MAPPING, templateView("edit_form.ftl"),templateView("edit_controller.ftl"), templateView("simple_resolve.ftl"), null, "edit.html"));
+            editComponent = Optional.ofNullable(editComponent).orElse(createAngularComponent(EDIT_VIEW_MAPPING, templateView("edit_form.ftl"),templateView("edit_controller.ftl"), templateView("edit_resolve.ftl"), ":p_id", "edit.html"));
+            listComponent = Optional.ofNullable(listComponent).orElse(createAngularComponent(LIST_VIEW_MAPPING, templateView("list_form.ftl"), templateView("list_controller.ftl"), templateView("simple_resolve.ftl"), null, "list.html"));
+            viewComponent = Optional.ofNullable(viewComponent).orElse(createAngularComponent(VIEW_VIEW_MAPPING, templateView("edit_form.ftl"), templateView("edit_controller.ftl"), templateView("edit_resolve.ftl"), ":p_id", "edit.html"));
         }
         init = true;
     }
 
-    public AngularUXComponent createAngularComponent(String viewType, View controllerView, View routeResolveView, String navParameter, String fileName) {
+    public AngularUXComponent createAngularComponent(String viewType, View view, View controllerView, View routeResolveView, String navParameter, String fileName) {
         addView(fileName, templateView(fileName));
-        return new AngularUXComponent(getNavigationLink(viewType, navParameter), getTemplatePath(fileName), getControllerName(viewType), controllerView, routeResolveView);
+        return new AngularUXComponent(getNavigationLink(viewType, navParameter), getTemplatePath(fileName), getControllerName(viewType), view, controllerView, routeResolveView);
     }
 
 
@@ -175,25 +176,59 @@ public class AngularResourceUX extends ResourceUX {
 
 
     public String getListRouteResolve() {
-        return renderTemplate(listComponent.routeResolve);
+        return renderTemplate(listComponent.routeResolve, this);
     }
 
     public String getViewRouteResolve() {
-        return renderTemplate(viewComponent.routeResolve);
+        return renderTemplate(viewComponent.routeResolve, this);
     }
 
     public String getCreateRouteResolve() {
-        return renderTemplate(createComponent.routeResolve);
+        return renderTemplate(createComponent.routeResolve, this);
     }
 
     public String getEditRouteResolve() {
-        return renderTemplate(editComponent.routeResolve);
+        return renderTemplate(editComponent.routeResolve, this);
     }
 
-    public String renderTemplate(View template) {
+    public String getListControllerView() {
+        return renderTemplate(listComponent.getControllerView(), this);
+    }
+
+    public String getViewControllerView() {
+        return renderTemplate(viewComponent.getControllerView(), this);
+    }
+
+    public String getCreateControllerView() {
+        return renderTemplate(createComponent.getControllerView(), this);
+    }
+
+    public String getEditControllerView() {
+        return renderTemplate(editComponent.getControllerView(), this);
+    }
+
+    public String getControllerViews() {
+        StringBuilder builder = new StringBuilder();
+        if (listComponent != null) {
+            builder.append(getListControllerView()).append("\n");
+        }
+        //by default we use the same controller for all view/edit/create operations ergo we check if they are the same
+        if (viewComponent != null) {
+            builder.append(getViewControllerView()).append("\n");
+        }
+        if (!Objects.equals(viewComponent, createComponent)) {
+            builder.append(getCreateControllerView()).append("\n");
+        }
+        if (!Objects.equals(viewComponent, editComponent)) {
+            builder.append(getEditControllerView()).append("\n");
+        }
+        return builder.toString();
+    }
+
+    public String renderTemplate(View template, Object model) {
         checkInitialisation();
         ByteArrayOutputStream target = new ByteArrayOutputStream();
-        template.render(this, target);
+        template.render(model, target);
         return target.toString();
     }
 

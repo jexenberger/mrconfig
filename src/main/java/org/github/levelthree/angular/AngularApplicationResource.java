@@ -38,6 +38,14 @@ public class AngularApplicationResource {
         return Response.ok(stream).build();
     }
 
+    @GET
+    @Path("application.js")
+    public Response getApplication() {
+        final Map<String, Object> modules = new HashMap<>(1,1.0f);
+        modules.put("modules", ModuleRegistry.getModules());
+        return createTemplateResponse(modules,"application.ftl");
+    }
+
 
     @GET
     @Path("/{module}/views/{entity}/{type}.html")

@@ -11,6 +11,7 @@ public class AngularUXComponent {
     String routePath;
     String templateUrl;
     String controllerName;
+    View view;
     View controllerView;
     View routeResolve;
 
@@ -19,12 +20,13 @@ public class AngularUXComponent {
     public AngularUXComponent() {
     }
 
-    public AngularUXComponent(String routePath, String templateUrl, String controllerName, View controllerView, View routeResolve) {
+    public AngularUXComponent(String routePath, String templateUrl, String controllerName, View view, View controllerView, View routeResolve) {
         this.routePath = routePath;
         this.templateUrl = templateUrl;
         this.controllerName = controllerName;
         this.controllerView = controllerView;
         this.routeResolve = routeResolve;
+        this.view = view;
     }
 
     public AngularUXComponent routePath(String routePath) {
@@ -73,6 +75,10 @@ public class AngularUXComponent {
 
     public View getRouteResolve() {
         return routeResolve;
+    }
+
+    public View getView() {
+        return view;
     }
 }
 

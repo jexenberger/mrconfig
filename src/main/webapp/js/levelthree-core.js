@@ -1,28 +1,51 @@
+/**
+ * Application declaration
+ */
 var application = angular.module('application', [
     'ngRoute',
     'ngResource',
-    'services',
-    'controllers',
+    'LtServices',
+    'LtControllers',
     'ui.bootstrap'
 ]);
 
+/**
+ * Declaration for the AuthEvents constant, defines the following:
+ * loginSuccess :
+ */
+var LtAuthEvents = {
+   loginSuccess: 'auth-login-success',
+   loginFailed: 'auth-login-failed',
+   logoutSuccess: 'auth-logout-success',
+   notAuthenticated: 'auth-not-authenticated',
+   notAuthorized: 'auth-not-authorized'
+}
+
+var LtLoadEvents = {
+    started: 'started-loading',
+    finished: 'finished-loading'
+}
+
+/**
+ * constant declaration
+ */
 application
-    .constant('AUTH_EVENTS', {
-        loginSuccess: 'auth-login-success',
-        loginFailed: 'auth-login-failed',
-        logoutSuccess: 'auth-logout-success',
-        notAuthenticated: 'auth-not-authenticated',
-        notAuthorized: 'auth-not-authorized'
-    })
-    .constant('LOAD_EVENTS', {
-        started: 'started-loading',
-        finished: 'finished-loading'
-    });
+    .constant('LT_AUTH_EVENTS', LtAuthEvents)
+    .constant('LT_LOAD_EVENTS', LtLoadEvents);
 
-var services = angular.module('services',[]);
-var controllers = angular.module('controllers', []);
 
-services.factory('base64', function() {
+application
+    .config(['$httpProvider', function($httpProvider) {
+        $httpProvider.interceptors.push('LtBasicAuthInterceptor');
+        $httpProvider.interceptors.push('LtLoadEventsInterceptor');
+    }]);
+
+
+
+var services = angular.module('LtServices',[]);
+var controllers = angular.module('LtControllers', []);
+
+services.factory('LtBase64', function() {
     var keyStr = 'ABCDEFGHIJKLMNOP' +
         'QRSTUVWXYZabcdef' +
         'ghijklmnopqrstuv' +
@@ -107,18 +130,110 @@ services.factory('base64', function() {
     };
 });
 
+application.factory('LtHATEOSUtils',[function() {
+
+    getIdFromHref = function(input) {
+      if (input == null) {
+          return null;
+      }
+      var parts = input.split("/");
+      return parts[parts.length-1];
+    }
+
+    stripLeadingAndTrailingChars = function(aString) {
+       if (aString == null) {
+           return null;
+       }
+       aString = aString.trim();
+       aString = aString.substring(1);
+       aString = aString.substring(0,aString.length-1);
+       return aString;
+    }
 
 
-getIdFromHref = function(input) {
-  if (input == null) {
-      return null;
-  }
-  var parts = input.split("/");
-  return parts[parts.length-1];
-}
+    parseKeyValue = function(aString, trimLeadingTrailing) {
+        var keyValue = aString.split('=');
+        var key = keyValue[0].trim();
+        var value = (trimLeadingTrailing != null && trimLeadingTrailing) ? stripLeadingAndTrailingChars(keyValue[1]) : keyValue[1].trim();
+        return {
+            key:key,
+            value:value
+        }
+    }
+
+    parseHeaderLink = function(linkString) {
+
+        //<href>; type="null"; rel="1"; title="all"
+        var result = {};
+        var parts = linkString.split(';');
+        var href = stripLeadingAndTrailingChars(parts[0]);
+        var type = parseKeyValue(parts[1], true).value;
+        if (type == 'null') {
+            type = null;
+        }
+        var rel = parseKeyValue(parts[2].trim(), true).value;
+        if (rel == 'null') {
+            rel = null;
+        }
+        var title = parseKeyValue(parts[3].trim(), true).value;
+        if (title == 'null') {
+            title = null;
+        }
+        result['href'] = href;
+        result['type'] = type;
+        result['rel'] = rel;
+        result['title'] = title;
+        return result;
+
+    }
+
+    isLink = function(val) {
+     if (val == null) {
+        return false;
+     }
+     if (val.hasOwnProperty("href")) {
+        return true;
+     }
+
+    }
+
+    lookupById = function($http, url, $q, onSuccess, onError) {
+
+       alert(url);
+
+       return $http.get(url,  {
+            headers : {Accept:'application/json'}
+        })
+        .success(function(data, status, headers, config) {
+                if (onSuccess != null) {
+                    onSuccess(data, headers);
+                }
+            })
+            .error(function(error, status) {
+                if (onError != null) {
+                    onError(error, status);
+                }
+                return null;
+        });
 
 
-application.factory('securityContext', ['$http','base64', '$rootScope', 'AUTH_EVENTS', function($http, base64, $rootScope, AUTH_EVENTS) {
+    }
+
+
+    return {
+        getIdFromHref:getIdFromHref,
+        lookupById:lookupById,
+        isLink:isLink,
+        parseHeaderLink:parseHeaderLink,
+        parseKeyValue:parseKeyValue,
+        stripLeadingAndTrailingChars:stripLeadingAndTrailingChars
+    }
+
+
+}]);
+
+
+application.factory('LtSecurityContext', ['$http','LtBase64', '$rootScope', 'LT_AUTH_EVENTS', function($http, base64, $rootScope, AUTH_EVENTS) {
 
    var roles = [];
    var authorization = null;
@@ -166,84 +281,8 @@ application.factory('securityContext', ['$http','base64', '$rootScope', 'AUTH_EV
    return context;
 }]);
 
-stripLeadingAndTrailingChars = function(aString) {
-   if (aString == null) {
-       return null;
-   }
-   aString = aString.trim();
-   aString = aString.substring(1);
-   aString = aString.substring(0,aString.length-1);
-   return aString;
-}
 
-parseKeyValue = function(aString, trimLeadingTrailing) {
-    var keyValue = aString.split('=');
-    var key = keyValue[0].trim();
-    var value = (trimLeadingTrailing != null && trimLeadingTrailing) ? stripLeadingAndTrailingChars(keyValue[1]) : keyValue[1].trim();
-    return {
-        key:key,
-        value:value
-    }
-}
-
-parseHeaderLink = function(linkString) {
-
-    //<href>; type="null"; rel="1"; title="all"
-    var result = {};
-    var parts = linkString.split(';');
-    var href = stripLeadingAndTrailingChars(parts[0]);
-    var type = parseKeyValue(parts[1], true).value;
-    if (type == 'null') {
-        type = null;
-    }
-    var rel = parseKeyValue(parts[2].trim(), true).value;
-    if (rel == 'null') {
-        rel = null;
-    }
-    var title = parseKeyValue(parts[3].trim(), true).value;
-    if (title == 'null') {
-        title = null;
-    }
-    result['href'] = href;
-    result['type'] = type;
-    result['rel'] = rel;
-    result['title'] = title;
-    return result;
-
-}
-
-isLink = function(val) {
- if (val == null) {
-    return false;
- }
- if (val.hasOwnProperty("href")) {
-    return true;
- }
-
-}
-
-lookupById = function($http, url, $q, onSuccess, onError) {
-
-   return $http.get(url,  {
-        headers : {Accept:'application/json'}
-    })
-    .success(function(data, status, headers, config) {
-            if (onSuccess != null) {
-                onSuccess(data, headers);
-            }
-        })
-        .error(function(error, status) {
-            if (onError != null) {
-                onError(error, status);
-            }
-            return null;
-    });
-
-
-}
-
-
-application.factory('LtBasicAuthInterceptor', ['$log', '$rootScope', 'LOAD_EVENTS', '$q',function($log, $rootScope, LOAD_EVENTS, $q) {
+application.factory('LtBasicAuthInterceptor', ['$log', '$rootScope', function($log, $rootScope) {
 
     var myInterceptor = {
         // optional method
@@ -252,6 +291,20 @@ application.factory('LtBasicAuthInterceptor', ['$log', '$rootScope', 'LOAD_EVENT
                 if ($rootScope.securityContext != null) {
                     config.headers.Authorization = 'Basic '+$rootScope.securityContext.authToken();
                 }
+                $log.debug(JSON.stringify(config));
+                return config;
+              }
+    };
+
+    return myInterceptor;
+}]);
+
+
+application.factory('LtLoadEventsInterceptor', ['$log', '$rootScope', 'LT_LOAD_EVENTS', '$q',function($log, $rootScope, LOAD_EVENTS, $q) {
+
+    var myInterceptor = {
+        // optional method
+              'request': function(config) {
                 $log.debug(JSON.stringify(config));
                 if (config.headers.Accept) {
                     $rootScope.$broadcast(LOAD_EVENTS.started);
@@ -279,15 +332,7 @@ application.factory('LtBasicAuthInterceptor', ['$log', '$rootScope', 'LOAD_EVENT
 }]);
 
 
-
-
-
-application.config(['$httpProvider', function($httpProvider) {
-
-    $httpProvider.interceptors.push('LtBasicAuthInterceptor');
-}]);
-
-controllers.controller('rs_menu_Controller',['$scope','$rootScope','$http', '$location', 'AUTH_EVENTS', function($scope, $rootScope, $http,$location, AUTH_EVENTS) {
+controllers.controller('rs_menu_Controller',['$scope','$rootScope','$http', '$location', 'LT_AUTH_EVENTS', function($scope, $rootScope, $http,$location, AUTH_EVENTS) {
 
 
     loadMenu = function() {
@@ -310,7 +355,7 @@ controllers.controller('rs_menu_Controller',['$scope','$rootScope','$http', '$lo
 }]);
 
 
-controllers.controller('reLoginModalController',['$scope','$rootScope','$http', '$location', '$modal', '$log','securityContext' ,function($scope, $rootScope, $http, $location, $modal, $log, securityContext) {
+controllers.controller('reLoginModalController',['$scope','$rootScope','$http', '$location', '$modal', '$log','LtSecurityContext' ,function($scope, $rootScope, $http, $location, $modal, $log, securityContext) {
 
 
 
@@ -434,7 +479,8 @@ application.directive('defaultValue', ['$scope', '$element', '$attrs', '$parse',
 }]);
 
 
-application.directive('lookupValid', ['$http', '$q','$parse', function ($http, $q, $parse){
+application.directive('lookupValid', ['$http', '$q','$parse','LtHATEOSUtils', function ($http, $q, $parse, ltHATEOSUtils){
+
    return {
       require: 'ngModel',
       link: function(scope, elem, attr, ngModel) {
@@ -446,19 +492,22 @@ application.directive('lookupValid', ['$http', '$q','$parse', function ($http, $
                 if (newValue.title != null) {
                     return;
                 }
-                var resourcePath = newValue.href;
-                lookupById($http, resourcePath, $q,
-                function(data, headers) {
-                    result = parseHeaderLink(headers('Link'));
-                    newValue.title = result.title;
-                    ngModel.$setValidity('lookupValid', true);
+                if (newValue.href == null) {
+                    return;
+                }
+                ltHATEOSUtils.lookupById($http, newValue.href, $q,
+                    function(data, headers) {
+                        result = parseHeaderLink(headers('Link'));
+                        newValue.title = result.title;
+                        ngModel.$setValidity('lookupValid', true);
 
-                },
-                function(error,status) {
-                    if (status == 404) {
-                        ngModel.$setValidity('lookupValid', false);
+                    },
+                    function(error,status) {
+                        if (status == 404) {
+                            ngModel.$setValidity('lookupValid', false);
+                        }
                     }
-                });
+                );
           });
 
           ngModel.$parsers.unshift(function(value) {
@@ -470,6 +519,7 @@ application.directive('lookupValid', ['$http', '$q','$parse', function ($http, $
              }
              var valid = false;
              var resourcePath = attr.lookupValid + '/' + value;
+
              return {href:resourcePath};
           });
 
@@ -479,11 +529,29 @@ application.directive('lookupValid', ['$http', '$q','$parse', function ($http, $
                 return null;
              }
              ngModel.$setValidity('lookupValid', true);
-             return getIdFromHref(value.href);
+             return ltHATEOSUtils.getIdFromHref(value.href);
           });
       }
    };
 }]);
+
+
+createService = function(services, serviceName, resourcePath ) {
+
+    services.factory(serviceName,['$resource', function($resource) {
+
+        return $resource(resourcePath+ '/:p_id', {} ,
+        {
+          'get':    {method:'GET', headers:{Accept:'application/json'}},
+          'create':   {method:'POST', headers:{Accept:'application/json'}},
+          'save':   {method:'PUT', headers:{Accept:'application/json'}},
+          'query':  {method:'GET', isArray:false, headers:{Accept:'application/json'}},
+          'remove': {method:'DELETE', headers:{Accept:'application/json'}}
+        });
+
+    }]);
+
+}
 
 
 

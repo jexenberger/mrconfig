@@ -3,12 +3,15 @@ package org.github.levelthree.angular;
 import org.github.levelthree.Resource;
 import org.github.levelthree.service.CRUDService;
 import org.github.levelthree.ux.MyEntityController;
+import org.github.levelthree.ux.Templating;
 import org.github.levelthree.ux.View;
 import org.junit.Before;
 import org.junit.Test;
 
 import static org.easymock.EasyMock.createMock;
+import static org.github.levelthree.util.IOUtil.pwd;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * Created by julian3 on 2014/09/21.
@@ -20,6 +23,13 @@ public class AngularResourceUXTest {
 
     @Before
     public void setUp() throws Exception {
+
+        Templating.reset();
+        AngularUXModule.reset();
+        AngularUXModule.DEBUG_PATH = pwd() + "/src/main/resources/org/github/levelthree/angular";
+        new AngularUXModule().init();
+
+
         mock = createMock(View.class);
         resource = (AngularResourceUX) new AngularResourceUX()
                 .resource(Resource.resource(MyEntityController.class, createMock(CRUDService.class)));
@@ -85,6 +95,14 @@ public class AngularResourceUXTest {
         test = resource.getListTemplate();
         assertEquals("/application/main/views/test/list.html", test);
 
+
+    }
+
+    @Test
+    public void testGetControllerViews() throws Exception {
+        String controllerViews = resource.getControllerViews();
+        assertNotNull(controllerViews);
+        System.out.println(controllerViews);
 
     }
 }

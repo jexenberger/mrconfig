@@ -7,6 +7,7 @@ describe("core", function() {
     var compiled;
     var scope;
     var $httpBackend;
+    var ltHATEOSUtils;
 
     beforeEach(function() {
         module('application');
@@ -15,12 +16,17 @@ describe("core", function() {
               scope         = $rootScope.$new();
               menuController = $controller("rs_menu_Controller", { $scope: scope });
               //modalController = $controller("reLookupController", { $scope: scope });
-              base64 = $injector.get('base64');
-
+              base64 = $injector.get('LtBase64');
+              ltHATEOSUtils = $injector.get("LtHATEOSUtils");
+              alert(ltHATEOSUtils);
               scope.test = {
-                id : 543,
+                id : 123,
                 hello : 'world'
               }
+              $httpBackend  = $injector.get('$httpBackend');
+              $httpBackend.when('GET', '/test/123').respond(
+                { href: '123', title: "Test 123" },{Link:'</test/123>; type="null"; rel="1"; title="all"'}
+              );
 
               var html = "<form name='form'><input type='text' name='test' ng-model='test' lookup-valid='/test'/></form>";
               element = angular.element(html);
@@ -28,10 +34,6 @@ describe("core", function() {
               compiled(scope);
               scope.$digest();
 
-              $httpBackend  = $injector.get('$httpBackend');
-              $httpBackend.when('GET', '/test/123').respond(
-                { href: '123', title: "Test 123" },{Link:'</test/123>; type="null"; rel="1"; title="all"'}
-              );
 
         });
 
@@ -66,8 +68,6 @@ describe("core", function() {
         $httpBackend.flush();
         alert(JSON.stringify(scope.test));
         expect(form.test.$valid).toBe(true);
-        //expect(scope.test.href).toBe('/test/123');
-        //expect(scope.test.title).toBe('Test 123');
 
     });
 
@@ -93,7 +93,7 @@ describe("core", function() {
 
     it("parseHeaderLink", function() {
         var linkString = '<test/1>; type="null"; rel="1"; title="all" ';
-        var link = parseHeaderLink(linkString);
+        var link = ltHATEOSUtils.parseHeaderLink(linkString);
         expect(link.href).toBe('test/1');
         expect(link.type).toBe(null);
         expect(link.rel).toBe('1');

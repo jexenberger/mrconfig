@@ -93,9 +93,13 @@ public class AngularApplicationResourceTest {
 
         Response response = new AngularApplicationResource().getAllNavigation();
         checkAndRunTemplate(response);
+    }
+
+    @Test
+    public void testGetApplication() throws Exception {
+        Response response = new AngularApplicationResource().getApplication();
+        checkAndRunTemplate(response);
 
 
     }
-
-
 }
