@@ -1,4 +1,5 @@
-${name}Controllers.controller('${resource.resourceUx.controllerName}',[
+//${listController} definition ---
+${moduleName}Controllers.controller('${listController}',[
       '$scope',
       '$routeParams',
       '$window',
@@ -6,8 +7,7 @@ ${name}Controllers.controller('${resource.resourceUx.controllerName}',[
       '$location',
       '$injector',
       '$parse',
-      '${resource.name}Service',
+      '${serviceName}',
       function($scope, $routeParams, $window, $http, $location, $injector, $parse, service) {
           angular.extend(this, new LtListController($scope, $routeParams, $window, $http, $location, $injector, $parse, service));
-      }]
-  );
+      }]);

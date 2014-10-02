@@ -1,10 +1,10 @@
-//================== BEGIN CONTROLLERS: ${module.name}
+//================== BEGIN SERVICES: ${module.name}
 <#list module.resources?keys as resourceKey>
    <#assign resource=module.resources[resourceKey]>
    <#if resource.resourceUx??>
 
-${resource.resourceUx.controllerViews}
+${resource.resourceUx.service}
 
    </#if>
 </#list>
-//================== END CONTROLLERS ${module.name}
+//================== END SERVICES: ${module.name}

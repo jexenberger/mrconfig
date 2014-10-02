@@ -56,6 +56,10 @@ public class AngularResourceUX extends ResourceUX {
         return Optional.ofNullable(serviceName).orElse("application." + getGroup() + ".services." + getResource().getName() + "Service");
     }
 
+    public String getResourcePath() {
+        return getResource().getPath();
+    }
+
 
 
     public String getTemplatePath(String defaultView) {
@@ -148,6 +152,10 @@ public class AngularResourceUX extends ResourceUX {
         return editComponent.getTemplateUrl();
     }
 
+    public String getModuleName() {
+        return getResource().getGroup();
+    }
+
     public String getViewTemplate() {
         checkInitialisation();
         return viewComponent.getTemplateUrl();
@@ -216,13 +224,17 @@ public class AngularResourceUX extends ResourceUX {
         if (viewComponent != null) {
             builder.append(getViewControllerView()).append("\n");
         }
-        if (!Objects.equals(viewComponent, createComponent)) {
+        if (!Objects.equals(getViewControllerView(), getCreateControllerView())) {
             builder.append(getCreateControllerView()).append("\n");
         }
-        if (!Objects.equals(viewComponent, editComponent)) {
+        if (!Objects.equals(getViewControllerView(), getEditControllerView())) {
             builder.append(getEditControllerView()).append("\n");
         }
         return builder.toString();
+    }
+
+    public String getService() {
+        return renderTemplate(templateView("service.ftl"),this);
     }
 
     public String renderTemplate(View template, Object model) {

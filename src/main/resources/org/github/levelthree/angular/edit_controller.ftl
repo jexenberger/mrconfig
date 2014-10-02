@@ -1,4 +1,5 @@
-${moduleName}Controllers.controller('${resource.resourceUx.controllerName}',[
+//${editController} definition ---
+${moduleName}Controllers.controller('${editController}',[
     '$scope',
     '$routeParams',
     '$window',
@@ -6,7 +7,7 @@ ${moduleName}Controllers.controller('${resource.resourceUx.controllerName}',[
     '$location',
     '$injector',
     '$parse',
-    '${resource.serviceName}',
+    '${serviceName}',
     function($scope, $routeParams, $window, $http, $location, $injector, $parse, service) {
         angular.extend(this, new LtEditController($scope, $routeParams, $window, $http, $location, $injector, $parse, service));
     }]
