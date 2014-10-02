@@ -35,6 +35,7 @@ public class AngularResourceUX extends ResourceUX {
 
 
     boolean init = false;
+    private View serviceView;
 
     public AngularResourceUX() {
         super();
@@ -43,13 +44,14 @@ public class AngularResourceUX extends ResourceUX {
 
 
 
-    public AngularResourceUX(String serviceName, AngularUXComponent createComponent, AngularUXComponent editComponent, AngularUXComponent listComponent, AngularUXComponent viewComponent) {
+    public AngularResourceUX(String serviceName, AngularUXComponent createComponent, AngularUXComponent editComponent, AngularUXComponent listComponent, AngularUXComponent viewComponent, View serviceView) {
         super();
         this.serviceName = serviceName;
         this.createComponent = createComponent;
         this.editComponent = editComponent;
         this.listComponent = listComponent;
         this.viewComponent = viewComponent;
+        this.serviceView = serviceView;
     }
 
     public String getServiceName() {
@@ -85,6 +87,7 @@ public class AngularResourceUX extends ResourceUX {
             editComponent = Optional.ofNullable(editComponent).orElse(createAngularComponent(EDIT_VIEW_MAPPING, templateView("edit_form.ftl"),templateView("edit_controller.ftl"), templateView("edit_resolve.ftl"), ":p_id", "edit.html"));
             listComponent = Optional.ofNullable(listComponent).orElse(createAngularComponent(LIST_VIEW_MAPPING, templateView("list_form.ftl"), templateView("list_controller.ftl"), templateView("simple_resolve.ftl"), null, "list.html"));
             viewComponent = Optional.ofNullable(viewComponent).orElse(createAngularComponent(VIEW_VIEW_MAPPING, templateView("edit_form.ftl"), templateView("edit_controller.ftl"), templateView("edit_resolve.ftl"), ":p_id", "edit.html"));
+            serviceView = templateView("service.ftl");
         }
         init = true;
     }
@@ -234,7 +237,8 @@ public class AngularResourceUX extends ResourceUX {
     }
 
     public String getService() {
-        return renderTemplate(templateView("service.ftl"),this);
+        serviceView = templateView("service.ftl");
+        return renderTemplate(serviceView,this);
     }
 
     public String renderTemplate(View template, Object model) {

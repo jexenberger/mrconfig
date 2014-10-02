@@ -103,7 +103,7 @@ public class Resource {
         resource.setDeletable(service);
         resource.setUniqueLookup(service);
         resource.setUpdateable(service);
-        //resource.ux(ResourceUX.defaultView(resource, formSupplier));
+        resource.ux(UXProvider.getResourceUXInstance(formSupplier));
         return resource;
     }
 

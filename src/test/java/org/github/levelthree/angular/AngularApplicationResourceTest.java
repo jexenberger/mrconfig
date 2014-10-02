@@ -61,12 +61,7 @@ public class AngularApplicationResourceTest {
 
     @Test
     public void testLoadModules() throws Exception {
-
-
-        Response response = new AngularApplicationResource().loadModules();
-        checkAndRunTemplate(response);
-
-
+        checkAndRunTemplate(new AngularApplicationResource().loadModules());
     }
 
     public void checkAndRunTemplate(Response response) throws IOException {
@@ -82,8 +77,7 @@ public class AngularApplicationResourceTest {
     @Test
     public void testLoadModuleNavigation() throws Exception {
 
-        Response response = new AngularApplicationResource().getNavigation("testModule1");
-        checkAndRunTemplate(response);
+        checkAndRunTemplate(new AngularApplicationResource().getNavigation("testModule1"));
 
 
     }
@@ -91,14 +85,12 @@ public class AngularApplicationResourceTest {
     @Test
     public void testAllNavigation() throws Exception {
 
-        Response response = new AngularApplicationResource().getAllNavigation();
-        checkAndRunTemplate(response);
+        checkAndRunTemplate(new AngularApplicationResource().getAllNavigation());
     }
 
     @Test
     public void testGetApplication() throws Exception {
-        Response response = new AngularApplicationResource().getApplication();
-        checkAndRunTemplate(response);
+        checkAndRunTemplate(new AngularApplicationResource().getApplication());
 
 
     }
