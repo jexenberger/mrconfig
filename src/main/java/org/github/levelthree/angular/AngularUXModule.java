@@ -2,13 +2,14 @@ package org.github.levelthree.angular;
 
 import org.github.levelthree.Module;
 import org.github.levelthree.ux.Templating;
+import org.github.levelthree.ux.form.DefaultUXModule;
 
 import java.util.Collection;
 
 /**
  * Created by julian3 on 2014/09/20.
  */
-public class AngularUXModule extends Module {
+public class AngularUXModule extends DefaultUXModule {
 
     public static String DEBUG_PATH = null;
 
@@ -20,6 +21,7 @@ public class AngularUXModule extends Module {
 
     @Override
     public void init() {
+        super.init();
         if (DEBUG_PATH == null) {
             Templating.registerClass(AngularUXModule.class);
         } else {

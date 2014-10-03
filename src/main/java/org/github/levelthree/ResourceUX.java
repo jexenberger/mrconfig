@@ -39,7 +39,6 @@ public abstract class ResourceUX {
     public ResourceUX form(Form form) {
         Objects.requireNonNull(form);
         this.form = form;
-        this.form.setGroup(getGroup());
         return this;
     }
 
@@ -50,10 +49,12 @@ public abstract class ResourceUX {
 
     public Form getForm() {
         if (this.form != null) {
+            this.form.setGroup(getGroup());
             return this.form;
         }
         if (this.formSupplier != null) {
             this.form = this.formSupplier.apply(this.resource);
+            this.form.setGroup(getGroup());
         }
         return this.form;
     }
@@ -85,7 +86,7 @@ public abstract class ResourceUX {
 
     public void render(String method, OutputStream output) {
         //the hard way
-        View targetView = viewRequestMap.get(method);
+        View targetView = getViewByType(method);
         if (targetView == null) {
             throw new IllegalStateException("no view could be resolved for "+method);
         }
@@ -99,6 +100,8 @@ public abstract class ResourceUX {
     public abstract String getEditLink();
 
     public abstract String getViewLink();
+
+    public abstract View getViewByType(String type);
 
     public void create() {
         Objects.requireNonNull(resource, "resource not set");

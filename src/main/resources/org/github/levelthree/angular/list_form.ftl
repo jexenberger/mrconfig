@@ -1,5 +1,5 @@
 <#assign capture=false>
-<div ng-controller="${id}Controller" ng-cloak>
+<div ng-controller="${uxContext['list']}" ng-cloak>
   <div class="container-fluid col-xs-12 col-sm-12 col-md-12">
       <div class="container-fluid">
       <legend><h4>${name}<small> - search</small></h4></legend>

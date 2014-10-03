@@ -4,9 +4,12 @@ import org.github.levelthree.ResourceUX;
 import org.github.levelthree.ux.View;
 
 import java.io.ByteArrayOutputStream;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
+import static java.util.Optional.ofNullable;
 import static org.github.levelthree.util.StringUtil.capitalize;
 import static org.github.levelthree.ux.TemplateView.templateView;
 
@@ -30,6 +33,7 @@ public class AngularResourceUX extends ResourceUX {
     AngularUXComponent editComponent;
     AngularUXComponent listComponent;
     AngularUXComponent viewComponent;
+    Map<String, AngularUXComponent> componentMap = new LinkedHashMap<>();
 
 
 
@@ -47,15 +51,15 @@ public class AngularResourceUX extends ResourceUX {
     public AngularResourceUX(String serviceName, AngularUXComponent createComponent, AngularUXComponent editComponent, AngularUXComponent listComponent, AngularUXComponent viewComponent, View serviceView) {
         super();
         this.serviceName = serviceName;
-        this.createComponent = createComponent;
-        this.editComponent = editComponent;
-        this.listComponent = listComponent;
-        this.viewComponent = viewComponent;
+        setCreateComponent(createComponent);
+        setEditComponent(editComponent);
+        setListComponent(listComponent);
+        setViewComponent(viewComponent);
         this.serviceView = serviceView;
     }
 
     public String getServiceName() {
-        return Optional.ofNullable(serviceName).orElse("application." + getGroup() + ".services." + getResource().getName() + "Service");
+        return ofNullable(serviceName).orElse("application." + getGroup() + ".services." + getResource().getName() + "Service");
     }
 
     public String getResourcePath() {
@@ -83,10 +87,10 @@ public class AngularResourceUX extends ResourceUX {
     @Override
     public void init() {
         if (defaultComponents) {
-            createComponent = Optional.ofNullable(createComponent).orElse(createAngularComponent(CREATE_VIEW_MAPPING, templateView("edit_form.ftl"),templateView("edit_controller.ftl"), templateView("simple_resolve.ftl"), null, "edit.html"));
-            editComponent = Optional.ofNullable(editComponent).orElse(createAngularComponent(EDIT_VIEW_MAPPING, templateView("edit_form.ftl"),templateView("edit_controller.ftl"), templateView("edit_resolve.ftl"), ":p_id", "edit.html"));
-            listComponent = Optional.ofNullable(listComponent).orElse(createAngularComponent(LIST_VIEW_MAPPING, templateView("list_form.ftl"), templateView("list_controller.ftl"), templateView("simple_resolve.ftl"), null, "list.html"));
-            viewComponent = Optional.ofNullable(viewComponent).orElse(createAngularComponent(VIEW_VIEW_MAPPING, templateView("edit_form.ftl"), templateView("edit_controller.ftl"), templateView("edit_resolve.ftl"), ":p_id", "edit.html"));
+            setCreateComponent(ofNullable(createComponent).orElse(createAngularComponent(CREATE_VIEW_MAPPING, templateView("edit_form.ftl"), templateView("edit_controller.ftl"), templateView("simple_resolve.ftl"), null, "edit.html")));
+            setEditComponent(ofNullable(editComponent).orElse(createAngularComponent(EDIT_VIEW_MAPPING, templateView("edit_form.ftl"),templateView("edit_controller.ftl"), templateView("edit_resolve.ftl"), ":p_id", "edit.html")));
+            setListComponent(ofNullable(listComponent).orElse(createAngularComponent(LIST_VIEW_MAPPING, templateView("list_form.ftl"), templateView("list_controller.ftl"), templateView("simple_resolve.ftl"), null, "list.html")));
+            setViewComponent(ofNullable(viewComponent).orElse(createAngularComponent(VIEW_VIEW_MAPPING, templateView("edit_form.ftl"), templateView("edit_controller.ftl"), templateView("edit_resolve.ftl"), ":p_id", "edit.html")));
             serviceView = templateView("service.ftl");
         }
         init = true;
@@ -128,6 +132,11 @@ public class AngularResourceUX extends ResourceUX {
     public String getViewLink() {
         checkInitialisation();
         return viewComponent.getRoutePath();
+    }
+
+    @Override
+    public View getViewByType(String type) {
+        return getComponentByType(type).getView();
     }
 
     public String getEditLink() {
@@ -248,5 +257,27 @@ public class AngularResourceUX extends ResourceUX {
         return target.toString();
     }
 
+    public void setCreateComponent(AngularUXComponent createComponent) {
+        this.componentMap.put(CREATE_VIEW_MAPPING, createComponent);
+        this.createComponent = createComponent;
+    }
 
+    public void setEditComponent(AngularUXComponent editComponent) {
+        this.componentMap.put(EDIT_VIEW_MAPPING, editComponent);
+        this.editComponent = editComponent;
+    }
+
+    public void setListComponent(AngularUXComponent listComponent) {
+        this.componentMap.put(LIST_VIEW_MAPPING, listComponent);
+        this.listComponent = listComponent;
+    }
+
+    public void setViewComponent(AngularUXComponent viewComponent) {
+        this.componentMap.put(VIEW_VIEW_MAPPING, viewComponent);
+        this.viewComponent = viewComponent;
+    }
+
+    public AngularUXComponent getComponentByType(String type) {
+        return this.componentMap.get(type);
+    }
 }

@@ -1,2 +1,1 @@
-// --- definition for ${serviceName}
-createService(${moduleName}Services,${serviceName}, ${resourcePath});
+createService(${moduleName}Services,'${serviceName}', '${resourcePath}');

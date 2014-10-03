@@ -51,6 +51,11 @@ public class ResourceUXTest {
             }
 
             @Override
+            public View getViewByType(String type) {
+                return view;
+            }
+
+            @Override
             public void init() {
                 addView("edit.html",view);
                 addView("list.html",view);

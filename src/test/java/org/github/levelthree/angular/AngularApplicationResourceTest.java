@@ -7,6 +7,7 @@ import org.github.levelthree.service.CRUDService;
 import org.github.levelthree.ux.MyEntityController;
 import org.github.levelthree.ux.Templating;
 import org.github.levelthree.ux.View;
+import org.github.levelthree.ux.form.BeanFormBuilder;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -30,14 +31,13 @@ public class AngularApplicationResourceTest {
         AngularUXModule.reset();
         AngularUXModule.DEBUG_PATH = pwd() + "/src/main/resources/org/github/levelthree/angular";
         new AngularUXModule().init();
-        final View mockView = createMock(View.class);
         ModuleRegistry.add(new Module("testModule1") {
 
             @Override
             public void init() {
 
                 Resource resource = Resource.resource(MyEntityController.class, createMock(CRUDService.class))
-                        .ux(new AngularResourceUX());
+                        .ux(new AngularResourceUX().formSupplier(BeanFormBuilder::form));
                 register(resource);
             }
         });
@@ -55,8 +55,6 @@ public class AngularApplicationResourceTest {
 
         ModuleRegistry.get("testModule1").ifPresent(Module::init);
         ModuleRegistry.get("testModule2").ifPresent(Module::init);
-
-
     }
 
     @Test
@@ -76,22 +74,33 @@ public class AngularApplicationResourceTest {
 
     @Test
     public void testLoadModuleNavigation() throws Exception {
-
         checkAndRunTemplate(new AngularApplicationResource().getNavigation("testModule1"));
-
-
     }
 
     @Test
     public void testAllNavigation() throws Exception {
-
         checkAndRunTemplate(new AngularApplicationResource().getAllNavigation());
     }
 
     @Test
     public void testGetApplication() throws Exception {
         checkAndRunTemplate(new AngularApplicationResource().getApplication());
+    }
 
+    @Test
+    public void testGetView() throws Exception {
+
+        Response view = new AngularApplicationResource().getView("testModule1", "test", "edit");
+        checkAndRunTemplate(view);
+
+        view = new AngularApplicationResource().getView("testModule1", "test", "list");
+        checkAndRunTemplate(view);
+
+        view = new AngularApplicationResource().getView("testModule1", "test", "create");
+        checkAndRunTemplate(view);
+
+        view = new AngularApplicationResource().getView("testModule1", "test", "view");
+        checkAndRunTemplate(view);
 
     }
 }

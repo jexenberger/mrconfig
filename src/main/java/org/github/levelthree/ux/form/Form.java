@@ -3,6 +3,8 @@ package org.github.levelthree.ux.form;
 
 import java.util.*;
 
+import static java.util.Optional.ofNullable;
+
 /**
  * Created by julian3 on 2014/07/19.
  */
@@ -18,6 +20,7 @@ public class Form {
     boolean sorted = false;
     boolean sortedSearch = false;
     Map<String, Form> collectionForms;
+    Map<String, String> uxContext;
     
 
 
@@ -175,5 +178,14 @@ public class Form {
             }
             return fieldA.getId().compareTo(fieldB.getId());
         };
+    }
+
+    public Map<String, String> getUxContext() {
+        uxContext = ofNullable(uxContext).orElse(new HashMap<>());
+        return uxContext;
+    }
+
+    public void setUxContext(Map<String, String> uxContext) {
+        this.uxContext = uxContext;
     }
 }

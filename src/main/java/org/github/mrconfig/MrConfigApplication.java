@@ -1,6 +1,7 @@
 package org.github.mrconfig;
 
 
+import org.github.levelthree.angular.AngularUXModule;
 import org.github.mrconfig.domain.*;
 import org.github.levelthree.Module;
 import org.github.levelthree.Resource;
@@ -78,7 +79,7 @@ public class MrConfigApplication extends ResourceConfig {
                         */
 
                         this.addModule(new JPAModule("org.github.mrconfig.domain"));
-                        this.addModule(new DefaultUXModule());
+                        this.addModule(new AngularUXModule());
 
                         register(Resource.scaffold(EnvironmentResource.class, BeanFormBuilder::form));
                         register(Resource.scaffold(DataCentreResource.class, BeanFormBuilder::form));

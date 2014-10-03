@@ -169,7 +169,7 @@ LtBaseController = function($scope, $routeParams, $window, $http, $location, $in
 
       $scope.reset();
     
-    }]);
+};
 
 
 LtListController = function($scope, $routeParams, $window, $http, $location, $injector, $parse, service) {
@@ -224,7 +224,7 @@ LtListController = function($scope, $routeParams, $window, $http, $location, $in
       }
 
 
-}]);
+};
 
 LtEditController = function($scope, $routeParams, $window, $http, $location, $injector, $parse, service) {
 
@@ -312,7 +312,7 @@ LtEditController = function($scope, $routeParams, $window, $http, $location, $in
         }
       };
 
-}];
+};
 
 LtModalController =  function($scope, $routeParams, $window, $http, $location, $injector, $parse, service) {
 
@@ -351,4 +351,4 @@ LtModalController =  function($scope, $routeParams, $window, $http, $location, $
 
 
 
-}]);
+};

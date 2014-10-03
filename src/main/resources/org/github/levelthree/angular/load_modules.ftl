@@ -7,9 +7,9 @@
  * MODULE:  '${moduleName}'
  *=============================================================================
  */
-${moduleName}Module =  application.module('application.${moduleName}');
-${moduleName}Controllers = ${moduleName}Module.module('application.${moduleName}.controllers',[]);
-${moduleName}Services = ${moduleName}Module.module('application.${moduleName}.services',[]);
+var ${moduleName}Module =  application.module('${moduleName}',[]);
+var ${moduleName}Controllers = ${moduleName}Module.module('controllers',[]);
+var ${moduleName}Services = ${moduleName}Module.module('services',[]);
 
 <#include 'module_services.ftl'>
 

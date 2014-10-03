@@ -1,7 +1,7 @@
 /**
  * Application declaration
  */
-var application = angular.module('application', [
+application = angular.module('application', [
     'ngRoute',
     'ngResource',
     'LtServices',
@@ -300,29 +300,29 @@ application.factory('LtBasicAuthInterceptor', ['$log', '$rootScope', function($l
 }]);
 
 
-application.factory('LtLoadEventsInterceptor', ['$log', '$rootScope', 'LT_LOAD_EVENTS', '$q',function($log, $rootScope, LOAD_EVENTS, $q) {
+application.factory('LtLoadEventsInterceptor', ['$log', '$rootScope', 'LT_LOAD_EVENTS', '$q',function($log, $rootScope, LT_LOAD_EVENTS, $q) {
 
     var myInterceptor = {
         // optional method
               'request': function(config) {
                 $log.debug(JSON.stringify(config));
                 if (config.headers.Accept) {
-                    $rootScope.$broadcast(LOAD_EVENTS.started);
+                    $rootScope.$broadcast(LT_LOAD_EVENTS.started);
                 }
                 return config;
               }
               ,
               'response': function(response) {
-                $rootScope.$broadcast(LOAD_EVENTS.finished);
+                $rootScope.$broadcast(LT_LOAD_EVENTS.finished);
                 return response;
               }
               ,
               'responseError' : function(response) {
-                $rootScope.$broadcast(LOAD_EVENTS.finished);
+                $rootScope.$broadcast(LT_LOAD_EVENTS.finished);
                 return $q.reject(response);
               },
               'requestError' : function(response) {
-                $rootScope.$broadcast(LOAD_EVENTS.finished);
+                $rootScope.$broadcast(LT_LOAD_EVENTS.finished);
                 return $q.reject(response);
               }
 
@@ -408,15 +408,15 @@ controllers.controller('reLoginController',  [ '$scope','$modalInstance','securi
 }]);
 
 
-controllers.controller('reLoadingController',  [ '$scope','$rootScope','LOAD_EVENTS',function ($scope, $rootScope, LOAD_EVENTS) {
+controllers.controller('reLoadingController',  [ '$scope','$rootScope','LT_LOAD_EVENTS',function ($scope, $rootScope, LT_LOAD_EVENTS) {
 
   $scope.show = false;
 
-  $rootScope.$on(LOAD_EVENTS.started,function(event) {
+  $rootScope.$on(LT_LOAD_EVENTS.started,function(event) {
        $scope.show = true;
   });
 
-  $rootScope.$on(LOAD_EVENTS.finished,function(event) {
+  $rootScope.$on(LT_LOAD_EVENTS.finished,function(event) {
        $scope.show = false;
   });
 
