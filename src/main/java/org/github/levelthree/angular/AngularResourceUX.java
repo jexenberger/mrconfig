@@ -7,7 +7,6 @@ import java.io.ByteArrayOutputStream;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 
 import static java.util.Optional.ofNullable;
 import static org.github.levelthree.util.StringUtil.capitalize;
@@ -59,7 +58,7 @@ public class AngularResourceUX extends ResourceUX {
     }
 
     public String getServiceName() {
-        return ofNullable(serviceName).orElse("application." + getGroup() + ".services." + getResource().getName() + "Service");
+        return ofNullable(serviceName).orElse(getGroup() + "_services_" + getResource().getName() + "Service");
     }
 
     public String getResourcePath() {
@@ -69,36 +68,36 @@ public class AngularResourceUX extends ResourceUX {
 
 
     public String getTemplatePath(String defaultView) {
-        return "/application/" + getGroup() + "/views" + getResource().getPath() + "/" + defaultView;
+        return "/ng-app/" + getGroup() + "/views" + getResource().getPath() + "/" + defaultView;
     }
 
     public String getNavigationLink(String defaultView, String navParameter) {
         if (navParameter != null) {
-            return "/" + getGroup() + "/views" + getResource().getPath() + "/" +  defaultView + "/" + navParameter;
+            return  "/views" + getResource().getPath() + "/" +  defaultView + "/" + navParameter;
         } else {
-            return "/" + getGroup() + "/views" + getResource().getPath() + "/" + defaultView;
+            return  "/views" + getResource().getPath() + "/" + defaultView;
         }
     }
 
     public String getControllerName(String defaultView) {
-        return "application." + getGroup() + ".controllers." + getResource().getName()+ capitalize(defaultView) + "Controller";
+        return getGroup() + "_controllers_" + getResource().getName()+ capitalize(defaultView) + "Controller";
     }
 
     @Override
     public void init() {
         if (defaultComponents) {
-            setCreateComponent(ofNullable(createComponent).orElse(createAngularComponent(CREATE_VIEW_MAPPING, templateView("edit_form.ftl"), templateView("edit_controller.ftl"), templateView("simple_resolve.ftl"), null, "edit.html")));
-            setEditComponent(ofNullable(editComponent).orElse(createAngularComponent(EDIT_VIEW_MAPPING, templateView("edit_form.ftl"),templateView("edit_controller.ftl"), templateView("edit_resolve.ftl"), ":p_id", "edit.html")));
-            setListComponent(ofNullable(listComponent).orElse(createAngularComponent(LIST_VIEW_MAPPING, templateView("list_form.ftl"), templateView("list_controller.ftl"), templateView("simple_resolve.ftl"), null, "list.html")));
-            setViewComponent(ofNullable(viewComponent).orElse(createAngularComponent(VIEW_VIEW_MAPPING, templateView("edit_form.ftl"), templateView("edit_controller.ftl"), templateView("edit_resolve.ftl"), ":p_id", "edit.html")));
+            setCreateComponent(ofNullable(createComponent).orElse(createAngularComponent(CREATE_VIEW_MAPPING, templateView("edit_form.ftl"), templateView("edit_controller.ftl"), templateView("simple_resolve.ftl"), null, "edit.html", EDIT_VIEW_MAPPING)));
+            setEditComponent(ofNullable(editComponent).orElse(createAngularComponent(EDIT_VIEW_MAPPING, templateView("edit_form.ftl"),templateView("edit_controller.ftl"), templateView("edit_resolve.ftl"), ":p_id", "edit.html", EDIT_VIEW_MAPPING)));
+            setListComponent(ofNullable(listComponent).orElse(createAngularComponent(LIST_VIEW_MAPPING, templateView("list_form.ftl"), templateView("list_controller.ftl"), templateView("simple_resolve.ftl"), null, "list.html", LIST_VIEW_MAPPING)));
+            setViewComponent(ofNullable(viewComponent).orElse(createAngularComponent(VIEW_VIEW_MAPPING, templateView("edit_form.ftl"), templateView("edit_controller.ftl"), templateView("edit_resolve.ftl"), ":p_id", "edit.html", EDIT_VIEW_MAPPING)));
             serviceView = templateView("service.ftl");
         }
         init = true;
     }
 
-    public AngularUXComponent createAngularComponent(String viewType, View view, View controllerView, View routeResolveView, String navParameter, String fileName) {
+    public AngularUXComponent createAngularComponent(String viewType, View view, View controllerView, View routeResolveView, String navParameter, String fileName, String controllerType) {
         addView(fileName, templateView(fileName));
-        return new AngularUXComponent(getNavigationLink(viewType, navParameter), getTemplatePath(fileName), getControllerName(viewType), view, controllerView, routeResolveView);
+        return new AngularUXComponent(getNavigationLink(viewType, navParameter), getTemplatePath(fileName), getControllerName(controllerType), view, controllerView, routeResolveView);
     }
 
 

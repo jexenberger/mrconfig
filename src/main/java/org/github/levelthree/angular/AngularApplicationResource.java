@@ -50,7 +50,7 @@ public class AngularApplicationResource {
     @GET
     @Path("/{module}/views/{entity}/{type}.html")
     @Produces({MediaType.TEXT_HTML})
-    public Response getView(@PathParam("module") String module, @PathParam("entity") String entity, @PathParam("entity") String type) {
+    public Response getView(@PathParam("module") String module, @PathParam("entity") String entity, @PathParam("type") String type) {
         if (!entity.startsWith("/")) {
             entity = "/"+entity;
         }
@@ -60,7 +60,12 @@ public class AngularApplicationResource {
 
         StreamingOutput stream = (output)-> {
             AngularResourceUX resourceUx = (AngularResourceUX) resource.getResourceUx();
-            resourceUx.getForm().getUxContext().put(type, resourceUx.getComponentByType(type).getControllerName());
+            try {
+                AngularUXComponent component = resourceUx.getComponentByType(type);
+                resourceUx.getForm().getUxContext().put(type, component.getControllerName());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             resourceUx.render(type, output);
         };
         return Response.ok(stream).build();

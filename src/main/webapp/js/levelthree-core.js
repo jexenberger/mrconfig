@@ -1,7 +1,9 @@
 /**
  * Application declaration
  */
-application = angular.module('application', [
+
+
+var levelThreeModule = angular.module('LtModule', [
     'ngRoute',
     'ngResource',
     'LtServices',
@@ -29,12 +31,12 @@ var LtLoadEvents = {
 /**
  * constant declaration
  */
-application
+levelThreeModule
     .constant('LT_AUTH_EVENTS', LtAuthEvents)
     .constant('LT_LOAD_EVENTS', LtLoadEvents);
 
 
-application
+levelThreeModule
     .config(['$httpProvider', function($httpProvider) {
         $httpProvider.interceptors.push('LtBasicAuthInterceptor');
         $httpProvider.interceptors.push('LtLoadEventsInterceptor');
@@ -44,6 +46,7 @@ application
 
 var services = angular.module('LtServices',[]);
 var controllers = angular.module('LtControllers', []);
+
 
 services.factory('LtBase64', function() {
     var keyStr = 'ABCDEFGHIJKLMNOP' +
@@ -130,7 +133,22 @@ services.factory('LtBase64', function() {
     };
 });
 
-application.factory('LtHATEOSUtils',[function() {
+
+levelThreeModule.factory('LtPromises',['$q',function($q) {
+
+
+    asPromise = function(value) {
+        return $q.when(value);
+    }
+
+    return {
+        asPromise : asPromise,
+        $get:angular.noop
+    };
+
+}]);
+
+levelThreeModule.factory('LtHATEOSUtils',[function() {
 
     getIdFromHref = function(input) {
       if (input == null) {
@@ -233,7 +251,7 @@ application.factory('LtHATEOSUtils',[function() {
 }]);
 
 
-application.factory('LtSecurityContext', ['$http','LtBase64', '$rootScope', 'LT_AUTH_EVENTS', function($http, base64, $rootScope, AUTH_EVENTS) {
+levelThreeModule.factory('LtSecurityContext', ['$http','LtBase64', '$rootScope', 'LT_AUTH_EVENTS', function($http, base64, $rootScope, AUTH_EVENTS) {
 
    var roles = [];
    var authorization = null;
@@ -282,7 +300,7 @@ application.factory('LtSecurityContext', ['$http','LtBase64', '$rootScope', 'LT_
 }]);
 
 
-application.factory('LtBasicAuthInterceptor', ['$log', '$rootScope', function($log, $rootScope) {
+levelThreeModule.factory('LtBasicAuthInterceptor', ['$log', '$rootScope', function($log, $rootScope) {
 
     var myInterceptor = {
         // optional method
@@ -300,7 +318,7 @@ application.factory('LtBasicAuthInterceptor', ['$log', '$rootScope', function($l
 }]);
 
 
-application.factory('LtLoadEventsInterceptor', ['$log', '$rootScope', 'LT_LOAD_EVENTS', '$q',function($log, $rootScope, LT_LOAD_EVENTS, $q) {
+levelThreeModule.factory('LtLoadEventsInterceptor', ['$log', '$rootScope', 'LT_LOAD_EVENTS', '$q',function($log, $rootScope, LT_LOAD_EVENTS, $q) {
 
     var myInterceptor = {
         // optional method
@@ -457,13 +475,13 @@ controllers.controller('reLookupController',[ '$scope','$http','$modalInstance',
 }]);
 
 
-application.filter('hrefId', function() {
+levelThreeModule.filter('hrefId', function() {
    return function(input) {
         return getIdFromHref(input);
    };
 });
 
-application.directive('defaultValue', ['$scope', '$element', '$attrs', '$parse', function($scope, $element, $attrs, $parse) {
+levelThreeModule.directive('defaultValue', ['$scope', '$element', '$attrs', '$parse', function($scope, $element, $attrs, $parse) {
   return {
     link: function() {
         alert('firing default value');
@@ -479,7 +497,7 @@ application.directive('defaultValue', ['$scope', '$element', '$attrs', '$parse',
 }]);
 
 
-application.directive('lookupValid', ['$http', '$q','$parse','LtHATEOSUtils', function ($http, $q, $parse, ltHATEOSUtils){
+levelThreeModule.directive('lookupValid', ['$http', '$q','$parse','LtHATEOSUtils', function ($http, $q, $parse, ltHATEOSUtils){
 
    return {
       require: 'ngModel',
@@ -538,12 +556,14 @@ application.directive('lookupValid', ['$http', '$q','$parse','LtHATEOSUtils', fu
 
 createService = function(services, serviceName, resourcePath ) {
 
-    services.factory(serviceName,['$resource', function($resource) {
+    services.value('resource_'+serviceName, resourcePath);
 
+    return services.factory(serviceName,['$resource', function($resource) {
+        alert(serviceName);
         return $resource(resourcePath+ '/:p_id', {} ,
         {
           'get':    {method:'GET', headers:{Accept:'application/json'}},
-          'create':   {method:'POST', headers:{Accept:'application/json'}},
+          'create': {method:'POST', headers:{Accept:'application/json'}},
           'save':   {method:'PUT', headers:{Accept:'application/json'}},
           'query':  {method:'GET', isArray:false, headers:{Accept:'application/json'}},
           'remove': {method:'DELETE', headers:{Accept:'application/json'}}

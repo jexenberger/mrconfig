@@ -1,7 +1,7 @@
 <#include "index_builder.ftl">
            <input id="${field.uuid}Field"
-                  class="form-control input-sm"
+                  class="<#include 'input_class.ftl'/>"
                   name="${field.uuid}Name"
-                  type="${field.htmlType()}"
+                  type="${field.type.id}"
                   ng-model="model.${fieldId}"
                   readonly="true"/>

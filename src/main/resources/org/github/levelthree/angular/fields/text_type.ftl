@@ -4,10 +4,11 @@
                    type="${field.type.id}"
                    ng-model="model.${fieldId}"
                    ng-readonly="!editable"
-                   class="form-control input-sm"
+                   class="<#include 'input_class.ftl'/>"
                    <#if field.defaultValue??>
                    ng-init="model.${fieldId} = model.${fieldId} || '${field.defaultValue}'"
                    </#if>
                    <#include '../placeholders_tabs.ftl'/>
-                   <#include '../constraints.ftl'/>/>
+                   <#include '../constraints.ftl'/>
+                   />
               <#include '../glyph_control.ftl'/>

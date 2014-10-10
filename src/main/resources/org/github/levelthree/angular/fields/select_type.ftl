@@ -2,7 +2,7 @@
               <select id="${field.uuid}Field"
                       name="${field.uuid}Name"
                       ng-model="model.${fieldId}"
-                      class="form-control input-sm"
+                      class="<#include 'input_class.ftl'/>"
                       ng-readonly="!editable"
                       <#include '../placeholders_tabs.ftl'/>
                       <#include '../constraints.ftl'>>

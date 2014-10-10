@@ -1,4 +1,4 @@
-${module.name}Module.config(['$routeProvider','$injector','$route',function($routeProvider, $injector, $route) {
+${module.name}Module.config(['$routeProvider','$injector',function($routeProvider, $injector) {
 <#list module.resources?keys as resourceKey>
    <#assign resource=module.resources[resourceKey]>
    <#if resource.resourceUx??>

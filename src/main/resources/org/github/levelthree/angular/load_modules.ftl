@@ -7,13 +7,19 @@
  * MODULE:  '${moduleName}'
  *=============================================================================
  */
-var ${moduleName}Module =  application.module('${moduleName}',[]);
-var ${moduleName}Controllers = ${moduleName}Module.module('controllers',[]);
-var ${moduleName}Services = ${moduleName}Module.module('services',[]);
+var ${moduleName}Module =  angular.module('${moduleName}',[
+    'ngRoute',
+    'ngResource',
+    'LtModule',
+    'ui.bootstrap',
+]);
 
 <#include 'module_services.ftl'>
 
 <#include 'module_controllers.ftl'>
+
+<#include 'module_navigation.ftl'>
+
 /*
  *=============================================================================
  * END MODULE:  '${moduleName}'
@@ -21,3 +27,15 @@ var ${moduleName}Services = ${moduleName}Module.module('services',[]);
  */
 </#if>
 </#list>
+var application = angular.module('application', [
+    <#list modules?keys as moduleName>
+    <#if (modules[moduleName].resources?size > 0)>
+    '${moduleName}',
+    </#if>
+    </#list>
+    'ngRoute',
+    'ngResource',
+    'LtModule',
+    'ui.bootstrap'
+
+]);

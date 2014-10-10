@@ -8,10 +8,10 @@
      <#assign fieldId = field.id>
      <#assign idx = "-1">
 </#if>
-         <div class="input-group">
+         <div class="input-group col-xs-10">
             <input id="${field.uuid}Field"
                    type="text"
-                   class="form-control input-sm"
+                   class="<#include 'input_class.ftl'/>"
                    name="${field.uuid}Name"
                    ng-readonly="!editable"
                    datepicker-popup="{{format}}"

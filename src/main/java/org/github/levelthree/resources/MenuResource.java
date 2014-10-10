@@ -38,7 +38,7 @@ public class MenuResource {
             }
             allow = allowAccess(context, form.getResource().getCreateRole());
             if (allow) {
-                response.getMenuGroups().get(form.getGroup()).add(new MenuItem(form.getName()+" New", form.getKey()+".new", form.getCreateLink()));
+                response.getMenuGroups().get(form.getGroup()).add(new MenuItem(form.getName()+" New", form.getKey()+".new",  form.getCreateLink()));
             }
 
         }

@@ -1,16 +1,16 @@
-
+<#include 'field_include_macro.ftl'/>
 <#assign capture=true>
 <div  ng-controller="${uxContext['edit']}" ng-cloak>
   <div class="container-fluid col-xs-12 col-sm-12 col-md-12">
      <div class="container-fluid">
-        <legend><h4>${name} {{editable}}<small ng-if="!editable"> - view</small> <small ng-if="editable && isNew"> - create</small><small ng-if="editable && !isNew"> - edit</small></h4></legend>
+        <legend><h4>${name}<small ng-if="!editable"> - view</small> <small ng-if="editable && isNew"> - create</small><small ng-if="editable && !isNew"> - edit</small></h4></legend>
      </div>
      <div class="container-fluid">
          <div class="btn-group pull-right btn-group-sm">
                                  <button type="button"
-                                         class="glyphicon glyphicon-cog btn btn-danger dropdown-toggle pull-right"
+                                         class="btn btn-danger dropdown-toggle pull-right"
                                          data-toggle="dropdown">
-                                     Actions <span class="caret"></span>
+                                     <i class="glyphicon glyphicon-cog">&nbsp;</i>Actions <span class="caret"></span>
                                  </button>
                                  <ul class="dropdown-menu" role="menu">
                                      <li ng-repeat="link in model.links">
@@ -24,38 +24,16 @@
          <div>
                 <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
          </div>
-        <form name="${id}Form" novalidate role="form">
+        <form name="${id}Form" class="form-horizontal" novalidate role="form">
           <#list byGroups?keys as group>
             <#assign fields=byGroups[group]>
-            <fieldset>
             <#if group != 'default'>
             <legend><h5>${group}</h5></legend>
-            </#if>
-            <#assign counter=0>
-            <#assign didRun=false>
-            <#list fields as field>
-                <#assign counter=counter+1>
-                <#assign didRun=true>
-                <#if counter==1>
-                <div class="row">
-                </#if>
-                <div class="col-xs-6 col-sm-6 col-md-6" ng-class="validationClass(${id}Form.${field.uuid}Name);">
-                 <#include "fields/"+field.type.templatePath+".ftl">
-                </div>
-                <#if field.readOnly>
-                <#assign counter=2>
-                </#if>
-                <#if counter==2>
-                </div>
-                <#assign counter=0>
-                </#if>
-
-            </#list>
-            <#if counter<2 && didRun>
-                </div>
-            </#if>
-            </fieldset>
             <br/>
+            </#if>
+            <#list fields as field>
+                 <#include "fields/"+field.type.templatePath+".ftl">
+            </#list>
            </#list>
 
 
@@ -80,7 +58,7 @@
                                             <td class="col-md-1">
                                               <div class="has-feedback form-group-sm">
                                                 <div class="btn-group btn-group-sm">
-                                                    <button class="btn btn-danger glyphicon glyphicon-remove" ng-click="removeCollectionItem('${key}',$index);">&nbsp;Delete</button></td>
+                                                    <button class="btn btn-danger" ng-click="removeCollectionItem('${key}',$index);"><i class="glyphicon glyphicon-remove">&nbsp;</i>Delete</button></td>
                                                 </div>
                                               </div>
                                             <#list collectionForm.fields as field>
@@ -96,7 +74,7 @@
                               </table>
 
            <div class="btn-group btn-group-sm">
-                  <label class="btn btn-primary glyphicon glyphicon-plus"  ng-click="addToCollection('${key}');">&nbsp;Add</label>
+                  <label class="btn btn-primary"  ng-click="addToCollection('${key}');"><i class="glyphicon glyphicon-plus">&nbsp;</i>Add</label>
            </div>
            </#list>
 
@@ -105,9 +83,9 @@
         </form>
         <hr/>
         <div class="btn-group btn-group-sm pull-right">
-                <button type="button" class="btn btn-success glyphicon glyphicon-ok " ng-disabled="${id}Form.$invalid || !editable" ng-click="update(model);">&nbsp;Save</button>
-                <button type="button" class="btn btn-primary glyphicon glyphicon-refresh" ng-click="reset(); ng-disabled="!editable">&nbsp;Reset</button>
-                <button type="button" class="btn btn-primary glyphicon glyphicon-off" ng-click="gotoList();">&nbsp;Done</button>
+                <button type="button" class="btn btn-success" ng-disabled="${id}Form.$invalid || !editable" ng-click="update(model, '${id}Form');"><i class="glyphicon glyphicon-ok">&nbsp;</i>Save</button>
+                <button type="button" class="btn btn-primary" ng-click="reset();" ng-disabled="!editable"><i class="glyphicon glyphicon-refresh">&nbsp;</i>Reset</button>
+                <button type="button" class="btn btn-primary" ng-click="gotoList();"><i class="glyphicon glyphicon-off">&nbsp;</i>Done</button>
         </div>
      </div>
   </div>

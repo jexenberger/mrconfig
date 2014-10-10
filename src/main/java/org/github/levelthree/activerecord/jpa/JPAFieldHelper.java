@@ -32,7 +32,8 @@ public class JPAFieldHelper implements FieldHelper {
             formField.setKey(true);
             formField.setSearchable(true);
         }
-        if (field.isAnnotationPresent(GeneratedValue.class)) {
+        if (field.isAnnotationPresent(GeneratedValue.class) || field.isAnnotationPresent(Version.class)) {
+            formField.setType(Component.readOnly());
             formField.setReadOnly(true);
         }
 

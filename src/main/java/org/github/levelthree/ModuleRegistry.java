@@ -21,7 +21,7 @@ public class ModuleRegistry {
 
 
     public static void add(Module module) {
-        MODULES.put(module.getDisplayName(), module);
+        MODULES.put(module.getName(), module);
     }
 
     public static Map<String, Module> getModules() {

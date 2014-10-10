@@ -154,7 +154,7 @@ public class Component {
     }
 
     public static Component readOnly() {
-        return new Component("readonly", "Read Only", "ReadOnly Field component", "hidden", "readonly","&nbsp;", null);
+        return new Component("readonly", "Read Only", "ReadOnly Field component", "readonly", "readonly","&nbsp;", null);
     }
 
     public static Component select() {

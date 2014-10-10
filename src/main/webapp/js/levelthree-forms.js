@@ -4,13 +4,18 @@
 
 
 
-LtBaseController = function($scope, $routeParams, $window, $http, $location, $injector, $parse, service) {
+LtBaseController = function($scope, $routeParams, $window, $http, $location, $injector, $parse, service, resourceName) {
 
       var _this = this;
 
+      $scope.resourceName = resourceName;
+
+
       $scope.alerts = [];
 
-      $scope.getIdFromHref = getIdFromHref;
+      $scope.model = {};
+
+      $scope.getIdFromHref = $injector.get('LtHATEOSUtils').getIdFromHref;
 
       $scope.processError = function(error, ref) {
           var message = '';
@@ -123,19 +128,19 @@ LtBaseController = function($scope, $routeParams, $window, $http, $location, $in
       }
     
       $scope.gotoList = function() {
-        $scope.goto(resourceName+'/list.html');
+        $scope.goto('/views'+resourceName+'/list');
       };
     
       $scope.gotoNew = function() {
-        $scope.goto(resourceName+'/new.html');
+        $scope.goto('/views'+resourceName+'/create');
       };
 
       $scope.gotoView = function(id) {
-        $scope.goto(resourceName+'/view/'+id);
+        $scope.goto('/views'+resourceName+'/view/'+id);
       };
 
       $scope.gotoEdit = function(id) {
-        $scope.goto(resourceName+'/view/'+id);
+        $scope.goto('/views'+resourceName+'/edit/'+id);
       };
 
       $scope.fieldValid = function(field) {
@@ -166,16 +171,13 @@ LtBaseController = function($scope, $routeParams, $window, $http, $location, $in
       }
 
 
-
-      $scope.reset();
-    
 };
 
 
-LtListController = function($scope, $routeParams, $window, $http, $location, $injector, $parse, service) {
+LtListController = function($scope, $routeParams, $window, $http, $location, $injector, $parse, service, resourceName) {
 
 
-       angular.extend(this, new LtBaseController($scope, $routeParams, $window, $http, $location, $injector, $parse, service));
+       angular.extend(this, new LtBaseController($scope, $routeParams, $window, $http, $location, $injector, $parse, service, resourceName));
 
        $scope.currentPage = 1;
        $scope.totalResults = 0;
@@ -226,15 +228,15 @@ LtListController = function($scope, $routeParams, $window, $http, $location, $in
 
 };
 
-LtEditController = function($scope, $routeParams, $window, $http, $location, $injector, $parse, service) {
+LtEditController = function($scope, $routeParams, $window, $http, $location, $injector, $parse, service, resourceName) {
 
-      angular.extend(this, new LtBaseController($scope, $routeParams, $window, $http, $location, $injector, $parse, service));
+      angular.extend(this, new LtBaseController($scope, $routeParams, $window, $http, $location, $injector, $parse, service, resourceName));
 
 
       $scope.state = {};
-      $scope.resourceName = resourceName;
       $scope.master = {};
       $scope.isNew = ($routeParams.p_id == null);
+
 
       $scope.load = function() {
         service.get({p_id:$routeParams.p_id}, function(result) {
@@ -286,7 +288,7 @@ LtEditController = function($scope, $routeParams, $window, $http, $location, $in
       }
 
 
-      $scope.update = function(model) {
+      $scope.update = function(model, formName) {
         $scope.alerts = [];
         if ($scope[formName].$invalid) {
             $scope.alerts.push({ type: 'danger', msg: 'Unable to save record while errors exist' });
@@ -311,6 +313,8 @@ LtEditController = function($scope, $routeParams, $window, $http, $location, $in
            });
         }
       };
+
+      $scope.reset();
 
 };
 

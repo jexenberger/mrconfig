@@ -1,5 +1,1 @@
-{
-                        editable : function() {
-                           return true;
-                        }
-                    }
+{}

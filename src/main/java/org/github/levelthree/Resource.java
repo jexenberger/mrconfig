@@ -18,7 +18,7 @@ import java.util.function.Function;
 public class Resource {
 
     String path;
-    String group = "main";
+    String group = "Main";
     Class<?> resourceClass;
     Class<?> resourceController;
     Creatable<?, ?> creatable;
@@ -85,7 +85,7 @@ public class Resource {
         if (resourceClass == null) {
             throw new IllegalArgumentException(resourceController.getName()+" has is not parameterised with the Resource class");
         }
-        group = (group != null) ? group : "main";
+        group = (group != null) ? group : "Main";
 
         return new Resource(path,group,resourceClass,resourceController,service,service,service,service,service);
 
