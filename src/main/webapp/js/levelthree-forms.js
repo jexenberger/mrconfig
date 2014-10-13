@@ -1,7 +1,35 @@
+controllers.controller('reLookupController',[ '$scope','$http','$modalInstance','resource','filter','filterField', function($scope, $http, $modalInstance, resource, filter, filterField) {
 
 
+   $scope.filterField = filterField;
 
+   $scope.lookup = function(value) {
+       var config = {};
+       var parameters = {};
+       if (value != null) {
+          parameters[filter] = value + "*";
+       }
+       var header = {}
+       header["Accept"] = "application/json";
+       config["params"] = parameters;
+       config["headers"] = header;
+       $http.get(resource, config).then(function(res){
+           var results = []
+           angular.forEach(res.data.result, function(item){
+               results.push(item);
+           });
+            $scope.results =  results;
+       });
+   };
 
+  $scope.ok = function (result) {
+    $modalInstance.close(result);
+  };
+
+  $scope.cancel = function () {
+    $modalInstance.dismiss('cancel');
+  };
+}]);
 
 
 LtBaseController = function($scope, $routeParams, $window, $http, $location, $injector, $parse, service, resourceName) {
@@ -173,11 +201,7 @@ LtBaseController = function($scope, $routeParams, $window, $http, $location, $in
 
 };
 
-
-LtListController = function($scope, $routeParams, $window, $http, $location, $injector, $parse, service, resourceName) {
-
-
-       angular.extend(this, new LtBaseController($scope, $routeParams, $window, $http, $location, $injector, $parse, service, resourceName));
+LtPageController = function($scope,  service) {
 
        $scope.currentPage = 1;
        $scope.totalResults = 0;
@@ -212,6 +236,15 @@ LtListController = function($scope, $routeParams, $window, $http, $location, $in
 
        }
 
+
+}
+
+
+LtListController = function($scope, $routeParams, $window, $http, $location, $injector, $parse, service, resourceName) {
+
+
+       angular.extend(this, new LtBaseController($scope, $routeParams, $window, $http, $location, $injector, $parse, service, resourceName));
+       angular.extend(this, new LtPageController($scope, service));
 
        $scope.doDelete = function(id) {
             $scope.alerts = [];
@@ -320,11 +353,11 @@ LtEditController = function($scope, $routeParams, $window, $http, $location, $in
 
 LtModalController =  function($scope, $routeParams, $window, $http, $location, $injector, $parse, service) {
 
-      angular.extend(this, new BaseController($scope, $routeParams, $window, $http, $location, $injector, $parse, service));
+      angular.extend(this, new LtBaseController($scope, $routeParams, $window, $http, $location, $injector, $parse, service));
 
       $scope.openLookup = function(resource, filter, filterField, modelFieldName, helpDisabledFlag) {
 
-             var $modal = injector.get('$modal');
+             var $modal = $injector.get('$modal');
              var modalInstance = $modal.open({
                templateUrl: 'lookupModal.html',
                controller: 'reLookupController',
