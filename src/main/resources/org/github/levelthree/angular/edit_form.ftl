@@ -1,6 +1,10 @@
 <#include 'field_include_macro.ftl'/>
 <#assign capture=true>
 <div  ng-controller="${uxContext['edit']}" ng-cloak>
+  <a href="#" id="example" class="btn btn-primary" rel="popover"
+     data-content="This is the body of Popoverhello world"
+     data-original-title="Creativity Tuts">pop
+  </a>
   <div class="container-fluid col-xs-12 col-sm-12 col-md-12">
      <div class="container-fluid">
         <legend><h4>${name}<small ng-if="!editable"> - view</small> <small ng-if="editable && isNew"> - create</small><small ng-if="editable && !isNew"> - edit</small></h4></legend>

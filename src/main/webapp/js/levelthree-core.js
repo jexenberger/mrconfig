@@ -302,7 +302,7 @@ levelThreeModule.factory('LtSecurityContext', ['$http','LtBase64', '$rootScope',
 
 levelThreeModule.factory('LtBasicAuthInterceptor', ['$log', '$rootScope', function($log, $rootScope) {
 
-    var myInterceptor = {
+    var ltBasicAuthInterceptor = {
         // optional method
               'request': function(config) {
                 // do something on success
@@ -314,13 +314,13 @@ levelThreeModule.factory('LtBasicAuthInterceptor', ['$log', '$rootScope', functi
               }
     };
 
-    return myInterceptor;
+    return ltBasicAuthInterceptor;
 }]);
 
 
 levelThreeModule.factory('LtLoadEventsInterceptor', ['$log', '$rootScope', 'LT_LOAD_EVENTS', '$q',function($log, $rootScope, LT_LOAD_EVENTS, $q) {
 
-    var myInterceptor = {
+    var ltBasicAuthInterceptor = {
         // optional method
               'request': function(config) {
                 $log.debug(JSON.stringify(config));
@@ -346,11 +346,11 @@ levelThreeModule.factory('LtLoadEventsInterceptor', ['$log', '$rootScope', 'LT_L
 
     };
 
-    return myInterceptor;
+    return ltBasicAuthInterceptor;
 }]);
 
 
-controllers.controller('rs_menu_Controller',['$scope','$rootScope','$http', '$location', 'LT_AUTH_EVENTS', function($scope, $rootScope, $http,$location, AUTH_EVENTS) {
+controllers.controller('LtMenuController',['$scope','$rootScope','$http', '$location', 'LT_AUTH_EVENTS', function($scope, $rootScope, $http,$location, AUTH_EVENTS) {
 
 
     loadMenu = function() {
@@ -373,7 +373,7 @@ controllers.controller('rs_menu_Controller',['$scope','$rootScope','$http', '$lo
 }]);
 
 
-controllers.controller('reLoginModalController',['$scope','$rootScope','$http', '$location', '$modal', '$log','LtSecurityContext' ,function($scope, $rootScope, $http, $location, $modal, $log, securityContext) {
+controllers.controller('LtLoginModalController',['$scope','$rootScope','$http', '$location', '$modal', '$log','LtSecurityContext' ,function($scope, $rootScope, $http, $location, $modal, $log, securityContext) {
 
 
 
@@ -381,7 +381,7 @@ controllers.controller('reLoginModalController',['$scope','$rootScope','$http', 
 
        var modalInstance = $modal.open({
          templateUrl: 'loginScreen.html',
-         controller: 'reLoginController',
+         controller: 'LtLoginController',
          size: size,
          resolve: {
            securityContext: function () {
@@ -411,7 +411,7 @@ controllers.controller('reLoginModalController',['$scope','$rootScope','$http', 
 }]);
 
 
-controllers.controller('reLoginController',  [ '$scope','$modalInstance','securityContext',function ($scope, $modalInstance, securityContext) {
+controllers.controller('LtLoginController',  [ '$scope','$modalInstance','securityContext',function ($scope, $modalInstance, securityContext) {
 
   $scope.securityContext = securityContext;
 
@@ -426,7 +426,7 @@ controllers.controller('reLoginController',  [ '$scope','$modalInstance','securi
 }]);
 
 
-controllers.controller('reLoadingController',  [ '$scope','$rootScope','LT_LOAD_EVENTS',function ($scope, $rootScope, LT_LOAD_EVENTS) {
+controllers.controller('LtLoadingController',  [ '$scope','$rootScope','LT_LOAD_EVENTS',function ($scope, $rootScope, LT_LOAD_EVENTS) {
 
   $scope.show = false;
 
@@ -440,6 +440,14 @@ controllers.controller('reLoadingController',  [ '$scope','$rootScope','LT_LOAD_
 
 }]);
 
+controllers.controller('LtDashboardController',  [ '$scope','$rootScope',function ($scope, $rootScope) {
+
+
+
+
+}]);
+
+
 
 
 
@@ -450,15 +458,13 @@ levelThreeModule.filter('hrefId', function() {
    };
 });
 
-levelThreeModule.directive('defaultValue', ['$scope', '$element', '$attrs', '$parse', function($scope, $element, $attrs, $parse) {
+levelThreeModule.directive('LtDefaultValue', ['$scope', '$element', '$attrs', '$parse', function($scope, $element, $attrs, $parse) {
   return {
     link: function() {
-        alert('firing default value');
         var getter, setter, val;
         val = $attrs.defaultValue;
         getter = $parse($attrs.ngModel);
         setter = getter.assign;
-        alert('assigning '+ngModel+" : "+val);
         setter($scope, val);
       }
 
@@ -466,7 +472,8 @@ levelThreeModule.directive('defaultValue', ['$scope', '$element', '$attrs', '$pa
 }]);
 
 
-levelThreeModule.directive('lookupValid', ['$http', '$q','$parse','LtHATEOSUtils', function ($http, $q, $parse, ltHATEOSUtils){
+
+levelThreeModule.directive('LtLookupValid', ['$http', '$q','$parse','LtHATEOSUtils', function ($http, $q, $parse, ltHATEOSUtils){
 
    return {
       require: 'ngModel',
@@ -528,7 +535,6 @@ createService = function(services, serviceName, resourcePath ) {
     services.value('resource_'+serviceName, resourcePath);
 
     return services.factory(serviceName,['$resource', function($resource) {
-        alert(serviceName);
         return $resource(resourcePath+ '/:p_id', {} ,
         {
           'get':    {method:'GET', headers:{Accept:'application/json'}},

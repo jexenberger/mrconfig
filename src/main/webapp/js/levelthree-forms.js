@@ -355,6 +355,8 @@ LtModalController =  function($scope, $routeParams, $window, $http, $location, $
 
       angular.extend(this, new LtBaseController($scope, $routeParams, $window, $http, $location, $injector, $parse, service));
 
+      var $log = $injector.get('$log');
+
       $scope.openLookup = function(resource, filter, filterField, modelFieldName, helpDisabledFlag) {
 
              var $modal = $injector.get('$modal');

@@ -1,0 +1,51 @@
+<script type="text/ng-template" id="lookupModal.html">
+    <div class="modal-header">
+        <h3 class="modal-title">Lookup</h3>
+    </div>
+    <div class="modal-body">
+        <form id="lookupForm" name="lookupFormName" class="form-horizontal" role="form" novalidate>
+            <fieldset>
+
+                <div class="form-group">
+                    <label for="filterField" class="col-sm-3 control-label">{{filterField}}</label>
+                    <div class="col-sm-9">
+                        <input name="filterFieldName" id="filterField" type="text" class="form-control" ng-model="filterValue" required>
+                    </div>
+                </div>
+
+            </fieldset>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Result</th>
+                    <th>#</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="result in results">
+                    <td>{{result.href | hrefId}}</td>
+                    <td>{{result.title}}</td>
+                    <td><button class="btn btn-success" ng-click="ok(result)">Select</button></td>
+                </tr>
+                </tbody>
+            </table>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <div align="center">
+            <pagination total-items="totalResults"
+                        ng-model="currentPage"
+                        items-per-page="15"
+                        ng-change="doPage(model, {}, currentPage)"
+                        class="pagination-sm"
+                        previous-text="&lsaquo;"
+                        next-text="&rsaquo;"
+                        first-text="&laquo;"
+                        last-text="&raquo;">
+            </pagination>
+        </div>
+        <button class="btn btn-default" ng-click="lookup(filterValue)">Search</button>
+        <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+    </div>
+</script>
