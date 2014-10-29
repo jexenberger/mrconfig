@@ -16,37 +16,11 @@ import java.net.URI;
 /**
  * Created by julian3 on 2014/07/18.
  */
-public interface WritableResource<T, K extends Serializable> extends BaseResource{
+public interface WritableResource<T, K extends Serializable> extends BaseResource, CreateableResource<T,K>{
 
 
-    @POST
-    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    default Response create(@Context SecurityContext context, T instance, @Context UriInfo uri) {
 
 
-        if (!isUserAllowedToCreate(context)) {
-            return Response.status(Response.Status.UNAUTHORIZED).build();
-        }
-
-        Creatable<T, K> service = getCreatable();
-        Box<K> result = service.create(instance);
-        if (result.isSuccess()) {
-            String urn = ResourceUtil.getResourcePath(getClass()) + "/" + result.get();
-            UriBuilder uriBuilder = UriBuilder.fromUri(urn);
-            URI build = uriBuilder.build();
-            populatePostCreationLinks(instance);
-            return Response.created(build).entity(instance).build();
-        } else {
-            return Response.status(Response.Status.BAD_REQUEST).entity(new Errors(result.mapError(Error::new))).build();
-        }
-    }
-
-    default void populatePostCreationLinks(T instance) {
-
-    }
-
-    Creatable<T, K> getCreatable();
 
     Updateable<T,K> getUpdateable();
 
@@ -81,10 +55,6 @@ public interface WritableResource<T, K extends Serializable> extends BaseResourc
         return Security.authorized(context, resource.isRequiresAuthentication(), resource.getUpdateRole());
     }
 
-    default boolean isUserAllowedToCreate(SecurityContext context) {
-        Resource resource = ResourceRegistry.get(getPath());
-        return Security.authorized(context, resource.isRequiresAuthentication(), resource.getCreateRole());
-    }
 
     default boolean isAllowParameterOverride() {
         return true;

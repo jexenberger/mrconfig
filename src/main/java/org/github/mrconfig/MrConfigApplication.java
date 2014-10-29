@@ -1,6 +1,8 @@
 package org.github.mrconfig;
 
 
+import org.github.levelthree.angular.AngularResourceUX;
+import org.github.levelthree.angular.AngularUXComponent;
 import org.github.levelthree.angular.AngularUXModule;
 import org.github.mrconfig.domain.*;
 import org.github.levelthree.Module;
@@ -81,23 +83,49 @@ public class MrConfigApplication extends ResourceConfig {
                         this.addModule(new JPAModule("org.github.mrconfig.domain"));
                         this.addModule(new AngularUXModule());
 
-                        register(Resource.scaffold(EnvironmentResource.class, BeanFormBuilder::form));
-                        register(Resource.scaffold(DataCentreResource.class, BeanFormBuilder::form));
-                        register(Resource.scaffold(EnvironmentGroupResource.class, BeanFormBuilder::form));
-                        register(Resource.scaffold(ServerResource.class, BeanFormBuilder::form));
-                        register(Resource.scaffold(PropertyResource.class, BeanFormBuilder::form));
-                        register(Resource.scaffold(AdminGroupResource.class, BeanFormBuilder::form));
-                        register(Resource.scaffold(UserResource.class, (resource) -> {
-                            Form roleForm = BeanFormBuilder.formBuilder(resource, (builder) -> builder.addCollection("roles", BeanFormBuilder.fromClass(new FormBuilder("roles", "Roles"), RoleMapping.class).getForm()).getForm()).create().getForm();
-                            return roleForm;
-                        }));
-                        Resource scaffold = Resource.scaffold(PropertyValueResource.class, BeanFormBuilder::form);
-                        //scaffold.getResourceUx()
-                        //        .addView("controller", staticView(classpath("myController.js")));
-                        register(scaffold);
 
-                        addResourceClass(PropertiesImportResource.class);
-                        addResourceClass(FileResource.class);
+                        addModule(new Module("Environment") {
+                            @Override
+                            public void init() {
+                                register(Resource.scaffold(EnvironmentResource.class, BeanFormBuilder::form));
+                                register(Resource.scaffold(DataCentreResource.class, BeanFormBuilder::form));
+                                register(Resource.scaffold(EnvironmentGroupResource.class, BeanFormBuilder::form));
+                                register(Resource.scaffold(ServerResource.class, BeanFormBuilder::form));
+                            }
+                        });
+
+                        addModule(new Module("AccessManagement") {
+                            @Override
+                            public void init() {
+                                register(Resource.scaffold(AdminGroupResource.class, BeanFormBuilder::form));
+                                register(Resource.scaffold(UserResource.class, (resource) -> {
+                                    Form roleForm = BeanFormBuilder.formBuilder(resource, (builder) -> builder.addCollection("roles", BeanFormBuilder.fromClass(new FormBuilder("roles", "Roles"), RoleMapping.class).getForm()).getForm()).create().getForm();
+                                    return roleForm;
+                                }));
+                            }
+                        });
+
+                        addModule(new Module("Settings") {
+                            @Override
+                            public void init() {
+                                register(Resource.scaffold(PropertyResource.class, BeanFormBuilder::form));
+                                Resource scaffold = Resource.scaffold(PropertyValueResource.class, BeanFormBuilder::form);
+                                //scaffold.getResourceUx()
+                                //        .addView("controller", staticView(classpath("myController.js")));
+                                register(scaffold);
+
+
+                                AngularResourceUX ux = new AngularResourceUX(staticView(classpath("/org/github/mrconfig/ux/propertyimport/service.js")));
+                                ux.setCreateComponent(new AngularUXComponent("/views/property-import/create",));
+                                Resource resource = new Resource(PropertyImport.class, PropertyImportResource.class, ux);
+                                register(resource);
+
+
+                                addResourceClass(PropertiesImportResource.class);
+                                addResourceClass(FileResource.class);
+                            }
+                        });
+
 
                         addResourceClass(JaxbProvider.class);
                         addResourceClass(JaxbProvider.class);

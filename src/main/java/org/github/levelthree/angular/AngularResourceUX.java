@@ -57,6 +57,11 @@ public class AngularResourceUX extends ResourceUX {
         this.serviceView = serviceView;
     }
 
+    public AngularResourceUX(View serviceView) {
+        super();
+        this.serviceView = serviceView;
+    }
+
     public String getServiceName() {
         return ofNullable(serviceName).orElse(getGroup() + "_services_" + getResource().getName() + "Service");
     }

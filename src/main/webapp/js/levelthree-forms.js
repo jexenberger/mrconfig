@@ -37,10 +37,7 @@ LtBaseController = function($scope, $routeParams, $window, $http, $location, $in
       var _this = this;
 
       $scope.resourceName = resourceName;
-
-
       $scope.alerts = [];
-
       $scope.model = {};
 
       $scope.getIdFromHref = $injector.get('LtHATEOSUtils').getIdFromHref;
@@ -324,14 +321,14 @@ LtEditController = function($scope, $routeParams, $window, $http, $location, $in
       $scope.update = function(model, formName) {
         $scope.alerts = [];
         if ($scope[formName].$invalid) {
-            $scope.alerts.push({ type: 'danger', msg: 'Unable to save record while errors exist' });
+            $scope.flashError( 'Unable to save record while errors exist' );
             return;
         }
         if ($scope.isNew) {
            service.create(model,function(success) {
              $scope.master = success;
              $scope.model = angular.copy($scope.master);
-             $scope.alerts.push({ type: 'success', msg: 'Record Created' });
+             $scope.flashInfo('Record Created');
              $scope.isNew = false;
            },function(error) {
              $scope.processError(error, null);
@@ -340,7 +337,7 @@ LtEditController = function($scope, $routeParams, $window, $http, $location, $in
            service.save( model,function(success) {
              $scope.master = success;
              $scope.model = angular.copy($scope.master);
-             $scope.alerts.push({ type: 'success', msg: 'Record Saved' })
+             $scope.flashInfo( 'Record Saved' );
            },function(error) {
              $scope.processError(error, null);
            });

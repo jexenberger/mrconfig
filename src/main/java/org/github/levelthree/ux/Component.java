@@ -153,6 +153,11 @@ public class Component {
         return new Component("lookup", "Lookup", "Lookup Field component", "lookup","text", "Enter id or search",null, Link.class, ActiveRecord.class);
     }
 
+    /*
+    public static Component file() {
+        return new Component("file", "File", "File component", "text","file", "Select File",null, ByteArray.);
+    } */
+
     public static Component readOnly() {
         return new Component("readonly", "Read Only", "ReadOnly Field component", "readonly", "readonly","&nbsp;", null);
     }

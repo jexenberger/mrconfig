@@ -74,25 +74,53 @@ public class Resource {
     }
 
 
+    public Resource(Class<?> resourceClass, Class<?> resourceController, ResourceUX resourceUx) {
+        this();
+        this.path = getResourcePath(resourceController);
+        this.group = "Main";
+        this.resourceClass = resourceClass;
+        this.resourceController = resourceController;
+        this.resourceUx = resourceUx;
+    }
+
+
+
+    public static Resource resource(Class<?> resourceController) {
+        return new Resource(getResourcePath(resourceController),"Main",getResourceClass(resourceController),resourceController,null,null,null,null,null);
+    }
 
     public static Resource resource(Class<?> resourceController, String group, CRUDService<?,?> service) {
-        Path pathAnnotation = resourceController.getAnnotation(Path.class);
-        if (pathAnnotation == null) {
-            throw new IllegalArgumentException(resourceController.getName()+" has no @Path annotation");
-        }
-        String path = pathAnnotation.value();
-        Class resourceClass = GenericsUtil.getClass(resourceController,0);
-        if (resourceClass == null) {
-            throw new IllegalArgumentException(resourceController.getName()+" has is not parameterised with the Resource class");
-        }
+        String path = getResourcePath(resourceController);
+        Class resourceClass = getResourceClass(resourceController);
         group = (group != null) ? group : "Main";
 
         return new Resource(path,group,resourceClass,resourceController,service,service,service,service,service);
 
     }
 
+    public static Class getResourceClass(Class<?> resourceController) {
+        Class resourceClass = GenericsUtil.getClass(resourceController, 0);
+        if (resourceClass == null) {
+            throw new IllegalArgumentException(resourceController.getName()+" has is not parameterised with the Resource class");
+        }
+        return resourceClass;
+    }
+
+    public static String getResourcePath(Class<?> resourceController) {
+        Path pathAnnotation = resourceController.getAnnotation(Path.class);
+        if (pathAnnotation == null) {
+            throw new IllegalArgumentException(resourceController.getName()+" has no @Path annotation");
+        }
+        return pathAnnotation.value();
+    }
+
     public static Resource resource(Class<?> resourceController, CRUDService<?,?> service) {
         Resource resource = resource(resourceController, null, service);
+        return resource;
+    }
+
+    public static Resource scaffoldStandaloneResource(Class<?> resourceController, Function<Resource,Form> formSupplier) {
+        Resource resource = resource(resourceController);
         return resource;
     }
 
