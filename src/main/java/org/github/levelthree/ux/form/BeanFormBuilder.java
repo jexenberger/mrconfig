@@ -54,7 +54,7 @@ public class BeanFormBuilder {
                 !Enum.class.isAssignableFrom(fieldClazz)
             ) {
                 String group = getGroup(declaredField);
-                List<FormField> fields = formBuilder(new Resource("/dummy", group, fieldClazz, null, null, null)).create().getForm().getFields();
+                List<FormField> fields = formBuilder(new Resource("/dummy", group, fieldClazz, null, null)).create().getForm().getFields();
                 fields.forEach((field) -> field.setGroup(group));
                 fields.forEach((field) -> field.setParent(declaredField.getName()));
                 builder.addFields(fields);

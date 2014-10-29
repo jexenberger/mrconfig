@@ -99,7 +99,7 @@ public class AngularApplicationResourceTest {
         view = new AngularApplicationResource().getView("testModule1", "test", "create");
         checkAndRunTemplate(view);
 
-        view = new AngularApplicationResource().getView("testModule1", "test", "view");
+        view = new AngularApplicationResource().getView("testModule1", "test", "template");
         checkAndRunTemplate(view);
 
     }

@@ -58,7 +58,7 @@
                                      <#assign idField=field.id>
                                      <a ng-href="#/views${resourceName}/edit/{{searchResult.${field.id}}}">{{searchResult.${field.id}}}</a>
                                      <#elseif field.type.id == 'lookup'>
-                                     <a ng-href="#/views${field.lookup}/view/{{getIdFromHref(searchResult.${field.id}.href)}}">{{searchResult.${field.id}.title  }}</a>
+                                     <a ng-href="#/views${field.lookup}/template/{{getIdFromHref(searchResult.${field.id}.href)}}">{{searchResult.${field.id}.title  }}</a>
                                      <#else>
                                      {{searchResult.${field.id}}}
                                      </#if>

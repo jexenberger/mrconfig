@@ -1,7 +1,7 @@
 //${listController} definition ---
-${moduleName}Module.controller('${listController}',
-      function($scope, $routeParams, $window, $http, $location, $injector, $parse, ${serviceName}, resource_${serviceName}) {
+${module}Module.controller('${controllerName}',
+      function($scope, $routeParams, $window, $http, $location, $injector, $parse, ${service.name}, resource_${service.name}) {
           $scope.editable = true;
-          angular.extend(this, new LtListController($scope, $routeParams, $window, $http, $location, $injector, $parse, ${serviceName}, resource_${serviceName}));
+          angular.extend(this, new LtListController($scope, $routeParams, $window, $http, $location, $injector, $parse, ${service.name}, resource_${service.name}));
       }
 );

@@ -18,7 +18,7 @@ import static org.github.levelthree.ux.TemplateView.templateView;
 public class AngularResourceUX extends ResourceUX {
 
 
-    public static final String VIEW_VIEW_MAPPING = "view";
+    public static final String VIEW_VIEW_MAPPING = "template";
     public static final String LIST_VIEW_MAPPING = "list";
     public static final String EDIT_VIEW_MAPPING = "edit";
     public static final String CREATE_VIEW_MAPPING = "create";
@@ -140,7 +140,7 @@ public class AngularResourceUX extends ResourceUX {
 
     @Override
     public View getViewByType(String type) {
-        return getComponentByType(type).getView();
+        return getComponentByType(type).getTemplate();
     }
 
     public String getEditLink() {
@@ -199,21 +199,7 @@ public class AngularResourceUX extends ResourceUX {
     }
 
 
-    public String getListRouteResolve() {
-        return renderTemplate(listComponent.routeResolve, this);
-    }
 
-    public String getViewRouteResolve() {
-        return renderTemplate(viewComponent.routeResolve, this);
-    }
-
-    public String getCreateRouteResolve() {
-        return renderTemplate(createComponent.routeResolve, this);
-    }
-
-    public String getEditRouteResolve() {
-        return renderTemplate(editComponent.routeResolve, this);
-    }
 
     public String getListControllerView() {
         return renderTemplate(listComponent.getControllerView(), this);
@@ -236,7 +222,7 @@ public class AngularResourceUX extends ResourceUX {
         if (listComponent != null) {
             builder.append(getListControllerView()).append("\n");
         }
-        //by default we use the same controller for all view/edit/create operations ergo we check if they are the same
+        //by default we use the same controller for all template/edit/create operations ergo we check if they are the same
         if (viewComponent != null) {
             builder.append(getViewControllerView()).append("\n");
         }

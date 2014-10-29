@@ -23,7 +23,7 @@ public class BeanFormBuilderTest {
     public void testForm() throws Exception {
 
 
-        Resource group = new Resource("/test", "group", MyEntity.class, MyEntityController.class, null, null);
+        Resource group = new Resource("/test", "group", MyEntity.class, MyEntityController.class, null);
         ResourceRegistry.register(group);
         Form myEnvironment = BeanFormBuilder.formBuilder(group).create().getForm();
         assertNotNull(myEnvironment);

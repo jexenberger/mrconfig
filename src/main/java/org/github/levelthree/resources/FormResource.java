@@ -34,14 +34,18 @@ public class FormResource {
             entity = "/"+entity;
         }
         Resource resource = ResourceRegistry.get(entity);
+        throw new IllegalArgumentException("need to fix");
+        /*
         if (resource == null || resource.getResourceUx() == null) {
             return Response.status(Response.Status.NOT_FOUND).entity(entity+" not found").build();
         }
 
         StreamingOutput stream = (output)-> {
-            resource.getResourceUx().render(type,output);
+            throw new IllegalArgumentException("need to fix");
+            //resource.getResourceUx().render(type,output);
         };
         return Response.ok(stream).build();
+        */
     }
 
 
@@ -49,6 +53,8 @@ public class FormResource {
     @Produces("application/javascript")
     @GET
     public Response getControllerCode(@PathParam("type") String type) {
+        throw new IllegalArgumentException("need to fix");
+            /*
         StreamingOutput stream = (output)-> {
 
             List<Resource> resources = ResourceRegistry.list().stream().filter((resource) -> resource.getResourceUx() != null).collect(toList());
@@ -63,6 +69,7 @@ public class FormResource {
             }
         };
         return Response.ok(stream).build();
+        */
     }
 
 }

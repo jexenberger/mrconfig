@@ -59,7 +59,9 @@ public class AngularApplicationResource {
         Resource resource = applicationModule.getResource(entity).orElseThrow(()->new WebApplicationException(Response.Status.NOT_FOUND));
 
         StreamingOutput stream = (output)-> {
-            AngularResourceUX resourceUx = (AngularResourceUX) resource.getResourceUx();
+            throw new IllegalArgumentException("need to implement in "+AngularApplicationResource.class.getName());
+            /*
+            AngularResourceUX resourceUx = (AngularResourceUX) ux;
             try {
                 AngularUXComponent component = resourceUx.getComponentByType(type);
                 resourceUx.getForm().getUxContext().put(type, component.getControllerName());
@@ -67,6 +69,7 @@ public class AngularApplicationResource {
                 e.printStackTrace();
             }
             resourceUx.render(type, output);
+            */
         };
         return Response.ok(stream).build();
     }

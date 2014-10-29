@@ -3,7 +3,7 @@
 <div  ng-controller="${uxContext['edit']}" ng-cloak>
   <div class="container-fluid col-xs-12 col-sm-12 col-md-12">
      <div class="container-fluid">
-        <legend><h4>${name}<small ng-if="!editable"> - view</small> <small ng-if="editable && isNew"> - create</small><small ng-if="editable && !isNew"> - edit</small></h4></legend>
+        <legend><h4>${name}<small ng-if="!editable"> - template</small> <small ng-if="editable && isNew"> - create</small><small ng-if="editable && !isNew"> - edit</small></h4></legend>
      </div>
      <div class="container-fluid">
          <div class="btn-group pull-right btn-group-sm">

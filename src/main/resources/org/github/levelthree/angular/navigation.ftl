@@ -20,7 +20,7 @@ application.config(function($routeProvider, $locationProvider) {
                         }
                     }
                 })
-                .when('${resource.path}/view/:p_id', {
+                .when('${resource.path}/template/:p_id', {
                     templateUrl : '${resource.path}/put.html',
                     controller  : '${resource.name}Controller',
                     resolve : {

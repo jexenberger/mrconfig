@@ -71,7 +71,7 @@ public class AngularResourceUXTest {
         assertEquals("/main/views/test/edit/:p_id", test);
 
         test = resource.getViewLink();
-        assertEquals("/main/views/test/view/:p_id", test);
+        assertEquals("/main/views/test/template/:p_id", test);
 
         test = resource.getListLink();
         assertEquals("/main/views/test/list", test);

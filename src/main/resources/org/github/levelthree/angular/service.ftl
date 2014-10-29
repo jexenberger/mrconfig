@@ -1,1 +1,1 @@
-createService(${moduleName}Module,'${serviceName}', '${resourcePath}');
+createService(${module}Module,'${name}', '${resourcePath}');

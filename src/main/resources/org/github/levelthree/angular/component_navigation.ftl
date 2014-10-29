@@ -1,0 +1,3 @@
+.when('${routePath}', {
+    templateUrl : '${templateUrl}'
+})

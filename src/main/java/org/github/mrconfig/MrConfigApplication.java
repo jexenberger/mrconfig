@@ -116,8 +116,7 @@ public class MrConfigApplication extends ResourceConfig {
 
 
                                 AngularResourceUX ux = new AngularResourceUX(staticView(classpath("/org/github/mrconfig/ux/propertyimport/service.js")));
-                                ux.setCreateComponent(new AngularUXComponent("/views/property-import/create",));
-                                Resource resource = new Resource(PropertyImport.class, PropertyImportResource.class, ux);
+                                Resource resource = new Resource(PropertyImport.class, PropertyImportResource.class);
                                 register(resource);
 
 

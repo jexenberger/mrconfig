@@ -26,7 +26,6 @@ public class Resource {
     Updateable<?,?> updateable;
     Deletable<?,?> deletable;
     UniqueLookup<?, ?> uniqueLookup;
-    ResourceUX resourceUx;
     String createRole;
     String listRole;
     String lookupRole;
@@ -59,7 +58,7 @@ public class Resource {
         this.uniqueLookup = uniqueLookup;
     }
 
-    public Resource(String path, String group, Class<?> resourceClass, Class<?> resourceController, CRUDService<?, ?> service, ResourceUX resourceUx) {
+    public Resource(String path, String group, Class<?> resourceClass, Class<?> resourceController, CRUDService<?, ?> service) {
         this();
         this.path = path;
         this.group = group;
@@ -70,17 +69,15 @@ public class Resource {
         this.updateable = service;
         this.deletable = service;
         this.uniqueLookup = service;
-        this.resourceUx = resourceUx;
     }
 
 
-    public Resource(Class<?> resourceClass, Class<?> resourceController, ResourceUX resourceUx) {
+    public Resource(Class<?> resourceClass, Class<?> resourceController) {
         this();
         this.path = getResourcePath(resourceController);
         this.group = "Main";
         this.resourceClass = resourceClass;
         this.resourceController = resourceController;
-        this.resourceUx = resourceUx;
     }
 
 
@@ -172,14 +169,6 @@ public class Resource {
         return uniqueLookup;
     }
 
-    public ResourceUX getResourceUx() {
-        return resourceUx;
-    }
-
-    public void setResourceUx(ResourceUX resourceUx) {
-        this.resourceUx = resourceUx;
-    }
-
     public void setGroup(String group) {
         this.group = group;
     }
@@ -209,7 +198,6 @@ public class Resource {
     }
 
     public Resource ux(ResourceUX resourceUx) {
-        this.resourceUx = resourceUx;
         resourceUx.setResource(this);
         resourceUx.create();
         return this;
@@ -223,16 +211,8 @@ public class Resource {
         return Inflector.getInstance().phrase(this.resourceClass.getSimpleName());
     }
 
-    public boolean hasUX() {
-        return this.resourceUx != null;
-    }
 
-    public void renderUX(String method, OutputStream outputStream) {
-       if (!hasUX()) {
-           throw new IllegalStateException("trying to render resource '"+getPath()+"' but has no UX Module");
-       }
-       getResourceUx().render(method, outputStream);
-    }
+
 
     public Resource setListRole(String listRole) {
         this.listRole = listRole;

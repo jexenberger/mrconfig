@@ -18,7 +18,7 @@ public class FormBuilderTest {
 
     @Test
     public void testBuild() throws Exception {
-        FormBuilder builder = newInstance(new Resource("/test", "group", MyEntity.class, MyEntityController.class, null, null));
+        FormBuilder builder = newInstance(new Resource("/test", "group", MyEntity.class, MyEntityController.class, null));
         FormField formField = new FormField("id");
         formField.setGroup("group");
         formField.setType(Component.readOnly());

@@ -24,11 +24,15 @@ public class MenuResource {
 
     @GET
     public Menu getMenu(@Context SecurityContext context) {
+        throw new IllegalArgumentException("must fix");
+
+        /*
         Collection<ResourceUX> forms = ResourceRegistry.list()
                 .stream()
                 .filter((resource)-> resource.getResourceUx() != null)
                 .map((resource)-> resource.getResourceUx())
                 .collect(toList());
+
         Menu response = new Menu();
         for (ResourceUX form : forms) {
             initGroup(response, form.getGroup());
@@ -43,7 +47,7 @@ public class MenuResource {
 
         }
 
-        return response;
+        return response;*/
     }
 
     public boolean allowAccess(SecurityContext context, String role) {
