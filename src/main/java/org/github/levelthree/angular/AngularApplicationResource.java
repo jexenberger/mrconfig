@@ -48,9 +48,9 @@ public class AngularApplicationResource {
 
 
     @GET
-    @Path("/{module}/views/{entity}/{type}.html")
+    @Path("/{setModule}/views/{entity}/{type}.html")
     @Produces({MediaType.TEXT_HTML})
-    public Response getView(@PathParam("module") String module, @PathParam("entity") String entity, @PathParam("type") String type) {
+    public Response getView(@PathParam("setModule") String module, @PathParam("entity") String entity, @PathParam("type") String type) {
         if (!entity.startsWith("/")) {
             entity = "/"+entity;
         }
@@ -75,31 +75,31 @@ public class AngularApplicationResource {
     }
 
     @GET
-    @Path("/{module}/controllers/{controller}.js")
-    public Response getControllers(@PathParam("module") String module, @PathParam("controller") String controller) {
+    @Path("/{setModule}/controllers/{setController}.js")
+    public Response getControllers(@PathParam("setModule") String module, @PathParam("setController") String controller) {
         return null;
     }
 
 
     @GET
-    @Path("/controllers/{controller}.js")
+    @Path("/controllers/{setController}.js")
     public Response getAllControllers() {
         return null;
     }
 
     @GET
-    @Path("/{module}/controllers.js")
-    public Response getControllers(@PathParam("module") String module) {
+    @Path("/{setModule}/controllers.js")
+    public Response getControllers(@PathParam("setModule") String module) {
         return null;
     }
 
     @GET
-    @Path("/{module}/navigation.js")
-    public Response getNavigation(@PathParam("module") String module) {
+    @Path("/{setModule}/navigation.js")
+    public Response getNavigation(@PathParam("setModule") String module) {
 
         Module theModule = ModuleRegistry.get(module).orElseThrow(()-> new WebApplicationException(Response.Status.NOT_FOUND));
         final Map<String, Object> modules = new HashMap<>(1,1.0f);
-        modules.put("module", theModule);
+        modules.put("setModule", theModule);
         return createTemplateResponse(modules, "module_navigation.ftl");
     }
 

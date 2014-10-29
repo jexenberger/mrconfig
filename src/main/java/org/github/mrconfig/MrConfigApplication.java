@@ -111,7 +111,7 @@ public class MrConfigApplication extends ResourceConfig {
                                 register(Resource.scaffold(PropertyResource.class, BeanFormBuilder::form));
                                 Resource scaffold = Resource.scaffold(PropertyValueResource.class, BeanFormBuilder::form);
                                 //scaffold.getResourceUx()
-                                //        .addView("controller", staticView(classpath("myController.js")));
+                                //        .addView("setController", staticView(classpath("myController.js")));
                                 register(scaffold);
 
 

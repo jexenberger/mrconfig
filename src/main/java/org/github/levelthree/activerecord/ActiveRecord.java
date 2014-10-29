@@ -56,26 +56,26 @@ public interface ActiveRecord<T extends ActiveRecord, K extends Serializable> ex
 
     static <T> Optional<T> single(Class<T> type, String name, Parameter... parameters) {
         requireNonNull(type, "type required");
-        requireNonNull(name, "name required");
+        requireNonNull(name, "setName required");
         return getProvider().single(type, name, parameters);
     }
 
 
     static <T> Iterator<T> iterate(Class<T> type, String name, Parameter... parameters) {
         requireNonNull(type, "type required");
-        requireNonNull(name, "name required");
+        requireNonNull(name, "setName required");
         return getProvider().iterate(type, name, parameters);
     }
 
     static <T> Stream<T> stream(Class<T> type, String name, Parameter... parameters) {
         requireNonNull(type, "type required");
-        requireNonNull(name, "name required");
+        requireNonNull(name, "setName required");
         return getProvider().stream(type, name, parameters);
     }
 
     static <T> Collection<T> page(Class<T> type,  String name, int start, int pageSize, Parameter... parameters) {
         requireNonNull(type, "type required");
-        requireNonNull(name, "name required");
+        requireNonNull(name, "setName required");
         return getProvider().page(type, name, start, pageSize, parameters);
     }
 

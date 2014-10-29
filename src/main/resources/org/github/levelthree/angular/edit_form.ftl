@@ -1,9 +1,9 @@
 <#include 'field_include_macro.ftl'/>
 <#assign capture=true>
-<div  ng-controller="${uxContext['edit']}" ng-cloak>
+<div  ng-controller="${component.controllerName}" ng-cloak>
   <div class="container-fluid col-xs-12 col-sm-12 col-md-12">
      <div class="container-fluid">
-        <legend><h4>${name}<small ng-if="!editable"> - template</small> <small ng-if="editable && isNew"> - create</small><small ng-if="editable && !isNew"> - edit</small></h4></legend>
+        <legend><h4>${form.name}<small ng-if="!editable"> - template</small> <small ng-if="editable && isNew"> - create</small><small ng-if="editable && !isNew"> - edit</small></h4></legend>
      </div>
      <div class="container-fluid">
          <div class="btn-group pull-right btn-group-sm">
@@ -24,11 +24,11 @@
          <div>
                 <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
          </div>
-        <form name="${id}Form" class="form-horizontal" novalidate role="form">
-          <#list byGroups?keys as group>
-            <#assign fields=byGroups[group]>
+        <form name="${form.id}Form" class="form-horizontal" novalidate role="form">
+          <#list form.byGroups?keys as group>
+            <#assign fields=form.byGroups[group]>
             <#if group != 'default'>
-            <legend><h5>${group}</h5></legend>
+            <legend><h5>${form.group}</h5></legend>
             <br/>
             </#if>
             <#list fields as field>
@@ -42,7 +42,7 @@
            <#list collectionForms?keys as key>
                <#assign collectionForm=collectionForms[key]>
                              <#assign fieldSize = 12 / (collectionForm.fields?size + 1)?int>
-                             <legend><h5><b>${collectionForm.name}</b></h5></legend>
+                             <legend><h5><b>${form.collectionForm.name}</b></h5></legend>
                               <table class="table table-hover">
                                   <thead>
                                       <tr>
@@ -83,7 +83,7 @@
         </form>
         <hr/>
         <div class="btn-group btn-group-sm pull-right">
-                <button type="button" class="btn btn-success" ng-disabled="${id}Form.$invalid || !editable" ng-click="update(model, '${id}Form');"><i class="glyphicon glyphicon-ok">&nbsp;</i>Save</button>
+                <button type="button" class="btn btn-success" ng-disabled="${form.id}Form.$invalid || !editable" ng-click="update(model, '${form.id}Form');"><i class="glyphicon glyphicon-ok">&nbsp;</i>Save</button>
                 <button type="button" class="btn btn-primary" ng-click="reset();" ng-disabled="!editable"><i class="glyphicon glyphicon-refresh">&nbsp;</i>Reset</button>
                 <button type="button" class="btn btn-primary" ng-click="gotoList();"><i class="glyphicon glyphicon-off">&nbsp;</i>Done</button>
         </div>

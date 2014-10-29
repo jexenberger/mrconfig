@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
  */
 public class Inflector {
 
-    // Pfft, can't think of a better name, but this is needed to avoid the price of initializing the pattern on each call.
+    // Pfft, can't think of a better setName, but this is needed to avoid the price of initializing the pattern on each call.
     private static final Pattern UNDERSCORE_PATTERN_1 = Pattern.compile("([A-Z]+)([A-Z][a-z])");
     private static final Pattern UNDERSCORE_PATTERN_2 = Pattern.compile("([a-z\\d])([A-Z])");
     private static final Pattern ALL_LOWERCASE = Pattern.compile("([a-z\\d])");
@@ -157,7 +157,7 @@ public class Inflector {
     }
 
     public String tableize(Class klass) {
-        // Strip away package name - we only want the 'base' class name.
+        // Strip away package setName - we only want the 'base' class setName.
         String className = klass.getName().replace(klass.getPackage().getName() + ".", "");
         return tableize(className);
     }

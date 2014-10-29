@@ -29,20 +29,20 @@ public class MenuResource {
         /*
         Collection<ResourceUX> forms = ResourceRegistry.list()
                 .stream()
-                .filter((resource)-> resource.getResourceUx() != null)
-                .map((resource)-> resource.getResourceUx())
+                .filter((setResource)-> setResource.getResourceUx() != null)
+                .map((setResource)-> setResource.getResourceUx())
                 .collect(toList());
 
         Menu response = new Menu();
-        for (ResourceUX form : forms) {
-            initGroup(response, form.getGroup());
-            boolean allow = allowAccess(context, form.getResource().getListRole());
+        for (ResourceUX setForm : forms) {
+            initGroup(response, setForm.getGroup());
+            boolean allow = allowAccess(context, setForm.getResource().getListRole());
             if (allow) {
-                response.getMenuGroups().get(form.getGroup()).add(new MenuItem(form.getName()+" Search", form.getKey()+".search", form.getListLink()));
+                response.getMenuGroups().get(setForm.getGroup()).add(new MenuItem(setForm.getName()+" Search", setForm.getKey()+".search", setForm.getListLink()));
             }
-            allow = allowAccess(context, form.getResource().getCreateRole());
+            allow = allowAccess(context, setForm.getResource().getCreateRole());
             if (allow) {
-                response.getMenuGroups().get(form.getGroup()).add(new MenuItem(form.getName()+" New", form.getKey()+".new",  form.getCreateLink()));
+                response.getMenuGroups().get(setForm.getGroup()).add(new MenuItem(setForm.getName()+" New", setForm.getKey()+".new",  setForm.getCreateLink()));
             }
 
         }

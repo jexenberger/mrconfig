@@ -95,7 +95,7 @@ public class AngularResourceUX extends ResourceUX {
             setEditComponent(ofNullable(editComponent).orElse(createAngularComponent(EDIT_VIEW_MAPPING, templateView("edit_form.ftl"),templateView("edit_controller.ftl"), templateView("edit_resolve.ftl"), ":p_id", "edit.html", EDIT_VIEW_MAPPING)));
             setListComponent(ofNullable(listComponent).orElse(createAngularComponent(LIST_VIEW_MAPPING, templateView("list_form.ftl"), templateView("list_controller.ftl"), templateView("simple_resolve.ftl"), null, "list.html", LIST_VIEW_MAPPING)));
             setViewComponent(ofNullable(viewComponent).orElse(createAngularComponent(VIEW_VIEW_MAPPING, templateView("edit_form.ftl"), templateView("edit_controller.ftl"), templateView("edit_resolve.ftl"), ":p_id", "edit.html", EDIT_VIEW_MAPPING)));
-            serviceView = templateView("service.ftl");
+            serviceView = templateView("setService.ftl");
         }
         init = true;
     }
@@ -222,7 +222,7 @@ public class AngularResourceUX extends ResourceUX {
         if (listComponent != null) {
             builder.append(getListControllerView()).append("\n");
         }
-        //by default we use the same controller for all template/edit/create operations ergo we check if they are the same
+        //by default we use the same setController for all template/edit/create operations ergo we check if they are the same
         if (viewComponent != null) {
             builder.append(getViewControllerView()).append("\n");
         }
@@ -236,7 +236,7 @@ public class AngularResourceUX extends ResourceUX {
     }
 
     public String getService() {
-        serviceView = templateView("service.ftl");
+        serviceView = templateView("setService.ftl");
         return renderTemplate(serviceView,this);
     }
 

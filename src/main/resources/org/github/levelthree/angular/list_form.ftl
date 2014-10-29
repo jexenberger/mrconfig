@@ -1,14 +1,14 @@
 <#include 'field_include_macro.ftl'/>
 <#assign capture=false>
-<div ng-controller="${uxContext['list']}" ng-cloak>
-   <#assign fieldSize = 9 / (searchFields?size)?int>
+<div ng-controller="${component.controllerName}" ng-cloak>
+   <#assign fieldSize = 9 / (form.searchFields?size)?int>
   <div class="container-fluid col-xs-12 col-sm-12 col-md-12">
       <div class="container-fluid">
-      <legend><h4>${name}<small> - search</small></h4></legend>
+      <legend><h4>${form.name}<small> - search</small></h4></legend>
       <form novalidate role="form">
          <#assign counter=0>
          <#assign didRun=false>
-         <#list searchFields as field>
+         <#list form.searchFields as field>
              <#assign counter=counter+1>
              <#assign didRun=true>
              <#if counter==1>
@@ -45,7 +45,7 @@
               <table class="table table-hover">
                   <thead>
                       <tr>
-                      <#list searchFields as field>
+                      <#list form.searchFields as field>
                           <th>${field.label}</th>
                       </#list>
                           <th><div>Actions</div></th>
@@ -53,12 +53,12 @@
                   </thead>
                   <tbody>
                           <tr ng-repeat="searchResult in searchPage.resource">
-                              <#list searchFields as field>
+                              <#list form.searchFields as field>
                                  <td class="col-xs-${fieldSize}"><#if field.key>
                                      <#assign idField=field.id>
-                                     <a ng-href="#/views${resourceName}/edit/{{searchResult.${field.id}}}">{{searchResult.${field.id}}}</a>
+                                     <a ng-href="#${component.relations['edit'].routePath}/{{searchResult.${field.id}}}">{{searchResult.${field.id}}}</a>
                                      <#elseif field.type.id == 'lookup'>
-                                     <a ng-href="#/views${field.lookup}/template/{{getIdFromHref(searchResult.${field.id}.href)}}">{{searchResult.${field.id}.title  }}</a>
+                                     {{searchResult.${field.id}.title}}
                                      <#else>
                                      {{searchResult.${field.id}}}
                                      </#if>

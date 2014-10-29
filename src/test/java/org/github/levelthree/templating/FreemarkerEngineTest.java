@@ -19,7 +19,7 @@ public class FreemarkerEngineTest extends BaseDomainJPATest{
 
         Template t = new Template();
         t.setId(TEST_TEMPLATE);
-        t.setContent("${name}".getBytes());
+        t.setContent("${setName}".getBytes());
         t.save();
 
         HashMap<String, Object> model = new HashMap<>();

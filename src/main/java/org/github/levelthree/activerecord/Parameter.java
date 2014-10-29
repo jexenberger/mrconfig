@@ -44,7 +44,7 @@ public class Parameter {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Parameter{");
-        sb.append("name='").append(name).append('\'');
+        sb.append("setName='").append(name).append('\'');
         sb.append(", value=").append(value);
         sb.append('}');
         return sb.toString();

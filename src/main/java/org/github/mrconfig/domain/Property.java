@@ -24,7 +24,7 @@ import static org.github.levelthree.activerecord.Parameter.p;
  * Created by w1428134 on 2014/07/07.
  */
 @javax.persistence.Entity
-@Table(indexes = {@Index(unique = true, columnList = "name,propertyGroup,category")})
+@Table(indexes = {@Index(unique = true, columnList = "setName,propertyGroup,category")})
 @XmlRootElement(namespace = "http://www.github.org/mrconfig")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Property extends KeyEntity<Property> {

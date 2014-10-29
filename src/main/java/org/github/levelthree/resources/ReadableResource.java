@@ -83,11 +83,11 @@ public interface ReadableResource<T, K extends Serializable> extends BaseResourc
             return Response.status(Response.Status.NOT_FOUND).entity(errors(notFound())).build();
         }
         /*
-        if (resource.getResourceUx() == null) {
+        if (setResource.getResourceUx() == null) {
             return Response.status(Response.Status.NOT_FOUND).entity(errors(notFound())).build();
         }
         StreamingOutput stream = (output) -> {
-            resource.getResourceUx().render(id, output);
+            setResource.getResourceUx().render(id, output);
         };*/
         throw new IllegalStateException("need to fix this");
         //return Response.ok().entity(null).build();

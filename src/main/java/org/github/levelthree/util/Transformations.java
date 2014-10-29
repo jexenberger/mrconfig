@@ -233,7 +233,7 @@ public class Transformations {
                 isAllowedType |= o.getClass().isAssignableFrom(Long.TYPE);
 
                 if (!isAllowedType) {
-                    throw new IllegalArgumentException("name cannot be converted to boolean as it is a " + val.get().getClass());
+                    throw new IllegalArgumentException("setName cannot be converted to boolean as it is a " + val.get().getClass());
                 }
 
                 return o.toString().equalsIgnoreCase("1") ||

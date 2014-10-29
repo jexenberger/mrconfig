@@ -1,5 +1,7 @@
 package org.github.levelthree.angular;
 
+import org.github.levelthree.ModuleRegistry;
+import org.github.levelthree.ResourceRegistry;
 import org.github.levelthree.ux.View;
 
 import java.io.OutputStream;
@@ -13,10 +15,12 @@ public class AngularService {
 
     private String name;
     private String module;
-    private View serviceView = templateView("service.ftl");
+    private View serviceView;
     private String resource;
 
     public AngularService() {
+        serviceView = templateView("service.ftl");
+        module = ResourceRegistry.DEFAULT_MODULE;
     }
 
     public AngularService(String name, String module, View serviceView, String resource) {
@@ -26,23 +30,27 @@ public class AngularService {
         this.resource = resource;
     }
 
-    public AngularService name(String name) {
+    public static AngularService service(String name, String resource) {
+        return new AngularService().setName(name).setResource(resource);
+    }
+
+    public AngularService setName(String name) {
         this.name = name;
         return this;
     }
 
 
-    public AngularService module(String module) {
+    public AngularService setModule(String module) {
         this.module = module;
         return this;
     }
 
-    public AngularService serviceView(View serviceView) {
+    public AngularService setServiceView(View serviceView) {
         this.serviceView = serviceView;
         return this;
     }
 
-    public AngularService resource(String resource) {
+    public AngularService setResource(String resource) {
         this.resource = resource;
         return this;
     }

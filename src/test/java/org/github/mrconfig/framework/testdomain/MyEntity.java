@@ -12,7 +12,7 @@ import java.util.Date;
  */
 @Entity()
 @NamedQueries({
-        @NamedQuery(name = "MyEntity.findNameLike", query = "SELECT e FROM MyEntity e where e.name like :name"),
+        @NamedQuery(name = "MyEntity.findNameLike", query = "SELECT e FROM MyEntity e where e.setName like :setName"),
 })
 @Table(indexes = {
         @Index(columnList = "value, enumType")
@@ -151,7 +151,7 @@ public class MyEntity implements ActiveRecord<MyEntity, Long>{
     public String toString() {
         return "MyEntity{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
+                ", setName='" + name + '\'' +
                 ", aDate=" + aDate +
                 ", doStuff=" + doStuff +
                 ", readOnly='" + readOnly + '\'' +

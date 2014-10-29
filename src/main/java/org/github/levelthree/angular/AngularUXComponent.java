@@ -1,10 +1,17 @@
 package org.github.levelthree.angular;
 
+import org.github.levelthree.Resource;
+import org.github.levelthree.ResourceRegistry;
 import org.github.levelthree.ux.View;
 import org.github.levelthree.ux.form.Form;
 
 import java.io.OutputStream;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Objects;
 
+import static org.github.levelthree.util.Pair.cons;
+import static org.github.levelthree.util.Pair.map;
 import static org.github.levelthree.ux.TemplateView.templateView;
 
 /**
@@ -13,19 +20,22 @@ import static org.github.levelthree.ux.TemplateView.templateView;
 public class AngularUXComponent  {
 
 
-    String routePath;
-    String templateUrl;
-    String controllerName;
-    View template;
-    View controllerView;
-    View navigationView = templateView("component_navigation.ftl");
-    AngularService service;
-    String module;
-    Form form;
+    private String routePath;
+    private String templateUrl;
+    private String controllerName;
+    private View template;
+    private View controllerView;
+    private View navigationView;
+    private AngularService service;
+    private String module;
+    private Form form;
+    private Map<String, AngularUXComponent> relations;
 
 
 
     public AngularUXComponent() {
+        navigationView = templateView("component_navigation.ftl");
+        module = ResourceRegistry.DEFAULT_MODULE;
     }
 
     public AngularUXComponent(String routePath, String templateUrl, String controllerName, View template, View controllerView, View navigationView) {
@@ -37,58 +47,62 @@ public class AngularUXComponent  {
         this.template = template;
     }
 
-
-    public AngularUXComponent module(String module) {
+    public AngularUXComponent setModule(String module) {
         this.module = module;
         return this;
     }
 
-    public AngularUXComponent routePath(String routePath) {
+    public AngularUXComponent setTemplate(View template) {
+        this.template = template;
+        return this;
+    }
+
+    public AngularUXComponent setPath(String routePath) {
         this.routePath = routePath;
         return this;
     }
 
-    public AngularUXComponent templateUrl(String templateUrl) {
+    public AngularUXComponent setTemplateUrl(String templateUrl) {
         this.templateUrl = templateUrl;
         return this;
     }
 
-    public AngularUXComponent form(Form form) {
+    public AngularUXComponent setForm(Form form) {
         this.form = form;
         return this;
     }
 
 
-    public AngularUXComponent controller(String name, View controllerView) {
-        controllerName(name);
-        controllerView(controllerView);
+    public AngularUXComponent setController(String name, View controllerView) {
+        setControllerName(name);
+        setControllerView(controllerView);
         return this;
     }
 
-    public AngularUXComponent controllerName(String controllerName) {
+    public AngularUXComponent setControllerName(String controllerName) {
         this.controllerName = controllerName;
         return this;
     }
 
-    public AngularUXComponent controllerView(View controllerView) {
+    public AngularUXComponent setControllerView(View controllerView) {
         this.controllerView = controllerView;
         return this;
     }
 
-    public AngularUXComponent navigationView(View navigationView) {
+    public AngularUXComponent setNavigationView(View navigationView) {
         this.navigationView = navigationView;
         return this;
     }
 
-    public AngularUXComponent service(AngularService service) {
+    public AngularUXComponent setService(AngularService service) {
         this.service = service;
         return this;
     }
 
     public AngularUXComponent navigation(String routePath, String templateUrl, View navigationView) {
-        routePath(routePath);
-        templateUrl(templateUrl);
-        navigationView(navigationView);
+        setPath(routePath);
+        setTemplateUrl(templateUrl);
+        setNavigationView(navigationView);
         return this;
     }
 
@@ -105,6 +119,8 @@ public class AngularUXComponent  {
         return controllerName;
     }
 
+
+
     public View getControllerView() {
         return controllerView;
     }
@@ -118,20 +134,46 @@ public class AngularUXComponent  {
         return template;
     }
 
-    public void renderTemplate(OutputStream output) {
-        getTemplate().render(this, output);
+
+    public AngularUXComponent renderNavigation(Resource resource, OutputStream output) {
+        getNavigationView().render(createModel(resource), output);
+        return this;
     }
 
-    public void renderNavigiation(OutputStream output) {
-        getNavigationView().render(this, output);
+    public Map<String, Object> createModel(Resource resource) {
+        return map(cons("component", this),cons("resource", resource), cons("form", this.form));
     }
 
-    public void renderController(OutputStream output) {
-        getControllerView().render(this, output);
+    public AngularUXComponent renderController(Resource resource, OutputStream output) {
+        Objects.requireNonNull(getControllerView(), "controller view must be specified");
+        getControllerView().render(createModel(resource), output);
+        return this;
+    }
+
+    public AngularUXComponent renderTemplate(Resource resource, OutputStream output) {
+        Objects.requireNonNull(getTemplate(), "template must be specified");
+        getTemplate().render(createModel(resource), output);
+        return this;
     }
 
     public AngularService getService() {
         return service;
+    }
+
+    public AngularUXComponent relation(String relationName, AngularUXComponent component) {
+        if (this.relations == null) {
+            this.relations = new LinkedHashMap<>();
+        }
+        this.relations.put(relationName, component);
+        return this;
+    }
+
+    public Form getForm() {
+        return form;
+    }
+
+    public Map<String, AngularUXComponent> getRelations() {
+        return relations;
     }
 
     public String getModule() {

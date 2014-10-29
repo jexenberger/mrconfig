@@ -1,3 +1,3 @@
-.when('${routePath}', {
-    templateUrl : '${templateUrl}'
+.when('${component.routePath}', {
+    templateUrl : '${component.templateUrl}'
 })

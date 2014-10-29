@@ -16,7 +16,7 @@ public class JaxbProvider implements ContextResolver<JAXBContext>{
 
         if (context == null) {
             try {
-                context = JAXBContext.newInstance("org.github.levelthree.service:org.github.levelthree.resources:org.github.levelthree.activerecord:org.github.levelthree.resources:org.github.mrconfig.domain");
+                context = JAXBContext.newInstance("org.github.levelthree.setService:org.github.levelthree.resources:org.github.levelthree.activerecord:org.github.levelthree.resources:org.github.mrconfig.domain");
                 context = new FormattingJaxbContext(context);
             } catch (JAXBException e) {
                throw new RuntimeException(e);

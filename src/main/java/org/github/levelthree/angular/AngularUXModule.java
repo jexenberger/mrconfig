@@ -45,7 +45,7 @@ public class AngularUXModule extends DefaultUXModule {
         for (AngularUXComponent angularUXComponent : angularUXComponents) {
             String controllerName = angularUXComponent.getControllerName();
             if (!alreadyRenderedControllers.contains(controllerName)) {
-                angularUXComponent.renderController();
+                //angularUXComponent.renderController();
             }
         }
     }

@@ -118,7 +118,7 @@ public class Component {
     public String toString() {
         return "Component{" +
                 "id='" + id + '\'' +
-                ", name='" + name + '\'' +
+                ", setName='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", templatePath='" + templatePath + '\'' +
                 '}';

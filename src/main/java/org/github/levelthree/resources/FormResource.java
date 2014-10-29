@@ -36,13 +36,13 @@ public class FormResource {
         Resource resource = ResourceRegistry.get(entity);
         throw new IllegalArgumentException("need to fix");
         /*
-        if (resource == null || resource.getResourceUx() == null) {
+        if (setResource == null || setResource.getResourceUx() == null) {
             return Response.status(Response.Status.NOT_FOUND).entity(entity+" not found").build();
         }
 
         StreamingOutput stream = (output)-> {
             throw new IllegalArgumentException("need to fix");
-            //resource.getResourceUx().render(type,output);
+            //setResource.getResourceUx().render(type,output);
         };
         return Response.ok(stream).build();
         */
@@ -57,7 +57,7 @@ public class FormResource {
             /*
         StreamingOutput stream = (output)-> {
 
-            List<Resource> resources = ResourceRegistry.list().stream().filter((resource) -> resource.getResourceUx() != null).collect(toList());
+            List<Resource> resources = ResourceRegistry.list().stream().filter((setResource) -> setResource.getResourceUx() != null).collect(toList());
 
             Template template = TemplateEngine.getConfiguration().getTemplate(type+".ftl");
             Map<String, List<Resource>> modules = new HashMap<>();
