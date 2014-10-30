@@ -1,5 +1,6 @@
 package org.github.levelthree.angular;
 
+import org.github.levelthree.ModuleRegistry;
 import org.github.levelthree.Resource;
 import org.github.levelthree.ResourceRegistry;
 import org.github.levelthree.ux.View;
@@ -35,7 +36,7 @@ public class AngularUXComponent  {
 
     public AngularUXComponent() {
         navigationView = templateView("component_navigation.ftl");
-        module = ResourceRegistry.DEFAULT_MODULE;
+        module = ModuleRegistry.DEFAULT_MODULE;
     }
 
     public AngularUXComponent(String routePath, String templateUrl, String controllerName, View template, View controllerView, View navigationView) {

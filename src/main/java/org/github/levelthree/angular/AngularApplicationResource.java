@@ -43,7 +43,7 @@ public class AngularApplicationResource {
     public Response getApplication() {
         final Map<String, Object> modules = new HashMap<>(1,1.0f);
         modules.put("modules", ModuleRegistry.getModules());
-        return createTemplateResponse(modules,"application.ftl");
+        return createTemplateResponse(modules,"application_declaration.ftl");
     }
 
 

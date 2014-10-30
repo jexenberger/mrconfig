@@ -6,6 +6,8 @@ import org.github.levelthree.ux.View;
 
 import java.io.OutputStream;
 
+import static org.github.levelthree.util.Pair.cons;
+import static org.github.levelthree.util.Pair.map;
 import static org.github.levelthree.ux.TemplateView.templateView;
 
 /**
@@ -20,7 +22,7 @@ public class AngularService {
 
     public AngularService() {
         serviceView = templateView("service.ftl");
-        module = ResourceRegistry.DEFAULT_MODULE;
+        module = ModuleRegistry.DEFAULT_MODULE;
     }
 
     public AngularService(String name, String module, View serviceView, String resource) {
@@ -74,6 +76,6 @@ public class AngularService {
     }
 
     public void render(OutputStream outputStream) {
-        this.getServiceView().render(this, outputStream);
+        this.getServiceView().render(map(cons("service",this)), outputStream);
     }
 }

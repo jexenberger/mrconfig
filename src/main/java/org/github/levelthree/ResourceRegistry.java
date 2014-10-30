@@ -11,7 +11,7 @@ public class ResourceRegistry {
 
     private static Map<String, Resource> RESOURCES = new HashMap<>();
 
-    public static String DEFAULT_MODULE = "main";
+
 
     public static Resource get(String path) {
         if (RESOURCES == null || RESOURCES.size()  == 0) {

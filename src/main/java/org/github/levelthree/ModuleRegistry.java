@@ -9,6 +9,9 @@ import java.util.Optional;
  */
 public class ModuleRegistry {
 
+
+    public static String DEFAULT_MODULE = "main";
+
     private static Map<String, Module> MODULES;
     static {
         MODULES = new LinkedHashMap<>();

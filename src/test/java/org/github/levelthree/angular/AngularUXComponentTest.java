@@ -16,20 +16,8 @@ import static org.junit.Assert.assertTrue;
 /**
  * Created by julian3 on 2014/10/29.
  */
-public class AngularUXComponentTest {
+public class AngularUXComponentTest extends BaseAngularTest{
 
-
-    private AngularUXModule angularUXModule;
-    private ByteArrayOutputStream outputStream;
-    private AngularUXComponent component;
-
-    @Before
-    public void setup() throws Exception {
-        angularUXModule = new AngularUXModule();
-        angularUXModule.init();
-        outputStream = new ByteArrayOutputStream();
-        component = new AngularUXComponent();
-    }
 
     @Test
     public void testRenderNavigation() throws Exception {
@@ -83,9 +71,4 @@ public class AngularUXComponentTest {
         checkResult();
     }
 
-    public void checkResult() {
-        String result = outputStream.toString();
-        System.out.println(result);
-        assertTrue(result.length() > 0);
-    }
 }

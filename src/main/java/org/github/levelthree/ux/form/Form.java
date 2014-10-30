@@ -1,6 +1,8 @@
 package org.github.levelthree.ux.form;
 
 
+import org.github.levelthree.ModuleRegistry;
+
 import java.util.*;
 
 import static java.util.Optional.ofNullable;
@@ -16,7 +18,7 @@ public class Form {
     List<FormField> fields;
     Set<FormField> searchFields;
     Set<FormField> listFields;
-    String group = "Main";
+    String group = ModuleRegistry.DEFAULT_MODULE;
     boolean sorted = false;
     boolean sortedSearch = false;
     Map<String, Form> collectionForms;

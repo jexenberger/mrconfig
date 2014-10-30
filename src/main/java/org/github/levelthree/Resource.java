@@ -18,7 +18,7 @@ import java.util.function.Function;
 public class Resource {
 
     String path;
-    String group = "Main";
+    String group = ModuleRegistry.DEFAULT_MODULE;
     Class<?> resourceClass;
     Class<?> resourceController;
     Creatable<?, ?> creatable;
@@ -75,7 +75,7 @@ public class Resource {
     public Resource(Class<?> resourceClass, Class<?> resourceController) {
         this();
         this.path = getResourcePath(resourceController);
-        this.group = "Main";
+        this.group = ModuleRegistry.DEFAULT_MODULE;
         this.resourceClass = resourceClass;
         this.resourceController = resourceController;
     }
@@ -83,7 +83,7 @@ public class Resource {
 
 
     public static Resource resource(Class<?> resourceController) {
-        return new Resource(getResourcePath(resourceController),"Main",getResourceClass(resourceController),resourceController,null,null,null,null,null);
+        return new Resource(getResourcePath(resourceController),ModuleRegistry.DEFAULT_MODULE,getResourceClass(resourceController),resourceController,null,null,null,null,null);
     }
 
     public static Resource resource(Class<?> resourceController, String group, CRUDService<?,?> service) {
