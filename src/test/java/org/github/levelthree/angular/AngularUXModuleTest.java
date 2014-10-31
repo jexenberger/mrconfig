@@ -15,26 +15,16 @@ import static org.github.levelthree.ux.TemplateView.templateView;
 /**
  * Created by w1428134 on 2014/10/30.
  */
-public class AngularUXModuleTest {
+public class AngularUXModuleTest extends BaseAngularTest{
 
     @Test
     public void testRenderModule() throws Exception {
 
-        Resource resource = Resource.resource(MyEntityController.class);
-        ResourceRegistry.register(resource);
 
-        AngularUXComponent component = new AngularUXComponent()
-                .setControllerView(templateView("edit_controller.ftl"))
-                .setControllerName("myTestControllerName")
-                .setService(service("test", "resource/stuff"))
-                .setTemplate(templateView("edit_form.ftl"))
-                .setForm(BeanFormBuilder.form(resource))
-                .setPath("/mypath");
+        angularUXModule.addComponent(component);
+        angularUXModule.init();
+        angularUXModule.renderModule(ModuleRegistry.DEFAULT_MODULE, outputStream);
+        checkResult();
 
-
-        AngularUXModule module = new AngularUXModule();
-        module.addComponent(component);
-        module.init();
-        module.renderModule(ModuleRegistry.DEFAULT_MODULE, new ByteArrayOutputStream());
     }
 }

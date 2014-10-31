@@ -14,7 +14,7 @@ import static org.junit.Assert.assertTrue;
 public abstract class BaseAngularTest {
     protected ByteArrayOutputStream outputStream;
     protected AngularUXComponent component;
-    private AngularUXModule angularUXModule;
+    protected AngularUXModule angularUXModule;
 
     @Before
     public void setup() throws Exception {
@@ -22,10 +22,11 @@ public abstract class BaseAngularTest {
         angularUXModule.init();
         component = new AngularUXComponent();
         component
+                .setPath("test_path")
+                .setTemplateUrl("test_path.html")
                 .setControllerView(templateView("edit_controller.ftl"))
                 .setControllerName("myTestControllerName")
-                .setService(service("test", "resource/stuff"))
-                .renderController(null, outputStream);
+                .setService(service("test", "resource/stuff"));
         outputStream = new ByteArrayOutputStream();
 
     }

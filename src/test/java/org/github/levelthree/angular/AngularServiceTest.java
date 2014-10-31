@@ -14,7 +14,8 @@ public class AngularServiceTest extends BaseAngularTest {
     @Test
     public void testRender() throws Exception {
 
-        service("test", "resource/stuff").render(new ByteArrayOutputStream());
+        service("test", "resource/stuff").render(null, outputStream);
+        checkResult();
 
     }
 }

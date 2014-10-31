@@ -1,6 +1,7 @@
 package org.github.levelthree.angular;
 
 import org.github.levelthree.ModuleRegistry;
+import org.github.levelthree.Resource;
 import org.github.levelthree.ResourceRegistry;
 import org.github.levelthree.ux.View;
 
@@ -13,7 +14,7 @@ import static org.github.levelthree.ux.TemplateView.templateView;
 /**
  * Created by w1428134 on 2014/10/29.
  */
-public class AngularService {
+public class AngularService implements AngularElement{
 
     private String name;
     private String module;
@@ -75,7 +76,7 @@ public class AngularService {
         return resource;
     }
 
-    public void render(OutputStream outputStream) {
-        this.getServiceView().render(map(cons("service",this)), outputStream);
+    public void render(Resource resource, OutputStream outputStream) {
+        this.getServiceView().render(map(cons("resource",resource),cons("service",this)), outputStream);
     }
 }

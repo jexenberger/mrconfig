@@ -260,8 +260,11 @@ LtListController = function($scope, $routeParams, $window, $http, $location, $in
 
 LtEditController = function($scope, $routeParams, $window, $http, $location, $injector, $parse, service, resourceName) {
 
+
+
       angular.extend(this, new LtBaseController($scope, $routeParams, $window, $http, $location, $injector, $parse, service, resourceName));
 
+      $scope.editable = $routeParams.readonly == null;
 
       $scope.state = {};
       $scope.master = {};
