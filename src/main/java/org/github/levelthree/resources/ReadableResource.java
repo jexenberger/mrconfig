@@ -9,7 +9,10 @@ import org.github.levelthree.service.UniqueLookup;
 import org.github.levelthree.util.GenericsUtil;
 import org.github.levelthree.util.Pair;
 
-import javax.ws.rs.*;
+import javax.ws.rs.BadRequestException;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.*;
 import java.io.Serializable;
 import java.util.*;
@@ -24,13 +27,14 @@ import static org.github.levelthree.util.Pair.cons;
 /**
  * Created by julian3 on 2014/07/18.
  */
-public interface ReadableResource<T, K extends Serializable> extends BaseResource{
-
+public interface ReadableResource<T, K extends Serializable> extends BaseResource {
 
 
     @GET
     @Path("{id}")
-    default Response get(@Context SecurityContext context, @PathParam("id") String id) {
+    default Response get(@Context SecurityContext context, @PathParam("id") String id, @Context UriInfo ui, @Context HttpHeaders headers) {
+
+        System.out.println("MEDIA TYPE: " + headers.getMediaType().toString());
 
         if (!isUserAllowedToLookup(context)) return Response.status(Response.Status.UNAUTHORIZED).build();
 
@@ -45,7 +49,7 @@ public interface ReadableResource<T, K extends Serializable> extends BaseResourc
         }
         populateGetLinks(entity);
 
-        return Response.ok(entity).links(getLookup().toLink(entity)).build();
+        return Response.ok(entity).type(headers.getMediaType()).links(getLookup().toLink(entity)).build();
     }
 
     default boolean isUserAllowedToLookup(SecurityContext context) {
@@ -73,30 +77,31 @@ public interface ReadableResource<T, K extends Serializable> extends BaseResourc
         return true;
     }
 
-
-    @GET
-    @Path("{view}.html")
-    @Produces({MediaType.TEXT_HTML})
-    default Response get(@Context SecurityContext context, @PathParam("view") String id, @Context UriInfo ui) {
-        final Resource resource = ResourceRegistry.get(getPath());
-        if (resource == null) {
-            return Response.status(Response.Status.NOT_FOUND).entity(errors(notFound())).build();
+    default Optional<MediaType> resolveMediaType(MediaType mediaType) {
+        if (mediaType == null) {
+            return Optional.of(MediaType.APPLICATION_JSON_TYPE);
         }
-        /*
-        if (setResource.getResourceUx() == null) {
-            return Response.status(Response.Status.NOT_FOUND).entity(errors(notFound())).build();
+        System.out.println(mediaType.getType());
+        if (mediaType.getType().equals(MediaType.TEXT_PLAIN) ||
+                mediaType.getType().equals(MediaType.MEDIA_TYPE_WILDCARD) ||
+                mediaType.getType().equals(MediaType.WILDCARD))
+        {
+            return Optional.of(MediaType.APPLICATION_JSON_TYPE);
         }
-        StreamingOutput stream = (output) -> {
-            setResource.getResourceUx().render(id, output);
-        };*/
-        throw new IllegalStateException("need to fix this");
-        //return Response.ok().entity(null).build();
+        return Optional.of(mediaType);
     }
 
     @GET
-    default Response get(@Context SecurityContext context, @Context UriInfo ui) {
+    default Response get(@Context SecurityContext context, @Context UriInfo ui, @Context HttpHeaders headers) {
 
         if (!isUserAllowedToList(context)) return Response.status(Response.Status.UNAUTHORIZED).build();
+
+        Optional<MediaType> mediaType = resolveMediaType(headers.getMediaType());
+        if (!mediaType.isPresent()) {
+            return Response.status(Response.Status.UNSUPPORTED_MEDIA_TYPE).build();
+        }
+        System.out.println("MEDIA TYPE -> " + mediaType);
+
 
         MultivaluedMap<String, String> queryParameters = ui.getQueryParameters();
         Collection<Pair<String, Object>> parameters = new ArrayList<>();
@@ -122,7 +127,7 @@ public interface ReadableResource<T, K extends Serializable> extends BaseResourc
         if (totalResults == 0) {
             response.setTotalPages(0);
             response.setCurrentPage(0);
-            return Response.ok(new GenericEntity<>(response, response.getClass())).build();
+            return Response.ok(new GenericEntity<>(response, response.getClass())).type(mediaType.get()).build();
         }
 
         if (page > 0) {
@@ -155,7 +160,7 @@ public interface ReadableResource<T, K extends Serializable> extends BaseResourc
         } else {
             response.setResult(results.stream().map(listable::toLink).collect(toList()));
         }
-        return Response.ok(new GenericEntity<>(response, response.getClass())).build();
+        return Response.ok(new GenericEntity<>(response, response.getClass())).type(mediaType.get()).build();
 
     }
 

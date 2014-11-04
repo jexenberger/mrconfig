@@ -10,10 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import javax.ws.rs.Path;
-import javax.ws.rs.core.MultivaluedHashMap;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.SecurityContext;
-import javax.ws.rs.core.UriInfo;
+import javax.ws.rs.core.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -53,7 +50,7 @@ public class ReadableResourceTest implements ReadableResource<MyEntity,Long> {
 
     @Test
     public void testGet() throws Exception {
-        Response response = this.get(createMock(SecurityContext.class), "1");
+        Response response = this.get(createMock(SecurityContext.class), "1", createMock(UriInfo.class), createMock(HttpHeaders.class));
         assertNotNull(response);
         assertEquals(200, response.getStatus());
         assertNotNull(response.getEntity());
@@ -68,7 +65,7 @@ public class ReadableResourceTest implements ReadableResource<MyEntity,Long> {
         expect(uriInfo.getPath()).andReturn("/helloworld").times(1);
         replay(uriInfo);
 
-        Response response = this.get(createMock(SecurityContext.class), uriInfo);
+        Response response = this.get(createMock(SecurityContext.class), uriInfo,  createMock(HttpHeaders.class));
         assertNotNull(response);
         assertEquals(200, response.getStatus());
         assertNotNull(response.getEntity());
@@ -108,7 +105,7 @@ public class ReadableResourceTest implements ReadableResource<MyEntity,Long> {
 
         replay(service, uriInfo);
 
-        Response response = this.get(createMock(SecurityContext.class), uriInfo);
+        Response response = this.get(createMock(SecurityContext.class), uriInfo,  createMock(HttpHeaders.class));
         assertNotNull(response);
         assertNotNull(response.getEntity());
         assertEquals(200, response.getStatus());

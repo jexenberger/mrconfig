@@ -37,6 +37,7 @@ public class ResourceRegistry {
 
     public static String register(Resource resource) {
         requireNonNull(resource, "resource cannot be null");
+        System.out.println("registered "+resource);
         RESOURCES.put(resource.getPath(), resource);
         return resource.getPath();
     }

@@ -1,96 +1,38 @@
 package org.github.mrconfig;
 
 
-import org.github.levelthree.angular.AngularResourceUX;
-import org.github.levelthree.angular.AngularUXComponent;
-import org.github.levelthree.angular.AngularUXModule;
+import org.github.levelthree.LevelThreeApplication;
 import org.github.mrconfig.domain.*;
-import org.github.levelthree.Module;
-import org.github.levelthree.Resource;
 import org.github.levelthree.activerecord.ProviderFactory;
-import org.github.levelthree.activerecord.jpa.JPAModule;
-import org.github.levelthree.resources.JaxbProvider;
-import org.github.levelthree.resources.RolesResources;
-import org.github.levelthree.resources.SessionInViewInterceptor;
-import org.github.levelthree.resources.StaticResource;
-import org.github.levelthree.ux.form.BeanFormBuilder;
-import org.github.levelthree.ux.form.DefaultUXModule;
-import org.github.levelthree.ux.form.Form;
-import org.github.levelthree.ux.form.FormBuilder;
-import org.github.mrconfig.resources.*;
-import org.glassfish.grizzly.http.server.HttpServer;
-import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
-import org.glassfish.jersey.media.multipart.MultiPartFeature;
-import org.glassfish.jersey.server.ResourceConfig;
-import org.glassfish.jersey.server.ServerProperties;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.HashMap;
-import java.util.Map;
 
+import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.joining;
 import static org.github.mrconfig.domain.Property.importProperties;
 import static org.github.levelthree.ux.ClasspathSource.classpath;
-import static org.github.levelthree.ux.StaticView.staticView;
 
 /**
  * Created by w1428134 on 2014/07/16.
  */
-public class MrConfigApplication extends ResourceConfig {
+public class MrConfigApplication extends LevelThreeApplication {
 
-    public MrConfigApplication(Class<?>... classes) {
-        super(classes);
-    }
+
+
 
 
     public static void main(String[] args) throws Exception {
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-
-
-                Module myModule = new Main();
-
-
-                ResourceConfig rc = new MrConfigApplication(myModule.allResources());
-
-                Map<String, Object> properties = new HashMap<>();
-                properties.put(ServerProperties.TRACING, "ALL");
-                properties.put(ServerProperties.TRACING_THRESHOLD, "VERBOSE");
-                rc.setProperties(properties);
-                //rc.register(provider);
-                HttpServer server = null;
-                try {
-                    server = GrizzlyHttpServerFactory.createHttpServer(new URI("http://localhost:6001"), rc, true);
-                    //StaticHttpHandler httpHandler = new StaticHttpHandler("/Users/julian3/MrConfig/src/main/webapp");
-                    //server.getServerConfiguration().addHttpHandler(httpHandler);
-                    server.getServerConfiguration().setTraceEnabled(true);
-                    bootstrap();
-                    while (0 == 0) {
-                        Thread.yield();
-                    }
-                } catch (URISyntaxException e) {
-                    e.printStackTrace();
-                } finally {
-                    if (server != null) {
-                        server.shutdownNow();
-                    }
-                }
-
-
-                //RuntimeDelegate instance = RuntimeDelegate.getInstance();
-                //HttpHandler endpoint = instance.createEndpoint(new MrConfigApplication(), HttpHandler.class);
-                //endpoint.
-
-            }
-        }).run();
+        new MrConfigApplication().start(true);
     }
 
-    public static void bootstrap() {
+    @Override
+    protected void init() {
+        add(new Main());
+    }
+
+    public void bootstrap() {
 
 
         User adminUser = new User("admin", "admin").save();

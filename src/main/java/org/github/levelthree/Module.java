@@ -5,6 +5,7 @@ import org.github.levelthree.util.Inflector;
 import java.util.*;
 
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
 
 /**
  * Created by julian3 on 2014/08/16.
@@ -30,9 +31,11 @@ public abstract class Module {
     public List<Class<?>> getResourceClasses() {
         init();
         List<Class<?>> allResources = new ArrayList<>();
-        List<Class<?>> classes = ResourceRegistry.list().stream().map(Resource::getResourceController).collect(toList());
+        Set<Class<?>> classes = ResourceRegistry.list().stream().map(Resource::getResourceController).collect(toSet());
         allResources.addAll(classes);
-        allResources.addAll(additionalResourceClasses);
+        if (additionalResourceClasses != null) {
+            allResources.addAll(additionalResourceClasses);
+        }
         allResources.forEach(System.out::println);
         return allResources;
     }
