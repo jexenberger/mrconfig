@@ -53,96 +53,10 @@ public class MrConfigApplication extends ResourceConfig {
             public void run() {
 
 
-                Module myModule = new Module("Main") {
-
-                    @Override
-                    public void init() {
-
-                        StaticResource.setRelativeDebugPath("/src/main/webapp");
-
-
-                        /*
-                        ReflectiveJaxrsScanner scanner = new ReflectiveJaxrsScanner();
-                        scanner.setResourcePackage("org.github.mrconfig.resources"); //your "resources" package
-                        ClassReaders.setReader(new DefaultJaxrsApiReader());
-
-                        // Set the swagger config options
-                        SwaggerConfig config = ConfigFactory.config();
-                        config.setApiVersion("1.0.3");
-                        config.setBasePath("http://localhost:6001"); //your "
-
-                        ClassReaders.setReader(new DefaultJaxrsApiReader());
-
-
-                        addResourceClass(com.wordnik.swagger.jaxrs.listing.ApiListingResource.class);
-                        addResourceClass(com.wordnik.swagger.jaxrs.listing.ApiDeclarationProvider.class);
-                        addResourceClass(com.wordnik.swagger.jaxrs.listing.ApiListingResourceJSON.class);
-                        addResourceClass(com.wordnik.swagger.jaxrs.listing.ResourceListingProvider.class);
-                        */
-
-                        this.addModule(new JPAModule("org.github.mrconfig.domain"));
-                        this.addModule(new AngularUXModule());
-
-
-                        addModule(new Module("Environment") {
-                            @Override
-                            public void init() {
-                                register(Resource.scaffold(EnvironmentResource.class, BeanFormBuilder::form));
-                                register(Resource.scaffold(DataCentreResource.class, BeanFormBuilder::form));
-                                register(Resource.scaffold(EnvironmentGroupResource.class, BeanFormBuilder::form));
-                                register(Resource.scaffold(ServerResource.class, BeanFormBuilder::form));
-                            }
-                        });
-
-                        addModule(new Module("AccessManagement") {
-                            @Override
-                            public void init() {
-                                register(Resource.scaffold(AdminGroupResource.class, BeanFormBuilder::form));
-                                register(Resource.scaffold(UserResource.class, (resource) -> {
-                                    Form roleForm = BeanFormBuilder.formBuilder(resource, (builder) -> builder.addCollection("roles", BeanFormBuilder.fromClass(new FormBuilder("roles", "Roles"), RoleMapping.class).getForm()).getForm()).create().getForm();
-                                    return roleForm;
-                                }));
-                            }
-                        });
-
-                        addModule(new Module("Settings") {
-                            @Override
-                            public void init() {
-                                register(Resource.scaffold(PropertyResource.class, BeanFormBuilder::form));
-                                Resource scaffold = Resource.scaffold(PropertyValueResource.class, BeanFormBuilder::form);
-                                //scaffold.getResourceUx()
-                                //        .addView("setController", staticView(classpath("myController.js")));
-                                register(scaffold);
-
-
-                                AngularResourceUX ux = new AngularResourceUX(staticView(classpath("/org/github/mrconfig/ux/propertyimport/service.js")));
-                                Resource resource = new Resource(PropertyImport.class, PropertyImportResource.class);
-                                register(resource);
-
-
-                                addResourceClass(PropertiesImportResource.class);
-                                addResourceClass(FileResource.class);
-                            }
-                        });
-
-
-                        addResourceClass(JaxbProvider.class);
-                        addResourceClass(JaxbProvider.class);
-                        addResourceClass(MultiPartFeature.class);
-                        addResourceClass(SessionInViewInterceptor.class);
-                        addResourceClass(RolesResources.class);
-                        //addResourceClass(BasicAuthFilter.class);
-
-                        //Scanner
-
-
-                    }
-                };
+                Module myModule = new Main();
 
 
                 ResourceConfig rc = new MrConfigApplication(myModule.allResources());
-
-
 
                 Map<String, Object> properties = new HashMap<>();
                 properties.put(ServerProperties.TRACING, "ALL");

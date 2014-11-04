@@ -10,6 +10,8 @@ import java.io.OutputStream;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 import static org.github.levelthree.util.Pair.cons;
 import static org.github.levelthree.util.Pair.map;
@@ -29,7 +31,7 @@ public class AngularUXComponent  {
     private View navigationView;
     private AngularService service;
     private String module;
-    private Form form;
+    private Supplier<Form> form;
     private Map<String, AngularUXComponent> relations;
 
 
@@ -68,7 +70,7 @@ public class AngularUXComponent  {
         return this;
     }
 
-    public AngularUXComponent setForm(Form form) {
+    public AngularUXComponent setForm(Supplier<Form> form) {
         this.form = form;
         return this;
     }
@@ -142,7 +144,7 @@ public class AngularUXComponent  {
     }
 
     public Map<String, Object> createModel(Resource resource) {
-        return map(cons("component", this),cons("resource", resource), cons("form", this.form));
+        return map(cons("component", this),cons("resource", resource), cons("form", this.form.get()));
     }
 
     public AngularUXComponent renderController(Resource resource, OutputStream output) {
@@ -169,7 +171,7 @@ public class AngularUXComponent  {
         return this;
     }
 
-    public Form getForm() {
+    public Supplier<Form> getForm() {
         return form;
     }
 

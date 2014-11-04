@@ -1,5 +1,7 @@
 package org.github;
 
+import org.github.levelthree.angular.AngularUXModule;
+import org.github.mrconfig.Main;
 import org.github.mrconfig.domain.AdminGroup;
 import org.github.mrconfig.domain.Environment;
 import org.github.mrconfig.domain.Server;
@@ -48,6 +50,15 @@ public class IntegrationTest {
         transaction.commit();
         entityManager.close();
         entityManagerFactory.close();
+
+    }
+
+
+    @Test
+    public void testGenerateApplicationFiles() throws Exception {
+
+        new Main().init();
+        new AngularUXModule().renderApplicationFiles("/Users/julian3/mrconfig/target/sample-application");
 
     }
 }

@@ -121,14 +121,14 @@ public class Resource {
         return resource;
     }
 
-    public static Resource scaffold(Class<?> resourceController, Function<Resource,Form> formSupplier) {
+    public static Resource scaffold(Class<?> resourceController) {
         Resource resource = resource(resourceController, null, null);
         ActiveRecordCRUDService service = new ActiveRecordCRUDService((Class<ActiveRecord>) resource.getResourceClass());
         resource.setCreatable(service);
+        resource.setListable(service);
         resource.setDeletable(service);
         resource.setUniqueLookup(service);
         resource.setUpdateable(service);
-        resource.ux(UXProvider.getResourceUXInstance(formSupplier));
         return resource;
     }
 

@@ -10,6 +10,8 @@ import org.junit.Test;
 import java.io.ByteArrayOutputStream;
 
 import static org.github.levelthree.angular.AngularService.service;
+import static org.github.levelthree.ux.StaticView.staticView;
+import static org.github.levelthree.ux.StringView.stringView;
 import static org.github.levelthree.ux.TemplateView.templateView;
 
 /**
@@ -22,9 +24,33 @@ public class AngularUXModuleTest extends BaseAngularTest{
 
 
         angularUXModule.addComponent(component);
+        angularUXModule.additional(stringView("//hello world"));
         angularUXModule.init();
         angularUXModule.renderModule(ModuleRegistry.DEFAULT_MODULE, outputStream);
         checkResult();
+
+    }
+
+    @Test
+    public void testRenderApplication() throws Exception {
+
+        angularUXModule.addComponent(component);
+        angularUXModule.additional(stringView("//hello world"));
+        angularUXModule.init();
+        angularUXModule.renderApplication(outputStream);
+        checkResult();
+
+
+    }
+
+    @Test
+    public void testRenderApplicationFiles() throws Exception {
+
+        angularUXModule.addComponent(component);
+        angularUXModule.additional(stringView("//hello world"));
+        angularUXModule.init();
+        angularUXModule.renderApplicationFiles("/Users/julian3/mrconfig/target");
+
 
     }
 }

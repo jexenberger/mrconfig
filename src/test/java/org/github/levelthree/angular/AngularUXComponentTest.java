@@ -56,7 +56,7 @@ public class AngularUXComponentTest extends BaseAngularTest{
                 .setControllerName("myTestControllerName")
                 .setService(service("test", "resource/stuff"))
                 .setTemplate(templateView("edit_form.ftl"))
-                .setForm(BeanFormBuilder.form(resource))
+                .setForm(()-> BeanFormBuilder.form(resource))
                 .setPath("/mypath")
                 .renderTemplate(null, outputStream);
         checkResult();
@@ -65,7 +65,7 @@ public class AngularUXComponentTest extends BaseAngularTest{
                 .setControllerName("myTestListControllerName")
                 .setService(service("test", "resource/stuff"))
                 .setTemplate(templateView("list_form.ftl"))
-                .setForm(BeanFormBuilder.form(resource))
+                .setForm(()-> BeanFormBuilder.form(resource))
                 .relation("edit", component)
                 .renderTemplate(null, outputStream);
         checkResult();
