@@ -123,7 +123,7 @@ public class Resource {
 
     public static Resource scaffold(Class<?> resourceController) {
         Resource resource = resource(resourceController, null, null);
-        ActiveRecordCRUDService service = new ActiveRecordCRUDService((Class<ActiveRecord>) resource.getResourceClass());
+        ActiveRecordCRUDService service = new ActiveRecordCRUDService((Class<ActiveRecord>) resource.getResourceClass(), resource.getPath());
         resource.setCreatable(service);
         resource.setListable(service);
         resource.setDeletable(service);

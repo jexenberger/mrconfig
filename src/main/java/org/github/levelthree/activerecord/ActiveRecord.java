@@ -112,6 +112,11 @@ public interface ActiveRecord<T extends ActiveRecord, K extends Serializable> ex
         return new Link(getId().toString(),null, String.join("/", entityName,idToUse.toString()), resolveName());
     }
 
+    public default Link toLink(String entityName, String mediaType) {
+        Object idToUse = getReference();
+        return new Link(getId().toString(),mediaType, String.join("/", entityName,idToUse.toString()), resolveName());
+    }
+
     @XmlTransient
     default Object getReference() {
         return (this instanceof Keyed) ? ((Keyed) this).getKey() : getId();

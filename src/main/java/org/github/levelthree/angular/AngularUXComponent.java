@@ -144,7 +144,7 @@ public class AngularUXComponent  {
     }
 
     public Map<String, Object> createModel(Resource resource) {
-        return map(cons("component", this),cons("resource", resource), cons("form", this.form.get()));
+        return map(cons("component", this),cons("resource", resource), cons("form", (this.form != null) ? this.form.get() : null));
     }
 
     public AngularUXComponent renderController(Resource resource, OutputStream output) {

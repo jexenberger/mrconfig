@@ -12,5 +12,6 @@ public interface UniqueLookup<T, K extends Serializable> {
     public Optional<T> resolve(Serializable id, Class<K> idType);
     public Optional<T> get(K id);
     public Link toLink(T instance);
+    public Link toLink(T instance, String mediaType);
 
 }

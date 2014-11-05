@@ -12,7 +12,7 @@ import java.util.Date;
  */
 @Entity()
 @NamedQueries({
-        @NamedQuery(name = "MyEntity.findNameLike", query = "SELECT e FROM MyEntity e where e.setName like :setName"),
+        @NamedQuery(name = "MyEntity.findNameLike", query = "SELECT e FROM MyEntity e where e.name like :name"),
 })
 @Table(indexes = {
         @Index(columnList = "value, enumType")

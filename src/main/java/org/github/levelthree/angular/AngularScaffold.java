@@ -29,23 +29,24 @@ public class AngularScaffold {
         AngularService service = service(moduleName + "Service", resource.getPath());
 
         if (resource.getListable() != null) {
-            components.add(createComponent(parent.getName(), resource, "list", service, formSupplier));
+            components.add(createComponent(moduleName, resource, "list", service, formSupplier));
         }
         if (resource.getUniqueLookup() != null) {
-            components.add(createComponent(parent.getName(), resource, "view", service, formSupplier));
+            components.add(createComponent(moduleName, resource, "view", service, formSupplier));
         }
         if (resource.getCreatable() != null) {
-            components.add(createComponent(parent.getName(), resource, "create", service, formSupplier));
+            components.add(createComponent(moduleName, resource, "create", service, formSupplier));
         }
         if (resource.getUpdateable() != null) {
-            components.add(createComponent(parent.getName(), resource, "edit", service, formSupplier));
+            components.add(createComponent(moduleName, resource, "edit", service, formSupplier));
         }
         return components;
     }
 
     public static AngularUXComponent createComponent(String moduleName, Resource resource, String componentType, AngularService service, Supplier<Form> form) {
         AngularUXComponent component = new AngularUXComponent();
-        String path = getRoutePath(moduleName, resource, componentType,"");
+        String param = (componentType.equals("view") || componentType.equals("edit")) ? "p_id" : null;
+        String path = getRoutePath(moduleName, resource, componentType,param);
         //a bit of a hack
         String templateType = "edit";
         if (componentType.equals("list")){

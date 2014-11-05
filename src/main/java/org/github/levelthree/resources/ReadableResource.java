@@ -34,9 +34,9 @@ public interface ReadableResource<T, K extends Serializable> extends BaseResourc
     @Path("{id}")
     default Response get(@Context SecurityContext context, @PathParam("id") String id, @Context UriInfo ui, @Context HttpHeaders headers) {
 
-        System.out.println("MEDIA TYPE: " + headers.getMediaType().toString());
-
         if (!isUserAllowedToLookup(context)) return Response.status(Response.Status.UNAUTHORIZED).build();
+
+        Optional<MediaType> mediaType = resolveMediaType(headers.getMediaType());
 
         Optional<T> byId = getLookup().resolve(id, getResourceIdType());
         if (!byId.isPresent()) {
@@ -49,7 +49,7 @@ public interface ReadableResource<T, K extends Serializable> extends BaseResourc
         }
         populateGetLinks(entity);
 
-        return Response.ok(entity).type(headers.getMediaType()).links(getLookup().toLink(entity)).build();
+        return Response.ok(entity).type(mediaType.get()).links(getLookup().toLink(entity, toType(mediaType.get()))).build();
     }
 
     default boolean isUserAllowedToLookup(SecurityContext context) {
@@ -77,31 +77,16 @@ public interface ReadableResource<T, K extends Serializable> extends BaseResourc
         return true;
     }
 
-    default Optional<MediaType> resolveMediaType(MediaType mediaType) {
-        if (mediaType == null) {
-            return Optional.of(MediaType.APPLICATION_JSON_TYPE);
-        }
-        System.out.println(mediaType.getType());
-        if (mediaType.getType().equals(MediaType.TEXT_PLAIN) ||
-                mediaType.getType().equals(MediaType.MEDIA_TYPE_WILDCARD) ||
-                mediaType.getType().equals(MediaType.WILDCARD))
-        {
-            return Optional.of(MediaType.APPLICATION_JSON_TYPE);
-        }
-        return Optional.of(mediaType);
-    }
-
     @GET
     default Response get(@Context SecurityContext context, @Context UriInfo ui, @Context HttpHeaders headers) {
 
+        Optional<MediaType> mediaType = resolveMediaType(headers.getMediaType());
+
         if (!isUserAllowedToList(context)) return Response.status(Response.Status.UNAUTHORIZED).build();
 
-        Optional<MediaType> mediaType = resolveMediaType(headers.getMediaType());
         if (!mediaType.isPresent()) {
             return Response.status(Response.Status.UNSUPPORTED_MEDIA_TYPE).build();
         }
-        System.out.println("MEDIA TYPE -> " + mediaType);
-
 
         MultivaluedMap<String, String> queryParameters = ui.getQueryParameters();
         Collection<Pair<String, Object>> parameters = new ArrayList<>();
@@ -158,7 +143,9 @@ public interface ReadableResource<T, K extends Serializable> extends BaseResourc
         if (queryParameters.containsKey(getDetailsParameter())) {
             response.setResource(results);
         } else {
-            response.setResult(results.stream().map(listable::toLink).collect(toList()));
+            response.setResult(results.stream().map((instance) -> {
+                return listable.toLink(instance, toType(mediaType.get()));
+            }).collect(toList()));
         }
         return Response.ok(new GenericEntity<>(response, response.getClass())).type(mediaType.get()).build();
 

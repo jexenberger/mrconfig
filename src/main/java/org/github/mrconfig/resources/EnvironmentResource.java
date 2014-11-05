@@ -30,12 +30,12 @@ public class EnvironmentResource implements ReadableResource<Environment,String>
 
     @Override
     public Listable<Environment> getListableResource() {
-        return new ActiveRecordCRUDService(Environment.class);
+        return new ActiveRecordCRUDService(Environment.class, getPath());
     }
 
     @Override
     public UniqueLookup getLookup() {
-        return new ActiveRecordCRUDService(Environment.class);
+        return new ActiveRecordCRUDService(Environment.class, getPath());
     }
 
 }

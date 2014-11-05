@@ -13,6 +13,7 @@ public interface Listable<T> {
     public Collection<T> list(Pair<String, Object> ... parameters);
     public Collection<T> page(int offset, int size, Pair<String, Object> ... parameters);
     public Link toLink(T instance);
+    public Link toLink(T instance, String mediaType);
     public long count(Pair<String, Object> ... parameters);
 
 

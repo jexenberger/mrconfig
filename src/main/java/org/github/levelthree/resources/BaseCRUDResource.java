@@ -18,7 +18,7 @@ public class BaseCRUDResource<T extends ActiveRecord<T,K>,K extends Serializable
     public CRUDService<T, K> getService() {
         if (service == null) {
             Class<T> aClass = (Class<T>) GenericsUtil.getClass(getClass(), 0);
-            service = new ActiveRecordCRUDService<>(aClass);
+            service = new ActiveRecordCRUDService<>(aClass, getPath());
         }
         return service;
     }

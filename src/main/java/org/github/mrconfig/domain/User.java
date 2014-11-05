@@ -11,10 +11,10 @@ import java.util.*;
 /**
  * Created by julian3 on 2014/07/17.
  */
-@Entity
+@Entity()
 @XmlRootElement(namespace="http://www.github.org/mrconfig")
 @XmlAccessorType(XmlAccessType.FIELD)
-@Table(indexes = {@Index(unique = false, columnList = "state")})
+@Access(AccessType.FIELD)
 public class User extends KeyEntity<User> implements Principal {
 
 
@@ -22,6 +22,8 @@ public class User extends KeyEntity<User> implements Principal {
     String password;
     @OneToMany(cascade = CascadeType.ALL)
     Set<RoleMapping> roles;
+
+    String name;
 
     @Enumerated
     UserState state = UserState.Pending;
@@ -78,7 +80,11 @@ public class User extends KeyEntity<User> implements Principal {
 
     @Override
     public String getName() {
-        return getName();
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override

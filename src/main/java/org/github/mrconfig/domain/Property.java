@@ -3,9 +3,7 @@ package org.github.mrconfig.domain;
 import org.github.levelthree.activerecord.ActiveRecord;
 import org.github.levelthree.util.Pair;
 
-import javax.persistence.Enumerated;
-import javax.persistence.Index;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -24,9 +22,10 @@ import static org.github.levelthree.activerecord.Parameter.p;
  * Created by w1428134 on 2014/07/07.
  */
 @javax.persistence.Entity
-@Table(indexes = {@Index(unique = true, columnList = "setName,propertyGroup,category")})
+@Table(indexes = {@Index(unique = true, columnList = "name,propertyGroup,category")})
 @XmlRootElement(namespace = "http://www.github.org/mrconfig")
 @XmlAccessorType(XmlAccessType.FIELD)
+@Access(AccessType.FIELD)
 public class Property extends KeyEntity<Property> {
 
 

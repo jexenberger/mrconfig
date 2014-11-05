@@ -68,19 +68,29 @@ public class AngularUXModule extends DefaultUXModule {
     public void renderApplicationFiles(String outputPath) {
         Path outputDir = FileSystems.getDefault().getPath(outputPath);
         try {
-            Files.createDirectories(outputDir);
-            renderApplicationDeclaration(newOutputStream(outputDir.resolve("application.js")));
+            Path path = Files.createDirectories(outputDir);
+            Path application = outputDir.resolve("application.js");
+            OutputStream applicationOutput = newOutputStream(application);
+            renderApplicationDeclaration(applicationOutput);
             getApplication().keySet().forEach((module) -> {
                 try {
-                    Path moduleDir = outputDir.resolve(module);
+                    Path moduleDir = path.resolve(module);
                     Files.createDirectories(moduleDir);
+                    OutputStream moduleOutput = newOutputStream(moduleDir.resolve("module.js"));
+                    OutputStream controllerOutput = newOutputStream(moduleDir.resolve("controller.js"));
+                    OutputStream navigationOutput = newOutputStream(moduleDir.resolve("navigation.js"));
+                    OutputStream servicesOutput = newOutputStream(moduleDir.resolve("services.js"));
                     renderModule(
                             module,
-                            newOutputStream(moduleDir.resolve("module.js")),
-                            newOutputStream(moduleDir.resolve("controller.js")),
-                            newOutputStream(moduleDir.resolve("navigation.js")),
-                            newOutputStream(moduleDir.resolve("services.js"))
+                            moduleOutput,
+                            controllerOutput,
+                            navigationOutput,
+                            servicesOutput
                     );
+                    moduleOutput.close();
+                    controllerOutput.close();
+                    navigationOutput.close();
+                    servicesOutput.close();
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -100,6 +110,7 @@ public class AngularUXModule extends DefaultUXModule {
     public void renderApplicationDeclaration(OutputStream applicationOutput) {
         write(applicationOutput, "\n\n//--- APPLICATION DECLARATION ---\n");
         applicationDeclaration.render(map(cons("modules", getApplication())), applicationOutput);
+        flushOutput(applicationOutput);
     }
 
     public void renderApplication(OutputStream outputStream) {
@@ -121,6 +132,7 @@ public class AngularUXModule extends DefaultUXModule {
                 deDuper.add(angularUXComponent.getControllerName());
             }
         }
+        flushOutput(output);
     }
 
     public void renderModuleServices(String moduleName, OutputStream output) {
@@ -135,6 +147,7 @@ public class AngularUXModule extends DefaultUXModule {
                 deDuper.add(angularUXComponent.getService().getName());
             }
         }
+        flushOutput(output);
     }
 
     public void renderModuleDeclaration(String moduleName, OutputStream output) {
@@ -143,6 +156,15 @@ public class AngularUXModule extends DefaultUXModule {
         if (additionalDeclarations != null) {
             write(output, "\n\n//--- MODULE FILTERS/DIRECTIVES/CONFIG/STATIC ---\n");
             additionalDeclarations.render(model, output);
+        }
+        flushOutput(output);
+    }
+
+    public void flushOutput(OutputStream output) {
+        try {
+            output.flush();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -171,6 +193,7 @@ public class AngularUXModule extends DefaultUXModule {
             }
         }
         templateView("end_navigation.ftl").render(model, output);
+        flushOutput(output);
     }
 
     public void write(OutputStream output, String simpleString) {

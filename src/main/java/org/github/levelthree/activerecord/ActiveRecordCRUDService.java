@@ -28,11 +28,13 @@ import static org.github.levelthree.util.Pair.cons;
  */
 public class ActiveRecordCRUDService<T extends ActiveRecord<T, K>, K extends Serializable> implements CRUDService<T, K> {
 
+    private final String resourcePath;
     Class<T> type;
     public static final ValidatorFactory VALIDATOR_FACTORY = Validation.buildDefaultValidatorFactory();
 
-    public ActiveRecordCRUDService(Class<T> type) {
+    public ActiveRecordCRUDService(Class<T> type, String resourcePath) {
         this.type = type;
+        this.resourcePath = resourcePath;
     }
 
     @Override
@@ -43,7 +45,12 @@ public class ActiveRecordCRUDService<T extends ActiveRecord<T, K>, K extends Ser
 
     @Override
     public Link toLink(T instance) {
-        return instance.toLink();
+        return instance.toLink(resourcePath);
+    }
+
+    @Override
+    public Link toLink(T instance, String mediaType) {
+        return instance.toLink(resourcePath, mediaType);
     }
 
     private Box<K> activeRecordSave(T instance, boolean loadFirst) {

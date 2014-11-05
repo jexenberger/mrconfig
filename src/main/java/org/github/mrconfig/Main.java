@@ -91,8 +91,8 @@ public class Main extends Module {
         });
 
 
-        addResourceClass(JaxbProvider.class);
-        addResourceClass(JaxbProvider.class);
+        //addResourceClass(JaxbProvider.class);
+        //addResourceClass(JaxbProvider.class);
         addResourceClass(MultiPartFeature.class);
         addResourceClass(SessionInViewInterceptor.class);
         addResourceClass(RolesResources.class);

@@ -12,6 +12,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.StreamingOutput;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Created by julian3 on 2014/09/20.
@@ -35,15 +36,23 @@ public class AngularApplicationResource {
         StreamingOutput stream = (output)-> {
             Templating.getTemplating().write(templateName,model,output);
         };
-        return Response.ok(stream).build();
+
     }
 
     @GET
     @Path("/application.js")
     public Response getApplication() {
-        final Map<String, Object> modules = new HashMap<>(1,1.0f);
-        modules.put("modules", ModuleRegistry.getModules());
-        return createTemplateResponse(modules,"application_declaration.ftl");
+
+        AngularUXModule module = getModule();
+
+        StreamingOutput stream = (output)-> {
+            module.renderApplication(output);
+        };
+        return Response.ok(stream).build();
+    }
+
+    public AngularUXModule getModule() {
+        return (AngularUXModule) ModuleRegistry.get(AngularUXModule.class.getName()).orElseThrow(() -> new WebApplicationException(Response.Status.NOT_FOUND));
     }
 
 
@@ -55,21 +64,11 @@ public class AngularApplicationResource {
             entity = "/"+entity;
         }
 
-        Module applicationModule = ModuleRegistry.get(module).orElseThrow(() -> new WebApplicationException(Response.Status.NOT_FOUND));
+        AngularUXModule applicationModule = getModule();
         Resource resource = applicationModule.getResource(entity).orElseThrow(()->new WebApplicationException(Response.Status.NOT_FOUND));
 
         StreamingOutput stream = (output)-> {
-            throw new IllegalArgumentException("need to implement in "+AngularApplicationResource.class.getName());
-            /*
-            AngularResourceUX resourceUx = (AngularResourceUX) ux;
-            try {
-                AngularUXComponent component = resourceUx.getComponentByType(type);
-                resourceUx.getForm().getUxContext().put(type, component.getControllerName());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            resourceUx.render(type, output);
-            */
+           applicationModule.get
         };
         return Response.ok(stream).build();
     }

@@ -19,7 +19,7 @@ import static org.github.levelthree.activerecord.Parameter.p;
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "type")
 @NamedQueries({
-        @NamedQuery(name = "Environment.findNameLike", query = "SELECT e FROM Environment e where e.setName like :setName"),
+        @NamedQuery(name = "Environment.findNameLike", query = "SELECT e FROM Environment e where e.name like :name"),
         @NamedQuery(name = "Environment.findByKey", query = "SELECT e FROM Environment e where e.id = :key")
 })
 @XmlRootElement(namespace = "http://www.github.org/mrconfig")
