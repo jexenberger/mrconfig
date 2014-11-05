@@ -2,12 +2,14 @@ package org.github.levelthree.resources;
 
 import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.StreamingOutput;
+import java.util.Collection;
 import java.util.Optional;
 
 /**
  * Created by julian3 on 2014/08/24.
  */
-public interface BaseResource {
+public interface BaseResource<T> {
 
 
     default String getPath() {
@@ -33,5 +35,13 @@ public interface BaseResource {
             return Optional.of(MediaType.APPLICATION_JSON_TYPE);
         }
         return Optional.of(mediaType);
+    }
+
+    default StreamingOutput resolveCustomerHandler(MediaType type, Collection<T> results) {
+        return null;
+    }
+
+    default StreamingOutput resolveCustomerHandler(MediaType type,T instance) {
+        return null;
     }
 }

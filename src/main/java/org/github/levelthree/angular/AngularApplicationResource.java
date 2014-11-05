@@ -36,7 +36,7 @@ public class AngularApplicationResource {
         StreamingOutput stream = (output)-> {
             Templating.getTemplating().write(templateName,model,output);
         };
-
+        return null;
     }
 
     @GET
@@ -68,7 +68,7 @@ public class AngularApplicationResource {
         Resource resource = applicationModule.getResource(entity).orElseThrow(()->new WebApplicationException(Response.Status.NOT_FOUND));
 
         StreamingOutput stream = (output)-> {
-           applicationModule.get
+           //applicationModule.get
         };
         return Response.ok(stream).build();
     }

@@ -27,7 +27,7 @@ import static org.github.levelthree.util.Pair.cons;
 /**
  * Created by julian3 on 2014/07/18.
  */
-public interface ReadableResource<T, K extends Serializable> extends BaseResource {
+public interface ReadableResource<T, K extends Serializable> extends BaseResource<T> {
 
 
     @GET
@@ -48,8 +48,9 @@ public interface ReadableResource<T, K extends Serializable> extends BaseResourc
             return Response.status(Response.Status.FORBIDDEN).build();
         }
         populateGetLinks(entity);
-
-        return Response.ok(entity).type(mediaType.get()).links(getLookup().toLink(entity, toType(mediaType.get()))).build();
+        StreamingOutput customHandler = resolveCustomerHandler(mediaType.get(), entity);
+        Object result = (customHandler != null) ? customHandler : entity;
+        return Response.ok(result).type(mediaType.get()).links(getLookup().toLink(entity, toType(mediaType.get()))).build();
     }
 
     default boolean isUserAllowedToLookup(SecurityContext context) {
@@ -80,10 +81,10 @@ public interface ReadableResource<T, K extends Serializable> extends BaseResourc
     @GET
     default Response get(@Context SecurityContext context, @Context UriInfo ui, @Context HttpHeaders headers) {
 
-        Optional<MediaType> mediaType = resolveMediaType(headers.getMediaType());
 
         if (!isUserAllowedToList(context)) return Response.status(Response.Status.UNAUTHORIZED).build();
 
+        Optional<MediaType> mediaType = resolveMediaType(headers.getMediaType());
         if (!mediaType.isPresent()) {
             return Response.status(Response.Status.UNSUPPORTED_MEDIA_TYPE).build();
         }
@@ -147,7 +148,9 @@ public interface ReadableResource<T, K extends Serializable> extends BaseResourc
                 return listable.toLink(instance, toType(mediaType.get()));
             }).collect(toList()));
         }
-        return Response.ok(new GenericEntity<>(response, response.getClass())).type(mediaType.get()).build();
+        StreamingOutput customHandler = resolveCustomerHandler(mediaType.get(), results);
+        Object entity = (customHandler != null) ? customHandler : new GenericEntity<>(response, response.getClass());
+        return Response.ok(entity).type(mediaType.get()).build();
 
     }
 

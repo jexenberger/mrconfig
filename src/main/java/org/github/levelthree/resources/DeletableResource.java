@@ -21,7 +21,7 @@ import static org.github.levelthree.resources.Errors.errors;
 /**
  * Created by julian3 on 2014/07/18.
  */
-public interface DeletableResource<T, K extends Serializable> extends BaseResource {
+public interface DeletableResource<T, K extends Serializable> extends BaseResource<T> {
 
     Deletable<T,K> getDeletable();
 

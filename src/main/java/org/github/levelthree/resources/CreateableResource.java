@@ -12,32 +12,38 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.*;
 import java.io.Serializable;
 import java.net.URI;
+import java.util.Optional;
 
 /**
  * Created by julian3 on 2014/10/24.
  */
-public interface CreateableResource <T, K extends Serializable> extends BaseResource{
+public interface CreateableResource <T, K extends Serializable> extends BaseResource<T>{
 
     @POST
-    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    default Response create(@Context SecurityContext context, T instance, @Context UriInfo uri) {
+    default Response create(@Context SecurityContext context, T instance, @Context UriInfo uri, @Context HttpHeaders headers) {
 
 
         if (!isUserAllowedToCreate(context)) {
             return Response.status(Response.Status.UNAUTHORIZED).build();
         }
 
+        Optional<MediaType> mediaType = resolveMediaType(headers.getMediaType());
+        if (!mediaType.isPresent()) {
+            return Response.status(Response.Status.UNSUPPORTED_MEDIA_TYPE).build();
+        }
+
+
+
         Creatable<T, K> service = getCreatable();
         Box<K> result = service.create(instance);
         if (result.isSuccess()) {
-            String urn = ResourceUtil.getResourcePath(getClass()) + "/" + result.get();
+            String urn = ResourceRegistry.getByResourceClass(getClass()) + "/" + result.get();
             UriBuilder uriBuilder = UriBuilder.fromUri(urn);
             URI build = uriBuilder.build();
             populatePostCreationLinks(instance);
-            return Response.created(build).entity(instance).build();
+            return Response.created(build).type(mediaType.get()).entity(instance).build();
         } else {
-            return Response.status(Response.Status.BAD_REQUEST).entity(new Errors(result.mapError(Error::new))).build();
+            return Response.status(Response.Status.BAD_REQUEST).type(mediaType.get()).entity(new Errors(result.mapError(Error::new))).build();
         }
     }
 

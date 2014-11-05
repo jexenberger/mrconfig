@@ -18,10 +18,6 @@ import static org.github.levelthree.ux.ClasspathSource.classpath;
  */
 public class MrConfigApplication extends LevelThreeApplication {
 
-
-
-
-
     public static void main(String[] args) throws Exception {
 
         new MrConfigApplication().start(true);

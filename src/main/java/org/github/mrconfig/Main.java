@@ -48,6 +48,7 @@ public class Main extends Module {
                         */
 
         this.addModule(new JPAModule("org.github.mrconfig.domain"));
+        this.addModule(new JaxbProvider("org.github.mrconfig.domain"));
         AngularUXModule uxModule = new AngularUXModule();
         this.addModule(uxModule);
 

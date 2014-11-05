@@ -9,6 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import javax.ws.rs.Path;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
@@ -43,7 +44,7 @@ public class WritableResourceTest implements WritableResource<MyEntity,Long>{
 
     @Test
     public void testCreate() throws Exception {
-        Response response = this.create(createMock(SecurityContext.class), instance, createMock(UriInfo.class));
+        Response response = this.create(createMock(SecurityContext.class), instance, createMock(UriInfo.class), createMock(HttpHeaders.class));
         assertEquals(201, response.getStatus());
         assertNotNull(response.getHeaderString("Location"));
         assertNotNull(response.getEntity());
@@ -52,7 +53,7 @@ public class WritableResourceTest implements WritableResource<MyEntity,Long>{
 
     @Test
     public void testSave() throws Exception {
-        Response response = this.save(createMock(SecurityContext.class),null, instance, createMock(UriInfo.class));
+        Response response = this.save(createMock(SecurityContext.class), null, instance, createMock(UriInfo.class));
         assertEquals(200, response.getStatus());
         assertNotNull("the response should have contained an entity", response.getEntity());
         verify(service);

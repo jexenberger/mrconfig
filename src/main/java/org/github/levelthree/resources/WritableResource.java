@@ -16,7 +16,7 @@ import java.net.URI;
 /**
  * Created by julian3 on 2014/07/18.
  */
-public interface WritableResource<T, K extends Serializable> extends BaseResource, CreateableResource<T,K>{
+public interface WritableResource<T, K extends Serializable> extends BaseResource<T>, CreateableResource<T,K>{
 
 
 

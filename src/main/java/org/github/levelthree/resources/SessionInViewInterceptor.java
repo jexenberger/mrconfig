@@ -30,13 +30,11 @@ public class SessionInViewInterceptor implements ContainerRequestFilter, Contain
 
     @Override
     public void filter(ContainerRequestContext containerRequestContext) throws IOException {
-        System.out.println(uuid);
         ProviderFactory.getProvider().startTransaction();
     }
 
     @Override
     public void filter(ContainerRequestContext containerRequestContext, ContainerResponseContext containerResponseContext) throws IOException {
-        System.out.println(uuid);
         ProviderFactory.getProvider().commitOrRollback(true);
 
     }
@@ -44,6 +42,7 @@ public class SessionInViewInterceptor implements ContainerRequestFilter, Contain
 
     @Override
     public Response toResponse(Exception e) {
+        e.printStackTrace();
         if (e instanceof WebApplicationException) {
             return ((WebApplicationException) e).getResponse();
         }
