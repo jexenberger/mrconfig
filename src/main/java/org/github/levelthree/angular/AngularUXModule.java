@@ -141,10 +141,12 @@ public class AngularUXModule extends DefaultUXModule {
         Set<String> deDuper = new HashSet<String>(angularUXComponents.size()+1, 1.0f);
         //render services
         for (AngularUXComponent angularUXComponent : angularUXComponents) {
-            if (angularUXComponent.getService() != null && !deDuper.contains(angularUXComponent.getService().getName())) {
+            String serviceName = angularUXComponent.getService().getName();
+            System.out.println(serviceName);
+            if (angularUXComponent.getService() != null && !deDuper.contains(serviceName)) {
                 write(output,"\n");
                 angularUXComponent.getService().render(null, output);
-                deDuper.add(angularUXComponent.getService().getName());
+                deDuper.add(serviceName);
             }
         }
         flushOutput(output);

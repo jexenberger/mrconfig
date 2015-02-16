@@ -52,12 +52,12 @@ public class AngularApplicationResource {
     }
 
     public AngularUXModule getModule() {
-        return (AngularUXModule) ModuleRegistry.get(AngularUXModule.class.getName()).orElseThrow(() -> new WebApplicationException(Response.Status.NOT_FOUND));
+        return (AngularUXModule) ModuleRegistry.get(AngularUXModule.class.getSimpleName()).orElseThrow(() -> new WebApplicationException(Response.Status.NOT_FOUND));
     }
 
 
     @GET
-    @Path("/{setModule}/views/{entity}/{type}.html")
+    @Path("/{module}/views/{entity}/{type}.html")
     @Produces({MediaType.TEXT_HTML})
     public Response getView(@PathParam("setModule") String module, @PathParam("entity") String entity, @PathParam("type") String type) {
         if (!entity.startsWith("/")) {

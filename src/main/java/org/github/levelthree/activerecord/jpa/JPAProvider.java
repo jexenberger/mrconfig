@@ -147,7 +147,7 @@ public class JPAProvider implements Provider {
 
     @Override
     public <T> Optional<T> single(Class<T> type, String name, org.github.levelthree.activerecord.Parameter... parameters) {
-        return transact(() -> {
+        return (Optional<T>) transact(() -> {
             Query namedQuery = createNamedQuery(buildName(type, name), parameters);
             try {
                 Object singleResult = namedQuery.getSingleResult();

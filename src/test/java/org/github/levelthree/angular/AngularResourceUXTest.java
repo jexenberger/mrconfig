@@ -36,6 +36,7 @@ public class AngularResourceUXTest {
         resource.create();
     }
 
+    /*
     @Test
     public void testGetLink() throws Exception {
 
@@ -104,5 +105,5 @@ public class AngularResourceUXTest {
         assertNotNull(controllerViews);
         System.out.println(controllerViews);
 
-    }
+    } */
 }

@@ -26,7 +26,7 @@ public class AngularScaffold {
     public static Collection<AngularUXComponent> scaffold(Module parent, Resource resource, Supplier<Form> formSupplier) {
         Collection<AngularUXComponent> components = new ArrayList<>();
         String moduleName = parent != null ? parent.getName() : ModuleRegistry.DEFAULT_MODULE;
-        AngularService service = service(moduleName + "Service", resource.getPath());
+        AngularService service = service(moduleName  + resource.getName() + "Service", resource.getPath());
 
         if (resource.getListable() != null) {
             components.add(createComponent(moduleName, resource, "list", service, formSupplier));
@@ -47,13 +47,14 @@ public class AngularScaffold {
         AngularUXComponent component = new AngularUXComponent();
         String param = (componentType.equals("view") || componentType.equals("edit")) ? "p_id" : null;
         String path = getRoutePath(moduleName, resource, componentType,param);
+        String templatePath = getTemplatePath(moduleName, resource, componentType);
         //a bit of a hack
         String templateType = "edit";
         if (componentType.equals("list")){
             templateType = "list";
         }
         component.setPath(path)
-                .setTemplateUrl(path)
+                .setTemplateUrl(templatePath)
                 .setControllerView(templateView(templateType + "_controller.ftl"))
                 .setControllerName(resource.getName() + StringUtil.capitalize(templateType) + "Controller")
                 .setForm(form)
@@ -63,11 +64,11 @@ public class AngularScaffold {
     }
 
     public static String getRoutePath(String moduleName, Resource resource, final String type, String param) {
-        return resource.getPath()+ "/" + type + ((param != null) ? ":"+param : "" );
+        return moduleName+resource.getPath()+ "/" + type + ((param != null) ? ":"+param : "" );
     }
 
     public static String getTemplatePath(String moduleName, Resource resource, final String type) {
-        return resource.getPath()+ "/" + type + ".html";
+        return  moduleName+resource.getPath()+ "/" + type + ".html";
     }
 
 
