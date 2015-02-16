@@ -25,13 +25,15 @@ public class MenuResource {
     @GET
     public Menu getMenu(@Context SecurityContext context) {
 
+        Menu response = new Menu();
+        /*
         Collection<ResourceUX> forms = ResourceRegistry.list()
                 .stream()
                 .filter((setResource)-> setResource.getResourceUx() != null)
                 .map((setResource)-> setResource.getResourceUx())
                 .collect(toList());
 
-        Menu response = new Menu();
+
         for (ResourceUX setForm : forms) {
             initGroup(response, setForm.getGroup());
             boolean allow = allowAccess(context, setForm.getResource().getListRole());
@@ -43,7 +45,7 @@ public class MenuResource {
                 response.getMenuGroups().get(setForm.getGroup()).add(new MenuItem(setForm.getName()+" New", setForm.getKey()+".new",  setForm.getCreateLink()));
             }
 
-        }
+        }*/
 
         return response;
     }

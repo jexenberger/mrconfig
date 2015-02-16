@@ -49,7 +49,7 @@ public class AngularUXModuleTest extends BaseAngularTest{
         angularUXModule.addComponent(component);
         angularUXModule.additional(stringView("//hello world"));
         angularUXModule.init();
-        angularUXModule.renderApplicationFiles("/Users/julian3/mrconfig/target");
+        angularUXModule.renderApplicationFiles("mrconfig/target");
 
 
     }

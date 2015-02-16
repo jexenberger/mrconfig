@@ -8,7 +8,10 @@ import org.github.levelthree.ux.MyEntityController;
 import org.junit.Test;
 
 import java.io.StringWriter;
+import java.util.Map;
 
+import static org.github.levelthree.util.Pair.cons;
+import static org.github.levelthree.util.Pair.map;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -50,12 +53,21 @@ public class BeanFormBuilderTest {
         assertNotNull(myEnvironment.getSearchFields());
         assertTrue(myEnvironment.getSearchFields().size() > 0);
 
+        Map<String, Object> environment =
+                map(
+                        cons("form", myEnvironment),
+                        cons("component", map(
+                                            cons("controllerName","test"),
+                                            cons("relations", map(cons("edit",map(cons("routePath","test"))))))
+                        )
+                );
+
         StringWriter out = new StringWriter();
-        TemplateEngine.getConfiguration().getTemplate("edit_form.ftl").process(myEnvironment, out);
+        TemplateEngine.getConfiguration().getTemplate("edit_form.ftl").process(environment, out);
         System.out.println(out.toString());
 
         out = new StringWriter();
-        TemplateEngine.getConfiguration().getTemplate("list_form.ftl").process(myEnvironment, out);
+        TemplateEngine.getConfiguration().getTemplate("list_form.ftl").process(environment, out);
         System.out.println(out.toString());
 
 

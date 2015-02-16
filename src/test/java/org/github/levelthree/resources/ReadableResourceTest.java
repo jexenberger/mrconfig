@@ -42,7 +42,7 @@ public class ReadableResourceTest implements ReadableResource<MyEntity,Long> {
         expect(service.page(0, 5)).andReturn(asList(instance)).anyTimes();
         expect(service.list()).andReturn(asList(instance)).anyTimes();
         expect(service.resolve(anyObject(),anyObject())).andReturn(Optional.ofNullable(instance)).anyTimes();
-        expect(service.toLink(eq(instance))).andReturn(new Link("self","string/xml","/helloworld","Hello World")).anyTimes();
+        expect(service.toLink(eq(instance),eq("application/json"))).andReturn(new Link("self","string/xml","/helloworld","Hello World")).anyTimes();
 
         replay(service);
 
@@ -92,7 +92,7 @@ public class ReadableResourceTest implements ReadableResource<MyEntity,Long> {
         Pair<String, Object> params = cons("name", (Object) "Name*");
         expect(service.count(params)).andReturn(totalItems).anyTimes();
         expect(service.page(0, getPageSize(), params)).andReturn(testData.subList(0,getPageSize())).anyTimes();
-        expect(service.toLink(anyObject(MyEntity.class))).andReturn(new Link("self","test/html","/helloworld","Hello world")).times(getPageSize());
+        expect(service.toLink(anyObject(MyEntity.class),eq("application/json"))).andReturn(new Link("self","test/html","/helloworld","Hello world")).times(getPageSize());
 
 
 
