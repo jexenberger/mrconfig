@@ -58,7 +58,7 @@ public class IntegrationTest {
     public void testGenerateApplicationFiles() throws Exception {
 
         new Main().init();
-        new AngularUXModule().renderApplicationFiles("mrconfig/target/sample-application");
+        new AngularUXModule().renderApplicationFiles("target/sample-application");
 
     }
 }

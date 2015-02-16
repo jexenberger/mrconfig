@@ -2,8 +2,6 @@ package org.github.levelthree.angular;
 
 import org.github.levelthree.Module;
 import org.github.levelthree.ModuleRegistry;
-import org.github.levelthree.Resource;
-import org.github.levelthree.ResourceUX;
 import org.github.levelthree.ux.Templating;
 
 import javax.ws.rs.*;
@@ -11,8 +9,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.StreamingOutput;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Optional;
 
 /**
  * Created by julian3 on 2014/09/20.
@@ -20,6 +18,17 @@ import java.util.Optional;
 @Path("/ng-app")
 @Produces({"application/javascript"})
 public class AngularApplicationResource {
+
+
+    static Map<String, String> templateMaps = new LinkedHashMap<>();
+    static {
+
+        templateMaps.put("edit","edit_form.ftl");
+        templateMaps.put("create","edit_form.ftl");
+        templateMaps.put("list","list_form.ftl");
+    }
+
+
 
 
     @GET
@@ -36,7 +45,7 @@ public class AngularApplicationResource {
         StreamingOutput stream = (output)-> {
             Templating.getTemplating().write(templateName,model,output);
         };
-        return null;
+        return Response.ok().type(MediaType.TEXT_HTML_TYPE).entity(stream).build();
     }
 
     @GET
@@ -57,25 +66,33 @@ public class AngularApplicationResource {
 
 
     @GET
-    @Path("/{module}/views/{entity}/{type}.html")
+    @Path("/{module}/{entity}/{type}")
     @Produces({MediaType.TEXT_HTML})
-    public Response getView(@PathParam("setModule") String module, @PathParam("entity") String entity, @PathParam("type") String type) {
+    public Response getView(@PathParam("module") String module, @PathParam("entity") String entity, @PathParam("type") String type) {
+        return getView(module, entity, type, false);
+    }
+
+
+    @GET
+    @Path("/{module}/{entity}/{type}/{p_id}")
+    @Produces({MediaType.TEXT_HTML})
+    public Response getView(@PathParam("module") String module, @PathParam("entity") String entity, @PathParam("type") String type, String id) {
+        return getView(module, entity, type, true);
+    }
+
+    private Response getView(String module, String entity, String type, boolean isIdParameter) {
         if (!entity.startsWith("/")) {
-            entity = "/"+entity;
+            entity = "/" + entity;
         }
 
         AngularUXModule applicationModule = getModule();
-        Resource resource = applicationModule.getResource(entity).orElseThrow(()->new WebApplicationException(Response.Status.NOT_FOUND));
-
-        StreamingOutput stream = (output)-> {
-           //applicationModule.get
-        };
-        return Response.ok(stream).build();
+        AngularUXComponent uxComponent = applicationModule.resolveComponent(module, entity, type, isIdParameter);
+        return createTemplateResponse(uxComponent, templateMaps.get(type));
     }
 
     @GET
-    @Path("/{setModule}/controllers/{setController}.js")
-    public Response getControllers(@PathParam("setModule") String module, @PathParam("setController") String controller) {
+    @Path("/{module}/controllers/{setController}.js")
+    public Response getControllers(@PathParam("module") String module, @PathParam("setController") String controller) {
         return null;
     }
 

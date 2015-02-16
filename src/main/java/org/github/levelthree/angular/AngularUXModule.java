@@ -244,8 +244,24 @@ public class AngularUXModule extends DefaultUXModule {
 
     public Resource scaffold(Module parent, Class resourceController) {
         Resource resource = Resource.scaffold(resourceController);
-        AngularScaffold.scaffold(parent, resource, ()-> BeanFormBuilder.form(resource)).forEach(this::addComponent);
+        AngularScaffold.scaffold(parent, resource, ()-> BeanFormBuilder.form(resource)).values().forEach(this::addComponent);
+        parent.register(resource);
         return resource;
+    }
+
+    public AngularUXComponent resolveComponent(String module, String entity, String type, boolean idParameter) {
+        String path = "/" + module + entity + "/" + type + ((idParameter) ? "/:p_id" : "");
+        Set<AngularUXComponent> moduleComponents = getModuleComponents(module);
+        for (AngularUXComponent moduleComponent : moduleComponents) {
+            if (moduleComponent.getRoutePath().equals(path)) {
+                return moduleComponent;
+            }
+        }
+        return null;
+    }
+
+    public Map<String, Set<AngularUXComponent>> allComponents() {
+        return Collections.unmodifiableMap(APPLICATION);
     }
 
 

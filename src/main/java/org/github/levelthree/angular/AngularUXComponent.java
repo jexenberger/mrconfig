@@ -7,6 +7,7 @@ import org.github.levelthree.ux.View;
 import org.github.levelthree.ux.form.Form;
 
 import java.io.OutputStream;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -155,7 +156,7 @@ public class AngularUXComponent  {
 
     public AngularUXComponent renderTemplate(Resource resource, OutputStream output) {
         Objects.requireNonNull(getTemplate(), "template must be specified");
-        getTemplate().render(createModel(resource), output);
+        getTemplate().render(this, output);
         return this;
     }
 
@@ -171,8 +172,8 @@ public class AngularUXComponent  {
         return this;
     }
 
-    public Supplier<Form> getForm() {
-        return form;
+    public Form getForm() {
+        return form.get();
     }
 
     public Map<String, AngularUXComponent> getRelations() {

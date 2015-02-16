@@ -7,9 +7,7 @@ import org.github.levelthree.ResourceRegistry;
 import org.github.levelthree.util.StringUtil;
 import org.github.levelthree.ux.form.Form;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -23,22 +21,22 @@ public class AngularScaffold {
 
 
 
-    public static Collection<AngularUXComponent> scaffold(Module parent, Resource resource, Supplier<Form> formSupplier) {
-        Collection<AngularUXComponent> components = new ArrayList<>();
+    public static Map<String, AngularUXComponent> scaffold(Module parent, Resource resource, Supplier<Form> formSupplier) {
+        Map<String,AngularUXComponent> components = new LinkedHashMap<>();
         String moduleName = parent != null ? parent.getName() : ModuleRegistry.DEFAULT_MODULE;
         AngularService service = service(moduleName  + resource.getName() + "Service", resource.getPath());
 
         if (resource.getListable() != null) {
-            components.add(createComponent(moduleName, resource, "list", service, formSupplier));
+            components.put("list",createComponent(moduleName, resource, "list", service, formSupplier));
         }
         if (resource.getUniqueLookup() != null) {
-            components.add(createComponent(moduleName, resource, "view", service, formSupplier));
+            components.put("view",createComponent(moduleName, resource, "view", service, formSupplier));
         }
         if (resource.getCreatable() != null) {
-            components.add(createComponent(moduleName, resource, "create", service, formSupplier));
+            components.put("create",createComponent(moduleName, resource, "create", service, formSupplier));
         }
         if (resource.getUpdateable() != null) {
-            components.add(createComponent(moduleName, resource, "edit", service, formSupplier));
+            components.put("edit",createComponent(moduleName, resource, "edit", service, formSupplier));
         }
         return components;
     }
@@ -64,11 +62,11 @@ public class AngularScaffold {
     }
 
     public static String getRoutePath(String moduleName, Resource resource, final String type, String param) {
-        return moduleName+resource.getPath()+ "/" + type + ((param != null) ? ":"+param : "" );
+        return "/"+moduleName+resource.getPath()+ "/" + type + ((param != null) ? "/:"+param : "" );
     }
 
     public static String getTemplatePath(String moduleName, Resource resource, final String type) {
-        return  moduleName+resource.getPath()+ "/" + type + ".html";
+        return  "/"+moduleName+resource.getPath()+ "/" + type + ".html";
     }
 
 

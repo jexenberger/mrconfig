@@ -46,7 +46,7 @@ public abstract class Module {
 
 
     protected Module addModule(Module module) {
-        Objects.requireNonNull(module, "setModule must be supplied");
+        Objects.requireNonNull(module, "module must be supplied");
         module.init();
         getAdditionalResourceClasses().addAll(module.getAdditionalResourceClasses());
         return this;
@@ -83,8 +83,8 @@ public abstract class Module {
             return name;
         }
         String name = getClass().getSimpleName();
-        if (name.toLowerCase().endsWith("setModule")) {
-            name = name.substring(0,name.length()-"setModule".length());
+        if (name.toLowerCase().endsWith("name")) {
+            name = name.substring(0,name.length()-"name".length());
         }
         return Inflector.getInstance().phrase(name);
     }

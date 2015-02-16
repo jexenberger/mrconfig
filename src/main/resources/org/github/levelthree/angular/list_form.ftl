@@ -1,6 +1,6 @@
 <#include 'field_include_macro.ftl'/>
 <#assign capture=false>
-<div ng-controller="${component.controllerName}" ng-cloak>
+<div ng-controller="${controllerName}" ng-cloak>
    <#assign fieldSize = 9 / (form.searchFields?size)?int>
   <div class="container-fluid col-xs-12 col-sm-12 col-md-12">
       <div class="container-fluid">
@@ -56,7 +56,9 @@
                               <#list form.searchFields as field>
                                  <td class="col-xs-${fieldSize}"><#if field.key>
                                      <#assign idField=field.id>
-                                     <a ng-href="#${component.relations['edit'].routePath}/{{searchResult.${field.id}}}">{{searchResult.${field.id}}}</a>
+                                     <#if relations?? && relations['edit']??>
+                                     <a ng-href="#${relations['edit'].routePath}/{{searchResult.${field.id}}}">{{searchResult.${field.id}}}</a>
+                                     </#if>
                                      <#elseif field.type.id == 'lookup'>
                                      {{searchResult.${field.id}.title}}
                                      <#else>

@@ -1,6 +1,6 @@
 <#include 'field_include_macro.ftl'/>
 <#assign capture=true>
-<div  ng-controller="${component.controllerName}" ng-cloak>
+<div  ng-controller="${controllerName}" ng-cloak>
   <div class="container-fluid col-xs-12 col-sm-12 col-md-12">
      <div class="container-fluid">
         <legend><h4>${form.name}<small ng-if="!editable"> - template</small> <small ng-if="editable && isNew"> - create</small><small ng-if="editable && !isNew"> - edit</small></h4></legend>

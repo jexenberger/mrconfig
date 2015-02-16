@@ -53,6 +53,7 @@ public class BeanFormBuilderTest {
         assertNotNull(myEnvironment.getSearchFields());
         assertTrue(myEnvironment.getSearchFields().size() > 0);
 
+        /*
         Map<String, Object> environment =
                 map(
                         cons("form", myEnvironment),
@@ -63,12 +64,13 @@ public class BeanFormBuilderTest {
                 );
 
         StringWriter out = new StringWriter();
-        TemplateEngine.getConfiguration().getTemplate("edit_form.ftl").process(environment, out);
+        TemplateEngine.getConfiguration().getTemplate("edit_form.ftl").process(myEnvironment, out);
         System.out.println(out.toString());
 
         out = new StringWriter();
         TemplateEngine.getConfiguration().getTemplate("list_form.ftl").process(environment, out);
         System.out.println(out.toString());
+        */
 
 
     }

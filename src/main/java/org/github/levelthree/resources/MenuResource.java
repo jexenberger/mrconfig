@@ -1,7 +1,12 @@
 package org.github.levelthree.resources;
 
+import org.github.levelthree.Module;
+import org.github.levelthree.ModuleRegistry;
 import org.github.levelthree.ResourceRegistry;
 import org.github.levelthree.ResourceUX;
+import org.github.levelthree.angular.AngularUXComponent;
+import org.github.levelthree.angular.AngularUXModule;
+import org.github.levelthree.ux.form.Form;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -9,9 +14,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.SecurityContext;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 import static java.util.stream.Collectors.toList;
 
@@ -33,7 +36,32 @@ public class MenuResource {
                 .map((setResource)-> setResource.getResourceUx())
                 .collect(toList());
 
+        */
+        Map<String, Module> modules = ModuleRegistry.getModules();
+        Optional<Module> module = ModuleRegistry.get(AngularUXModule.class.getSimpleName());
+        AngularUXModule uxModule = (AngularUXModule) module.get();
+        Map<String, Set<AngularUXComponent>> allComponents = uxModule.allComponents();
+        allComponents.forEach((key, value)-> {
+            initGroup(response, key);
+            value.forEach((component)-> {
+                /*
+                Form form = component.getForm();
+                boolean allow = allowAccess(context, form.getResource().getListRole());
+                if (allow) {
+                    response.getMenuGroups().get(form.getGroup()).add(new MenuItem(form.getName()+" Search", form.getKey()+".search", form.getListLink()));
+                }
+                allow = allowAccess(context, form.getResource().getCreateRole());
+                if (allow) {
+                    response.getMenuGroups().get(form.getGroup()).add(new MenuItem(form.getName()+" New", form.getKey()+".new",  form.getCreateLink()));
+                }*/
+            });
+        });
+        /*
+        for (String module : allComponents) {
+            response.getMenuGroups().get(module);
 
+        }
+        /*
         for (ResourceUX setForm : forms) {
             initGroup(response, setForm.getGroup());
             boolean allow = allowAccess(context, setForm.getResource().getListRole());
